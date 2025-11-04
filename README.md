@@ -15,6 +15,16 @@ SmartOrder is a full-stack web application designed to simplify bulk order manag
 - ORM: Sequelize
 - Auth: JWT-based authentication
 
+# Render Backend URL
+https://smartorder-zlab.onrender.com
+
+# Vercel Frontend URL
+https://smart-order-gold.vercel.app/
+
+# NeonDB URL
+https://console.neon.tech/app/projects/noisy-unit-41350121
+
+
 # Getting Started
 1. Clone the repository
 2. Backend Setup
@@ -39,3 +49,4 @@ cd ../frontend
 npm install
 npm run start
 ```
+
