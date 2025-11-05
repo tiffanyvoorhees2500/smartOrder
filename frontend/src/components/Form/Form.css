@@ -1,0 +1,54 @@
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  background-color: var(--primary-color);
+  border-radius: 10px;
+  padding: 1em;
+  max-width: 400px;
+  font-family: sans-serif;
+}
+
+form span.formError {
+  background-color: rgb(255, 191, 161);
+  border-radius: 5px;
+  padding: 0.25em;
+}
+
+form h2 {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+form .formChildren {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+
+label {
+  font-size: large;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+
+input, select {
+  border-radius: 5px;
+  padding: 0.5em 1em;
+  border: none;
+}
+
+form button {
+  border-radius: 50px;
+  padding: 0.25em 0.5em;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.39);
+  color: white;
+  font-size: large;
+  cursor: pointer;
+  width: 50%;
+  align-self: center;
+}
