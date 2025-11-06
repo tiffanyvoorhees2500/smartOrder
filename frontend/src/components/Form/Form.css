@@ -27,7 +27,6 @@ form .formChildren {
   gap: 2em;
 }
 
-
 label {
   font-size: large;
   display: flex;
@@ -35,20 +34,38 @@ label {
   gap: 0.25em;
 }
 
-input, select {
+input,
+select {
   border-radius: 5px;
   padding: 0.5em 1em;
-  border: none;
+  min-width: 300px;
 }
 
 form button {
   border-radius: 50px;
   padding: 0.25em 0.5em;
   border: none;
-  background-color: rgba(0, 0, 0, 0.39);
+  background-color: var(--accent-color);
   color: white;
   font-size: large;
   cursor: pointer;
   width: 50%;
   align-self: center;
+}
+
+form button:hover {
+  background-color: var(--secondary-color);
+}
+
+.form-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem; /* adds space below the logo */
+}
+
+.form-logo img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
 }
