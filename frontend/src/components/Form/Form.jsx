@@ -7,13 +7,22 @@ const base_url = process.env.REACT_APP_API_BASE_URL;
 
 export function LoginForm() {
   async function handleLogin(e) {
-    await axios.post(`${base_url}/users/login`, {
+  e.preventDefault();
+  try {
+    const response = await axios.post(`${base_url}/users/login`, {
       email: e.target.email.value,
       password: e.target.password.value,
     });
 
+    localStorage.setItem("token", response.data.token);
+
     window.location.href = "/";
+
+  } catch (error) {
+    const message = error.response?.data?.error || error.message || "Login failed";
+    alert("Login failed: " + message);
   }
+}
 
   return (
     <StyledForm onSubmit={handleLogin} title="Login">
@@ -37,9 +46,9 @@ export function LoginForm() {
           name="password"
           id="password"
           required
-          minLength={8}
-          pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}"
-          title="Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number"
+          // minLength={8}
+          // pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}"
+          // title="Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number"
         />
       </label>
 
