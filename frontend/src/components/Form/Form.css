@@ -69,3 +69,10 @@ form button:hover {
   height: 100px;
   object-fit: contain;
 }
+
+.error-message {
+  color: red;
+  text-align: center; /* centers the text horizontally */
+  margin: 10px 0;     /* optional spacing above/below */
+  font-weight: bold;  /* optional emphasis */
+}

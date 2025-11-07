@@ -1,28 +1,44 @@
 import "./Form.css";
 import axios from "axios";
 import { StyledForm } from "./StyledForm";
+import { useState } from "react";
 import { states } from "./states";
 
 const base_url = process.env.REACT_APP_API_BASE_URL;
 
 export function LoginForm() {
-  async function handleLogin(e) {
-  e.preventDefault();
-  try {
-    const response = await axios.post(`${base_url}/users/login`, {
-      email: e.target.email.value,
-      password: e.target.password.value,
-    });
+  const [ errorMessage, setErrorMessage ] = useState("");
 
-    localStorage.setItem("token", response.data.token);
+    async function handleLogin(e) {
+    e.preventDefault();
+    const email = e.target.email.value.trim();
+    const password = e.target.password.value.trim();
 
-    window.location.href = "/";
+    // Client-side validation
+    if (!email || !password) {
+      setErrorMessage("Please enter both email and password.");
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setErrorMessage("Please enter a valid email address.");
+      return;
+    }
 
-  } catch (error) {
-    const message = error.response?.data?.error || error.message || "Login failed";
-    alert("Login failed: " + message);
+    try {
+      const response = await axios.post(`${base_url}/users/login`, {
+        email,
+        password,
+      });
+
+      localStorage.setItem("token", response.data.token);
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Login failed:", error);
+      // Show a generic error message
+      setErrorMessage("Invalid credentials. Try again.");
+    }
   }
-}
 
   return (
     <StyledForm onSubmit={handleLogin} title="Login">
@@ -33,7 +49,6 @@ export function LoginForm() {
           type="email"
           name="email"
           id="email"
-          required
           placeholder="example@example.com"
         />
       </label>
@@ -41,19 +56,15 @@ export function LoginForm() {
       {/* == Password == */}
       <label htmlFor="password">
         Password
-        <input
-          type="password"
-          name="password"
-          id="password"
-          required
-          // minLength={8}
-          // pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}"
-          // title="Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number"
-        />
+        <input type="password" name="password" id="password" />
       </label>
 
       {/* == Submit == */}
       <button type="submit">Login</button>
+      
+      {/* Error message */}
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
+
     </StyledForm>
   );
 }
@@ -98,9 +109,6 @@ export function RegisterForm() {
           name="password"
           id="password"
           required
-          minLength={8}
-          pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}"
-          title="Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number"
         />
       </label>
 
