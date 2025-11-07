@@ -1,11 +1,11 @@
-import db from '../models/index.js';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+const db = require('../models/index.js');
+const bcrypt =require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const { User } = db;
 
 // Create a new user
-export const createUser = async (req, res) => {
+exports.createUser = async (req, res) => {
   const { name, email, password, defaultShipToState } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -21,7 +21,7 @@ export const createUser = async (req, res) => {
   }
 };
 
-export const loginUser = async (req, res) => {
+exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ where: { email } });
