@@ -1,4 +1,5 @@
 form {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 1em;
@@ -6,7 +7,9 @@ form {
   border-radius: 10px;
   padding: 1em;
   max-width: 400px;
+  width: 90%;
   font-family: sans-serif;
+  margin: 5% auto;
 }
 
 form span.formError {
@@ -38,7 +41,6 @@ input,
 select {
   border-radius: 5px;
   padding: 0.5em 1em;
-  min-width: 300px;
 }
 
 form button {

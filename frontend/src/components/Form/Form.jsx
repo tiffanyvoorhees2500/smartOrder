@@ -2,6 +2,7 @@ import "./Form.css";
 import axios from "axios";
 import { StyledForm } from "./StyledForm";
 import { states } from "./states";
+import SlidingButton from "../Buttons/SlidingButton";
 
 const base_url = process.env.REACT_APP_API_BASE_URL;
 
@@ -55,6 +56,8 @@ export function RegisterForm() {
       name: e.target.name.value,
       email: e.target.email.value,
       password: e.target.password.value,
+      pricingType: e.target.pricingType.value,
+      discountType: e.target.discountType.value,
       defaultShipToState: e.target.defaultShipToState.value,
     });
 
@@ -95,11 +98,38 @@ export function RegisterForm() {
         />
       </label>
 
+      {/* == Pricing Type == */}
+      <label htmlFor="pricingType">
+        Pricing Type:
+        <SlidingButton
+          options={["Retail", "Wholesale"]}
+          selected="Retail"
+          name="pricingType"
+          id="pricingType"
+        />
+      </label>
+
+      {/* == Discount Type == */}
+      <label htmlFor="discountType">
+        Discount Type:
+        <SlidingButton
+          options={["Individual", "Group"]}
+          selected="Individual"
+          name="discountType"
+          id="discountType"
+        />
+      </label>
+
       {/* == Default Ship To State == */}
       <label htmlFor="defaultShipToState">
         State:
-        <select name="defaultShipToState" id="defaultShipToState">
-          <option disabled selected>
+        <select
+          name="defaultShipToState"
+          id="defaultShipToState"
+          defaultValue={""}
+          required
+        >
+          <option disabled value="">
             Select a state
           </option>
           {states.map((state) => (

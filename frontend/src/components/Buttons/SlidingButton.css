@@ -1,0 +1,44 @@
+.slideButton {
+  display: flex;
+  flex-direction: row;
+  font-size: medium;
+  background-color: #000a;
+  border-radius: 35px;
+  padding: 0.25em;
+  justify-content:space-evenly;
+  align-items: center;
+  position: relative;
+}
+
+.slideButton span {
+  width: 100%;
+  text-align: center;
+  padding: inherit;
+  border-radius: inherit;
+  position: relative;
+  z-index: 1;
+  color: white;
+  padding:0.25em;
+  
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.slideButton .active {
+  color: black;
+  transition: all 200ms linear;
+}
+
+.slider {
+  background-color: var(--primary-color);
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: inherit;
+  height: 100%;
+  border: 2px solid var(--accent-color);
+  box-sizing: border-box;
+  z-index: 0;
+  transition: all 200ms linear;
+}

@@ -32,16 +32,21 @@ export function StyledForm({
           setError("");
         } catch (err) {
           const errorMessage =
-            err.response.data?.error || "Internal Server Error";
+            err.response?.data?.error || "Internal Server Error";
           setError(errorMessage);
         }
       }}
     >
       {/* == Logo == */}
       <div className="form-logo">
-        <img src="/logo512.png" alt="Smart Order Logo" width="100" height="100"/>
+        <img
+          src="/logo512.png"
+          alt="Smart Order Logo"
+          width="100"
+          height="100"
+        />
       </div>
-      
+
       {/* == Form Title == */}
       <h2>{title}</h2>
 
