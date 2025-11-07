@@ -1,8 +1,10 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import db from './src/models/index.js';
-import userRoutes from './src/routes/userRoutes.js';
+'use strict';
+
+const express = require('express');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const db = require('./src/models');
+const userRoutes = require('./src/routes/userRoutes');
 
 const { sequelize } = db;
 
