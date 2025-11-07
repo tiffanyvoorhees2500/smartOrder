@@ -27,7 +27,18 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    original_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
   });
+
+  Product.associate = (models) => {
+    Product.hasMany(models.ProductIngredient, {
+      foreignKey: 'productId',
+      as: 'ingredients',
+    });
+  };
 
   return Product;
 };

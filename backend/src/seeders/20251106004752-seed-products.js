@@ -27,6 +27,7 @@ module.exports = {
           else data.number_in_bottle = parseInt(data.number_in_bottle);
 
           products.push({
+            original_id: data.original_id ? parseInt(data.original_id) : null,
             name: data.name,
             retail: data.retail,
             wholesale: data.wholesale,
