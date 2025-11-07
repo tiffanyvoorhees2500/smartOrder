@@ -85,7 +85,6 @@ module.exports = {
                   .trim()
                   .toLowerCase() === 'yes';
 
-              // Handle ENUM fields
               const pricingType =
                 String(data.pricingType || '')
                   .trim()
