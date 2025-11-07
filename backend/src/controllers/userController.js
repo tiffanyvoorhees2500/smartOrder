@@ -1,6 +1,8 @@
-import { User } from '../models/index.js';
+import db from '../models/index.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+
+const { User } = db;
 
 // Create a new user
 export const createUser = async (req, res) => {
