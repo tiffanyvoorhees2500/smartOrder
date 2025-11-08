@@ -2,16 +2,19 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { LoginForm, RegisterForm } from "./components/form/Form";
 import Layout from "./components/layout/Layout";
-
-// Check if a user is logged in
-const isLoggedIn = !!localStorage.getItem("token");
+import { isAuthenticated, isAdmin } from "./utils/auth";
 
 // ProtectedRoute only renders children if user is logged in
 function ProtectedRoute({ children }) {
-  return isLoggedIn ? children : (window.location.href = "/login");
+  return isAuthenticated() ? children : <Navigate to="/login" replace />;
+}
+
+function AdminRoute({ children }) {
+  if (!isAuthenticated()) return <Navigate to="/login" replace />;
+  return isAdmin() ? children : <Navigate to="/" replace />;
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -32,7 +35,13 @@ root.render(
           />
           {/* Public routes */}
           <Route path="login" element={<LoginForm />} />
-          <Route path="register" element={<RegisterForm />} />
+          <Route 
+            path="register" 
+            element={
+              <AdminRoute>
+                <RegisterForm />
+              </AdminRoute>
+            } />
         </Route>
       </Routes>
     </BrowserRouter>

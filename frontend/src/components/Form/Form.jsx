@@ -3,6 +3,7 @@ import axios from "axios";
 import { StyledForm } from "./StyledForm";
 import { useState } from "react";
 import { states } from "./states";
+import { setToken } from "../../utils/auth";
 
 const base_url = process.env.REACT_APP_API_BASE_URL;
 
@@ -31,7 +32,7 @@ export function LoginForm() {
         password,
       });
 
-      localStorage.setItem("token", response.data.token);
+      setToken(response.data.token);
       window.location.href = "/";
     } catch (error) {
       console.error("Login failed:", error);
