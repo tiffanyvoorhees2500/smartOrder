@@ -2,6 +2,11 @@ import React from "react";
 import "./Header.css";
 
 export default function Header() {
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  };
+
   return (
     <header className="app-header">
       <div className="header-left">
@@ -16,7 +21,7 @@ export default function Header() {
         <a href="/past-orders">Past Orders</a>
         <a href="/admin-order">Admin Order</a>
         <a href="/admin-past-orders">Admin Past Orders</a>
-        <a href="/login" className="logout-link">Logout</a>
+        <button className="logout-link" onClick={handleLogout}>Logout</button>
       </nav>
     </header>
   );
