@@ -1,0 +1,46 @@
+.app-header {
+  position: sticky;
+  top: 0;
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: var(--primary-color);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-logo {
+  height: 40px; /* adjust as needed */
+  width: auto;
+}
+
+.header-title {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.header-subtitle {
+  font-size: 1rem;
+  margin-left: 0.25rem;
+  font-weight: normal;
+}
+
+.header-nav a {
+  margin-left: 1rem;
+  text-decoration: none;
+  color: var(--accent-color);
+  font-weight: 500;
+}
+
+.header-nav .logout-link {
+  margin-left: 2rem; /* separate logoff from nav links */
+  font-weight: bold;
+}

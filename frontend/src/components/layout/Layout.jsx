@@ -2,6 +2,7 @@ import React from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Header from "../header/Header";
 import Footer from "../footer/Footer";
+import "./Layout.css";
 
 export default function Layout({ children }) {
   const location = useLocation();
@@ -11,7 +12,7 @@ export default function Layout({ children }) {
     <div className="app-layout">
       {!hideHeaderFooter && <Header />}
 
-      <main>
+      <main className={hideHeaderFooter ? "login-main" : "main-content"}>
         <Outlet />
       </main>
 
