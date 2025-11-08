@@ -24,7 +24,7 @@ form h2 {
 form .formChildren {
   display: flex;
   flex-direction: column;
-  gap: 2em;
+  gap: 1.5em;
 }
 
 label {
@@ -57,6 +57,22 @@ form button:hover {
   background-color: var(--secondary-color);
 }
 
+.form-buttons {
+  display: flex;
+  gap: 1em;         
+  justify-content: center; 
+}
+
+.form-buttons button {
+  max-width: 50%;
+  width: auto;      
+  flex: 1;          
+}
+
+.delete-button {
+  background-color: darkred;
+}
+
 .form-logo {
   display: flex;
   justify-content: center;
@@ -76,3 +92,36 @@ form button:hover {
   margin: 10px 0;     /* optional spacing above/below */
   font-weight: bold;  /* optional emphasis */
 }
+
+.toggle-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.toggle {
+  border: 1px solid #ccc;
+  padding: 5px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s, color 0.2s;
+  font-size: smaller;
+}
+
+.toggle input {
+  display: none;
+}
+
+.toggle.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.inline-label {
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
