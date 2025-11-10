@@ -47,6 +47,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'paidForById',
       as: 'paidForBy',
     });
+
+    AdminOrder.hasMany(models.AdminLineItem, {
+      foreignKey: 'adminOrderId',
+      as: 'lineItems',
+    });
   };
 
   return AdminOrder;

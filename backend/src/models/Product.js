@@ -38,6 +38,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'productId',
       as: 'ingredients',
     });
+
+    Product.hasMany(models.AdminLineItem, {
+      foreignKey: 'productId',
+      as: 'adminLineItems',
+    });
   };
 
   return Product;
