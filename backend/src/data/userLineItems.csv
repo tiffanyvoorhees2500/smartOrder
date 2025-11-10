@@ -1,0 +1,655 @@
+original_id,userId,userName,productId,productName,quantity,basePrice,percentOff,finalPrice,adminOrderId
+1.66795E+12,2,Mindy Rowley,3,Whole Food Vitamin/Mineral,2,16.15,,16.15,1.66931E+12
+1.66795E+12,3,Tonya Crane,3,Whole Food Vitamin/Mineral,2,16.15,,16.15,1.66931E+12
+1.66795E+12,8,Chelsea Broderick,3,Whole Food Vitamin/Mineral,2,16.15,,16.15,1.66931E+12
+1.66795E+12,8,Chelsea Broderick,25,Whole C - Chewables,2,13.3,,13.3,1.66931E+12
+1.66802E+12,5,Tyson Rowley,77,Flora Blitz 100,1,37.05,,37.05,1.66931E+12
+1.66802E+12,2,Mindy Rowley,77,Flora Blitz 100,2,37.05,,37.05,1.66931E+12
+1.66965E+12,2,Mindy Rowley,13,Fat/Sugar/Trim,3,14.45,,14.45,1.66983E+12
+1.66965E+12,2,Mindy Rowley,20,Muscle Rx,1,35.7,,35.7,1.66983E+12
+1.66965E+12,2,Mindy Rowley,109,REM Sleep,3,16.15,,16.15,1.66983E+12
+1.66965E+12,3,Tonya Crane,3,Whole Food Vitamin/Mineral,4,14.45,,14.45,1.66983E+12
+1.66965E+12,3,Tonya Crane,110,Female + B,4,16.15,,16.15,1.66983E+12
+1.66965E+12,3,Tonya Crane,45,Essential DAK 1K2,1,15.3,,15.3,1.66983E+12
+1.66965E+12,3,Tonya Crane,71,"Allergy Pak (1 Acute, 2 EFA, 2 Opti-Mito-Force, 1 Flora Plus)",2,31.45,,31.45,1.66983E+12
+1.66965E+12,3,Tonya Crane,94,Optimal Fruit & Veggie Plus,1,45.9,,45.9,1.66983E+12
+1.66965E+12,6,Rachael Brown,19,Longevi-D k2,3,17,,17,1.66983E+12
+1.66965E+12,8,Chelsea Broderick,82,"NOS Performance Paks (3 Arginine N.O., 1 High Potency Vitamin D3, 2 Crea-Nitric, 1 Methyl-B)",2,33.15,,33.15,1.66983E+12
+1.66965E+12,8,Chelsea Broderick,22,Opti T,2,16.15,,16.15,1.66983E+12
+1.66965E+12,2,Mindy Rowley,93,Optimal Complete Performance (Vanilla),1,45.9,,45.9,1.66983E+12
+1.66982E+12,2,Mindy Rowley,1,Digestion,6,14.45,,14.45,1.66983E+12
+1.66983E+12,2,Mindy Rowley,1,Digestion,8,12.75,,12.75,1.66992E+12
+1.66983E+12,3,Tonya Crane,1,Digestion,3,12.75,,12.75,1.66992E+12
+1.66983E+12,5,Tyson Rowley,1,Digestion,2,12.75,,12.75,1.66992E+12
+1.66984E+12,2,Mindy Rowley,71,"Allergy Pak (1 Acute, 2 EFA, 2 Opti-Mito-Force, 1 Flora Plus)",3,28.9,,28.9,1.66992E+12
+1.66984E+12,3,Tonya Crane,71,"Allergy Pak (1 Acute, 2 EFA, 2 Opti-Mito-Force, 1 Flora Plus)",1,28.9,,28.9,1.66992E+12
+1.66984E+12,3,Tonya Crane,91,Optimal Complete Nutrition Plus,1,45.9,,45.9,1.66992E+12
+1.66984E+12,5,Tyson Rowley,10,Cort Adrena,2,12.75,,12.75,1.66992E+12
+1.66984E+12,2,Mindy Rowley,11,Defense,6,15.3,,15.3,1.66992E+12
+1.66984E+12,5,Tyson Rowley,12,EFA - Essential Fatty Acids,1,13.81,,13.81,1.66992E+12
+1.66984E+12,2,Mindy Rowley,13,Fat/Sugar/Trim,5,12.75,,12.75,1.66992E+12
+1.66984E+12,3,Tonya Crane,13,Fat/Sugar/Trim,1,12.75,,12.75,1.66992E+12
+1.66984E+12,5,Tyson Rowley,13,Fat/Sugar/Trim,2,12.75,,12.75,1.66992E+12
+1.66984E+12,2,Mindy Rowley,110,Female + B,2,12.75,,12.75,1.66992E+12
+1.66984E+12,3,Tonya Crane,110,Female + B,2,12.75,,12.75,1.66992E+12
+1.66984E+12,8,Chelsea Broderick,110,Female + B,2,12.75,,12.75,1.66992E+12
+1.66984E+12,16,Chelsea Friend,110,Female + B,2,12.75,,12.75,1.66992E+12
+1.66984E+12,2,Mindy Rowley,14,Flora Plus,6,12.75,,12.75,1.66992E+12
+1.66984E+12,5,Tyson Rowley,77,Flora Blitz 100,1,35.7,,35.7,1.66992E+12
+1.66984E+12,3,Tonya Crane,111,Natural Vitality,1,12.75,,12.75,1.66992E+12
+1.66984E+12,2,Mindy Rowley,82,"NOS Performance Paks (3 Arginine N.O., 1 High Potency Vitamin D3, 2 Crea-Nitric, 1 Methyl-B)",1,38.25,,38.25,1.66992E+12
+1.66984E+12,8,Chelsea Broderick,82,"NOS Performance Paks (3 Arginine N.O., 1 High Potency Vitamin D3, 2 Crea-Nitric, 1 Methyl-B)",2,38.25,,38.25,1.66992E+12
+1.66984E+12,8,Chelsea Broderick,22,Opti T,2,14.45,,14.45,1.66992E+12
+1.66984E+12,16,Chelsea Friend,22,Opti T,2,14.45,,14.45,1.66992E+12
+1.66984E+12,3,Tonya Crane,27,Opti-Adrenal,1,14.45,,14.45,1.66992E+12
+1.66984E+12,16,Chelsea Friend,27,Opti-Adrenal,2,14.45,,14.45,1.66992E+12
+1.66984E+12,2,Mindy Rowley,35,Opti-Immune VRL,5,15.3,,15.3,1.66992E+12
+1.66984E+12,2,Mindy Rowley,36,Opti-Iodine,2,13.6,,13.6,1.66992E+12
+1.66984E+12,2,Mindy Rowley,42,Opti-Para,4,13.6,,13.6,1.66992E+12
+1.66984E+12,5,Tyson Rowley,23,OxyPure,3,13.6,,13.6,1.66992E+12
+1.66984E+12,2,Mindy Rowley,26,Zinc-Oxy Spray,2,18.7,,18.7,1.66992E+12
+1.66992E+12,8,Chelsea Broderick,27,Opti-Adrenal,2,14.45,,14.45,1.66992E+12
+1.66993E+12,2,Mindy Rowley,77,Flora Blitz 100,2,35.7,,35.7,1.66993E+12
+1.66993E+12,2,Mindy Rowley,7,BonePlus Calcium,3,12.75,,12.75,1.66993E+12
+1.66993E+12,2,Mindy Rowley,35,Opti-Immune VRL,1,15.3,,15.3,1.66993E+12
+1.66993E+12,3,Tonya Crane,3,Whole Food Vitamin/Mineral,2,12.75,,12.75,1.66993E+12
+1.66993E+12,3,Tonya Crane,110,Female + B,2,12.75,,12.75,1.66993E+12
+1.66993E+12,3,Tonya Crane,111,Natural Vitality,1,12.75,,12.75,1.66993E+12
+1.66993E+12,3,Tonya Crane,45,Essential DAK 1K2,2,13.6,,13.6,1.66993E+12
+1.66993E+12,5,Tyson Rowley,10,Cort Adrena,1,12.75,,12.75,1.66993E+12
+1.66993E+12,5,Tyson Rowley,1,Digestion,1,12.75,,12.75,1.66993E+12
+1.66993E+12,5,Tyson Rowley,12,EFA - Essential Fatty Acids,2,13.81,,13.81,1.66993E+12
+1.66993E+12,5,Tyson Rowley,13,Fat/Sugar/Trim,1,12.75,,12.75,1.66993E+12
+1.66993E+12,5,Tyson Rowley,110,Female + B,3,12.75,,12.75,1.66993E+12
+1.66993E+12,5,Tyson Rowley,77,Flora Blitz 100,3,35.7,,35.7,1.66993E+12
+1.66993E+12,5,Tyson Rowley,19,Longevi-D k2,2,15.3,,15.3,1.66993E+12
+1.66993E+12,5,Tyson Rowley,23,OxyPure,3,13.6,,13.6,1.66993E+12
+1.66995E+12,2,Mindy Rowley,1,Digestion,6,12.75,,12.75,1.66995E+12
+1.66995E+12,2,Mindy Rowley,13,Fat/Sugar/Trim,6,12.75,,12.75,1.66995E+12
+1.66995E+12,2,Mindy Rowley,42,Opti-Para,5,13.6,,13.6,1.66995E+12
+1.66995E+12,2,Mindy Rowley,11,Defense,4,15.3,,15.3,1.66995E+12
+1.66995E+12,2,Mindy Rowley,7,BonePlus Calcium,3,12.75,,12.75,1.66995E+12
+1.66995E+12,2,Mindy Rowley,110,Female + B,3,12.75,,12.75,1.66995E+12
+1.66995E+12,2,Mindy Rowley,4,Acute,2,17,,17,1.66995E+12
+1.66995E+12,2,Mindy Rowley,18,Liver/Kidney,1,12.75,,12.75,1.66995E+12
+1.66995E+12,2,Mindy Rowley,10,Cort Adrena,2,12.75,,12.75,1.66995E+12
+1.66995E+12,2,Mindy Rowley,15,Iron,2,12.75,,12.75,1.66995E+12
+1.66995E+12,2,Mindy Rowley,22,Opti T,1,14.45,,14.45,1.66995E+12
+1.66995E+12,2,Mindy Rowley,23,OxyPure,3,13.6,,13.6,1.66995E+12
+1.66995E+12,2,Mindy Rowley,26,Zinc-Oxy Spray,3,18.7,,18.7,1.66995E+12
+1.66995E+12,2,Mindy Rowley,36,Opti-Iodine,2,13.6,,13.6,1.66995E+12
+1.66995E+12,2,Mindy Rowley,77,Flora Blitz 100,2,35.7,,35.7,1.66995E+12
+1.66995E+12,3,Tonya Crane,71,"Allergy Pak (1 Acute, 2 EFA, 2 Opti-Mito-Force, 1 Flora Plus)",2,28.9,,28.9,1.66995E+12
+1.66995E+12,3,Tonya Crane,110,Female + B,1,12.75,,12.75,1.66995E+12
+1.66995E+12,3,Tonya Crane,45,Essential DAK 1K2,1,16,,16,1.66995E+12
+1.66995E+12,5,Tyson Rowley,20,Muscle Rx,1,35.7,,35.7,1.66995E+12
+1.66995E+12,5,Tyson Rowley,22,Opti T,1,14.45,,14.45,1.66995E+12
+1.66995E+12,5,Tyson Rowley,12,EFA - Essential Fatty Acids,1,13.81,,13.81,1.66995E+12
+1.66995E+12,6,Rachael Brown,1,Digestion,1,12.75,,12.75,1.66995E+12
+1.66995E+12,6,Rachael Brown,13,Fat/Sugar/Trim,1,12.75,,12.75,1.66995E+12
+1.66995E+12,6,Rachael Brown,110,Female + B,1,12.75,,12.75,1.66995E+12
+1.66995E+12,6,Rachael Brown,19,Longevi-D k2,1,15.3,,15.3,1.66995E+12
+1.66995E+12,8,Chelsea Broderick,110,Female + B,2,12.75,,12.75,1.66995E+12
+1.66995E+12,8,Chelsea Broderick,82,"NOS Performance Paks (3 Arginine N.O., 1 High Potency Vitamin D3, 2 Crea-Nitric, 1 Methyl-B)",1,38.25,,38.25,1.66995E+12
+1.66995E+12,8,Chelsea Broderick,1,Digestion,3,12.75,,12.75,1.66995E+12
+1.66995E+12,8,Chelsea Broderick,76,"Exposure Protection Pak (2 Vitamin-Mineral, 1 High CFU Probiotic, 1 Phytonutrients, 1 Zinc, 1 Crea-Nitric, 1 Vitamin D3)",2,38.25,,38.25,1.66995E+12
+1.66995E+12,3,Tonya Crane,3,Whole Food Vitamin/Mineral,1,12.75,,12.75,1.66995E+12
+1.66995E+12,3,Tonya Crane,19,Longevi-D k2,1,15.3,,15.3,1.66995E+12
+1.66995E+12,3,Tonya Crane,110,Female + B,2,12.75,,12.75,1.66995E+12
+1.66995E+12,3,Tonya Crane,12,EFA - Essential Fatty Acids,1,13.81,,13.81,1.66995E+12
+1.66995E+12,3,Tonya Crane,91,Optimal Complete Nutrition Plus,1,37.6,,37.6,1.66995E+12
+1.66995E+12,3,Tonya Crane,71,"Allergy Pak (1 Acute, 2 EFA, 2 Opti-Mito-Force, 1 Flora Plus)",2,27.2,,27.2,1.66995E+12
+1.66995E+12,1,Tiffany Voorhees,76,"Exposure Protection Pak (2 Vitamin-Mineral, 1 High CFU Probiotic, 1 Phytonutrients, 1 Zinc, 1 Crea-Nitric, 1 Vitamin D3)",2,28.9,,28.9,1.66995E+12
+1.66995E+12,5,Tyson Rowley,1,Digestion,2,12.75,,12.75,1.66995E+12
+1.66995E+12,5,Tyson Rowley,13,Fat/Sugar/Trim,3,12.75,,12.75,1.66995E+12
+1.66995E+12,5,Tyson Rowley,22,Opti T,2,14.45,,14.45,1.66995E+12
+1.66995E+12,5,Tyson Rowley,10,Cort Adrena,6,12.75,,12.75,1.66995E+12
+1.66995E+12,5,Tyson Rowley,12,EFA - Essential Fatty Acids,1,13.81,,13.81,1.66995E+12
+1.66995E+12,5,Tyson Rowley,110,Female + B,3,12.75,,12.75,1.66995E+12
+1.66995E+12,2,Mindy Rowley,11,Defense,2,15.3,,15.3,1.66995E+12
+1.66995E+12,2,Mindy Rowley,10,Cort Adrena,3,12.75,,12.75,1.66995E+12
+1.66995E+12,2,Mindy Rowley,110,Female + B,1,12.75,,12.75,1.66995E+12
+1.66995E+12,2,Mindy Rowley,42,Opti-Para,8,13.6,,13.6,1.66995E+12
+1.66995E+12,2,Mindy Rowley,48,Essential Magnesium,3,13.6,,13.6,1.66995E+12
+1.66995E+12,6,Rachael Brown,1,Digestion,2,14.25,,14.25,1.66995E+12
+1.66995E+12,6,Rachael Brown,13,Fat/Sugar/Trim,2,14.25,,14.25,1.66995E+12
+1.66995E+12,6,Rachael Brown,19,Longevi-D k2,2,14.4,,14.4,1.66995E+12
+1.66995E+12,6,Rachael Brown,110,Female + B,2,14.25,,14.25,1.66995E+12
+1.66995E+12,16,Chelsea Friend,1,Digestion,1,14.25,,14.25,1.66995E+12
+1.66995E+12,8,Chelsea Broderick,1,Digestion,2,14.25,,14.25,1.66995E+12
+1.66996E+12,15,Alana Niamela,77,Flora Blitz 100,2,39.9,,39.9,1.66996E+12
+1.66996E+12,15,Alana Niamela,13,Fat/Sugar/Trim,1,14.25,,14.25,1.66996E+12
+1.66996E+12,15,Alana Niamela,56,Essential Shrooms,1,15.2,,15.2,1.66996E+12
+1.66996E+12,15,Alana Niamela,76,"Exposure Protection Pak (2 Vitamin-Mineral, 1 High CFU Probiotic, 1 Phytonutrients, 1 Zinc, 1 Crea-Nitric, 1 Vitamin D3)",4,32.3,,32.3,1.66996E+12
+1.66996E+12,2,Mindy Rowley,77,Flora Blitz 100,3,33.6,,33.6,1.66996E+12
+1.66996E+12,2,Mindy Rowley,76,"Exposure Protection Pak (2 Vitamin-Mineral, 1 High CFU Probiotic, 1 Phytonutrients, 1 Zinc, 1 Crea-Nitric, 1 Vitamin D3)",2,30.6,,30.6,1.66996E+12
+1.66996E+12,2,Mindy Rowley,35,Opti-Immune VRL,1,16.2,,16.2,1.66996E+12
+1.66996E+12,2,Mindy Rowley,4,Acute,2,18,,18,1.66996E+12
+1.66996E+12,2,Mindy Rowley,18,Liver/Kidney,2,13.5,,13.5,1.66996E+12
+1.66996E+12,2,Mindy Rowley,82,"NOS Performance Paks (3 Arginine N.O., 1 High Potency Vitamin D3, 2 Crea-Nitric, 1 Methyl-B)",1,40.5,,40.5,1.66996E+12
+1.66996E+12,1,Tiffany Voorhees,76,"Exposure Protection Pak (2 Vitamin-Mineral, 1 High CFU Probiotic, 1 Phytonutrients, 1 Zinc, 1 Crea-Nitric, 1 Vitamin D3)",2,30.6,,30.6,1.66996E+12
+1.66996E+12,1,Tiffany Voorhees,88,"Stress/Anxiety Relief Pak (1 Muscle Rx, 1 Cort-Adrena, 1 Hormonal Blend +B, 1 Magnesium, 2 Calm Nutrients, 1 High CFU Probiotic)",1,30.6,,30.6,1.66996E+12
+1.66996E+12,3,Tonya Crane,76,"Exposure Protection Pak (2 Vitamin-Mineral, 1 High CFU Probiotic, 1 Phytonutrients, 1 Zinc, 1 Crea-Nitric, 1 Vitamin D3)",1,30.6,,30.6,1.66996E+12
+1.66996E+12,3,Tonya Crane,110,Female + B,2,13.5,,13.5,1.66996E+12
+1.66996E+12,3,Tonya Crane,14,Flora Plus,1,13.5,,13.5,1.66996E+12
+1.66996E+12,3,Tonya Crane,12,EFA - Essential Fatty Acids,1,14.63,,14.63,1.66996E+12
+1.66996E+12,5,Tyson Rowley,10,Cort Adrena,3,13.5,,13.5,1.66996E+12
+1.66996E+12,5,Tyson Rowley,77,Flora Blitz 100,1,33.6,,33.6,1.66996E+12
+1.66996E+12,5,Tyson Rowley,18,Liver/Kidney,1,13.5,,13.5,1.66996E+12
+1.66996E+12,5,Tyson Rowley,14,Flora Plus,1,13.5,,13.5,1.66996E+12
+1.66996E+12,5,Tyson Rowley,12,EFA - Essential Fatty Acids,1,14.63,,14.63,1.66996E+12
+1.66996E+12,1,Tiffany Voorhees,1,Digestion,2,12,,12,1.66996E+12
+1.66996E+12,1,Tiffany Voorhees,14,Flora Plus,2,12,,12,1.66996E+12
+1.66996E+12,1,Tiffany Voorhees,94,Optimal Fruit & Veggie Plus,1,34.4,,34.4,1.66996E+12
+1.66996E+12,1,Tiffany Voorhees,76,"Exposure Protection Pak (2 Vitamin-Mineral, 1 High CFU Probiotic, 1 Phytonutrients, 1 Zinc, 1 Crea-Nitric, 1 Vitamin D3)",2,27.2,,27.2,1.66996E+12
+1.66996E+12,1,Tiffany Voorhees,25,Whole C - Chewables,2,10.4,,10.4,1.66996E+12
+1.66996E+12,3,Tonya Crane,1,Digestion,1,12,,12,1.66996E+12
+1.66996E+12,3,Tonya Crane,76,"Exposure Protection Pak (2 Vitamin-Mineral, 1 High CFU Probiotic, 1 Phytonutrients, 1 Zinc, 1 Crea-Nitric, 1 Vitamin D3)",2,27.2,,27.2,1.66996E+12
+1.66996E+12,3,Tonya Crane,110,Female + B,2,12,,12,1.66996E+12
+1.66996E+12,3,Tonya Crane,15,Iron,1,12,,12,1.66996E+12
+1.66996E+12,3,Tonya Crane,48,Essential Magnesium,1,12.8,,12.8,1.66996E+12
+1.66996E+12,3,Tonya Crane,91,Optimal Complete Nutrition Plus,1,37.6,,37.6,1.66996E+12
+1.66996E+12,4,Amber Hansen,3,Whole Food Vitamin/Mineral,1,12,,12,1.66996E+12
+1.66996E+12,5,Tyson Rowley,22,Opti T,4,13.6,,13.6,1.66996E+12
+1.66996E+12,5,Tyson Rowley,13,Fat/Sugar/Trim,2,12,,12,1.66996E+12
+1.66996E+12,5,Tyson Rowley,18,Liver/Kidney,1,12,,12,1.66996E+12
+1.66996E+12,5,Tyson Rowley,1,Digestion,1,12,,12,1.66996E+12
+1.66996E+12,5,Tyson Rowley,10,Cort Adrena,1,12,,12,1.66996E+12
+1.66996E+12,5,Tyson Rowley,14,Flora Plus,2,12,,12,1.66996E+12
+1.66996E+12,5,Tyson Rowley,37,Opti Lung,2,14.4,,14.4,1.66996E+12
+1.66996E+12,5,Tyson Rowley,76,"Exposure Protection Pak (2 Vitamin-Mineral, 1 High CFU Probiotic, 1 Phytonutrients, 1 Zinc, 1 Crea-Nitric, 1 Vitamin D3)",2,27.2,,27.2,1.66996E+12
+1.66996E+12,5,Tyson Rowley,20,Muscle Rx,1,30.4,,30.4,1.66996E+12
+1.66996E+12,5,Tyson Rowley,25,Whole C - Chewables,2,10.4,,10.4,1.66996E+12
+1.66996E+12,5,Tyson Rowley,77,Flora Blitz 100,1,33.6,,33.6,1.66996E+12
+1.66996E+12,6,Rachael Brown,110,Female + B,1,12,,12,1.66996E+12
+1.66996E+12,6,Rachael Brown,109,REM Sleep,1,13.6,,13.6,1.66996E+12
+1.66996E+12,6,Rachael Brown,19,Longevi-D k2,1,14.4,,14.4,1.66996E+12
+1.66996E+12,7,Shayla Rowley,76,"Exposure Protection Pak (2 Vitamin-Mineral, 1 High CFU Probiotic, 1 Phytonutrients, 1 Zinc, 1 Crea-Nitric, 1 Vitamin D3)",2,27.2,,27.2,1.66996E+12
+1.66996E+12,8,Chelsea Broderick,76,"Exposure Protection Pak (2 Vitamin-Mineral, 1 High CFU Probiotic, 1 Phytonutrients, 1 Zinc, 1 Crea-Nitric, 1 Vitamin D3)",2,27.2,,27.2,1.66996E+12
+1.66996E+12,10,Dana Bentley,1,Digestion,7,12,,12,1.66996E+12
+1.66996E+12,10,Dana Bentley,14,Flora Plus,7,12,,12,1.66996E+12
+1.66996E+12,10,Dana Bentley,13,Fat/Sugar/Trim,4,12,,12,1.66996E+12
+1.66996E+12,10,Dana Bentley,76,"Exposure Protection Pak (2 Vitamin-Mineral, 1 High CFU Probiotic, 1 Phytonutrients, 1 Zinc, 1 Crea-Nitric, 1 Vitamin D3)",3,27.2,,27.2,1.66996E+12
+1.66996E+12,9,Alexa Rowley,1,Digestion,1,12.75,,12.75,1.66996E+12
+1.66996E+12,9,Alexa Rowley,7,BonePlus Calcium,1,12.75,,12.75,1.66996E+12
+1.66996E+12,9,Alexa Rowley,13,Fat/Sugar/Trim,1,12.75,,12.75,1.66996E+12
+1.66996E+12,8,Chelsea Broderick,30,Opti-Enviro Detox,1,21.25,,21.25,1.66996E+12
+1.66996E+12,8,Chelsea Broderick,76,"Exposure Protection Pak (2 Vitamin-Mineral, 1 High CFU Probiotic, 1 Phytonutrients, 1 Zinc, 1 Crea-Nitric, 1 Vitamin D3)",3,27.2,,27.2,1.66996E+12
+1.66996E+12,7,Shayla Rowley,3,Whole Food Vitamin/Mineral,1,12.75,,12.75,1.66996E+12
+1.66996E+12,7,Shayla Rowley,11,Defense,2,12.8,,12.8,1.66996E+12
+1.66996E+12,7,Shayla Rowley,14,Flora Plus,2,12,,12,1.66996E+12
+1.66996E+12,7,Shayla Rowley,25,Whole C - Chewables,2,8.8,,8.8,1.66996E+12
+1.66996E+12,7,Shayla Rowley,35,Opti-Immune VRL,2,12.8,,12.8,1.66996E+12
+1.66996E+12,7,Shayla Rowley,1,Digestion,2,12.75,,12.75,1.66996E+12
+1.66996E+12,7,Shayla Rowley,76,"Exposure Protection Pak (2 Vitamin-Mineral, 1 High CFU Probiotic, 1 Phytonutrients, 1 Zinc, 1 Crea-Nitric, 1 Vitamin D3)",3,27.2,,27.2,1.66996E+12
+1.66996E+12,7,Shayla Rowley,23,OxyPure,1,13.6,,13.6,1.66996E+12
+1.66996E+12,6,Rachael Brown,110,Female + B,2,12.75,,12.75,1.66996E+12
+1.66996E+12,6,Rachael Brown,76,"Exposure Protection Pak (2 Vitamin-Mineral, 1 High CFU Probiotic, 1 Phytonutrients, 1 Zinc, 1 Crea-Nitric, 1 Vitamin D3)",1,27.2,,27.2,1.66996E+12
+1.66996E+12,6,Rachael Brown,39,Opti-Metals Detox,1,21.25,,21.25,1.66996E+12
+1.66996E+12,6,Rachael Brown,30,Opti-Enviro Detox,1,21.25,,21.25,1.66996E+12
+1.66996E+12,5,Tyson Rowley,14,Flora Plus,1,12,,12,1.66996E+12
+1.66996E+12,5,Tyson Rowley,18,Liver/Kidney,1,12.75,,12.75,1.66996E+12
+1.66996E+12,1,Tiffany Voorhees,76,"Exposure Protection Pak (2 Vitamin-Mineral, 1 High CFU Probiotic, 1 Phytonutrients, 1 Zinc, 1 Crea-Nitric, 1 Vitamin D3)",3,27.2,,27.2,1.66996E+12
+1.66996E+12,1,Tiffany Voorhees,94,Optimal Fruit & Veggie Plus,1,32.3,,32.3,1.66996E+12
+1.66996E+12,1,Tiffany Voorhees,25,Whole C - Chewables,2,8.8,,8.8,1.66996E+12
+1.66996E+12,3,Tonya Crane,1,Digestion,2,12.75,,12.75,1.66996E+12
+1.66996E+12,3,Tonya Crane,14,Flora Plus,1,12,,12,1.66996E+12
+1.66996E+12,3,Tonya Crane,3,Whole Food Vitamin/Mineral,1,12.75,,12.75,1.66996E+12
+1.66996E+12,3,Tonya Crane,45,Essential DAK 1K2,1,13.6,,13.6,1.66996E+12
+1.66996E+12,3,Tonya Crane,12,EFA - Essential Fatty Acids,1,13.81,,13.81,1.66996E+12
+1.66996E+12,3,Tonya Crane,13,Fat/Sugar/Trim,2,12.75,,12.75,1.66996E+12
+1.66996E+12,3,Tonya Crane,94,Optimal Fruit & Veggie Plus,1,32.3,,32.3,1.66996E+12
+1.66996E+12,3,Tonya Crane,76,"Exposure Protection Pak (2 Vitamin-Mineral, 1 High CFU Probiotic, 1 Phytonutrients, 1 Zinc, 1 Crea-Nitric, 1 Vitamin D3)",4,27.2,,27.2,1.66996E+12
+1.66996E+12,3,Tonya Crane,23,OxyPure,2,13.6,,13.6,1.66996E+12
+1.66999E+12,2,Mindy Rowley,76,"Exposure Protection Pak (2 Vitamin-Mineral, 1 High CFU Probiotic, 1 Phytonutrients, 1 Zinc, 1 Crea-Nitric, 1 Vitamin D3)",4,27.2,,27.2,1.66999E+12
+1.66999E+12,2,Mindy Rowley,3,Whole Food Vitamin/Mineral,2,13.5,,13.5,1.66999E+12
+1.66999E+12,2,Mindy Rowley,1,Digestion,4,13.5,,13.5,1.66999E+12
+1.66999E+12,2,Mindy Rowley,18,Liver/Kidney,2,13.5,,13.5,1.66999E+12
+1.66999E+12,2,Mindy Rowley,11,Defense,4,12.8,,12.8,1.66999E+12
+1.66999E+12,2,Mindy Rowley,35,Opti-Immune VRL,2,12.8,,12.8,1.66999E+12
+1.66999E+12,2,Mindy Rowley,110,Female + B,2,13.5,,13.5,1.66999E+12
+1.66999E+12,2,Mindy Rowley,7,BonePlus Calcium,4,13.5,,13.5,1.66999E+12
+1.66999E+12,2,Mindy Rowley,23,OxyPure,4,14.4,,14.4,1.66999E+12
+1.66999E+12,2,Mindy Rowley,12,EFA - Essential Fatty Acids,2,14.63,,14.63,1.66999E+12
+1.66999E+12,2,Mindy Rowley,48,Essential Magnesium,2,14.4,,14.4,1.66999E+12
+1.66999E+12,5,Tyson Rowley,20,Muscle Rx,1,36.1,,36.1,1.67E+12
+1.66999E+12,5,Tyson Rowley,18,Liver/Kidney,2,14.25,,14.25,1.67E+12
+1.66999E+12,5,Tyson Rowley,22,Opti T,5,13.6,,13.6,1.67E+12
+1.66999E+12,5,Tyson Rowley,10,Cort Adrena,4,14.25,,14.25,1.67E+12
+1.66999E+12,5,Tyson Rowley,37,Opti Lung,1,14.4,,14.4,1.67E+12
+1.67E+12,3,Tonya Crane,3,Whole Food Vitamin/Mineral,2,12,,12,1.67E+12
+1.67E+12,3,Tonya Crane,77,Flora Blitz 100,2,33.6,,33.6,1.67E+12
+1.67E+12,3,Tonya Crane,45,Essential DAK 1K2,2,12.8,,12.8,1.67E+12
+1.67E+12,3,Tonya Crane,12,EFA - Essential Fatty Acids,2,13,,13,1.67E+12
+1.67E+12,3,Tonya Crane,35,Opti-Immune VRL,1,12.8,,12.8,1.67E+12
+1.67E+12,3,Tonya Crane,110,Female + B,1,12,,12,1.67E+12
+1.67E+12,5,Tyson Rowley,18,Liver/Kidney,1,12,,12,1.67E+12
+1.67E+12,5,Tyson Rowley,25,Whole C - Chewables,1,8.8,,8.8,1.67E+12
+1.67E+12,5,Tyson Rowley,37,Opti Lung,1,12.8,,12.8,1.67E+12
+1.67E+12,2,Mindy Rowley,1,Digestion,7,12.75,,12.75,1.67E+12
+1.67E+12,2,Mindy Rowley,13,Fat/Sugar/Trim,5,12.75,,12.75,1.67E+12
+1.67E+12,2,Mindy Rowley,42,Opti-Para,3,13.6,,13.6,1.67E+12
+1.67E+12,2,Mindy Rowley,45,Essential DAK 1K2,4,12.8,,12.8,1.67E+12
+1.67E+12,2,Mindy Rowley,35,Opti-Immune VRL,2,13.6,,13.6,1.67E+12
+1.67E+12,2,Mindy Rowley,11,Defense,5,13.6,,13.6,1.67E+12
+1.67E+12,2,Mindy Rowley,14,Flora Plus,5,12.75,,12.75,1.67E+12
+1.67E+12,2,Mindy Rowley,40,Opti-Methyl-B,3,12.8,,12.8,1.67E+12
+1.67E+12,2,Mindy Rowley,18,Liver/Kidney,3,12.75,,12.75,1.67E+12
+1.67E+12,2,Mindy Rowley,12,EFA - Essential Fatty Acids,2,13,,13,1.67E+12
+1.67E+12,2,Mindy Rowley,3,Whole Food Vitamin/Mineral,4,12.75,,12.75,1.67E+12
+1.67E+12,2,Mindy Rowley,48,Essential Magnesium,2,13.6,,13.6,1.67E+12
+1.67E+12,2,Mindy Rowley,92,Optimal Complete Performance (Chocolate),2,34,,34,1.67E+12
+1.67036E+12,9,Alexa Rowley,14,Flora Plus,3,12.75,,12.75,1.67036E+12
+1.67036E+12,9,Alexa Rowley,7,BonePlus Calcium,3,12.75,,12.75,1.67036E+12
+1.67036E+12,9,Alexa Rowley,11,Defense,2,13.6,,13.6,1.67036E+12
+1.67036E+12,9,Alexa Rowley,13,Fat/Sugar/Trim,3,12.75,,12.75,1.67036E+12
+1.67036E+12,9,Alexa Rowley,1,Digestion,3,12.75,,12.75,1.67036E+12
+1.67036E+12,8,Chelsea Broderick,77,Flora Blitz 100,1,35.7,,35.7,1.67036E+12
+1.67036E+12,7,Shayla Rowley,19,Longevi-D k2,1,13.6,,13.6,1.67036E+12
+1.67036E+12,7,Shayla Rowley,14,Flora Plus,2,12.75,,12.75,1.67036E+12
+1.67036E+12,7,Shayla Rowley,3,Whole Food Vitamin/Mineral,1,12.75,,12.75,1.67036E+12
+1.67036E+12,5,Tyson Rowley,37,Opti Lung,2,13.6,,13.6,1.67036E+12
+1.67036E+12,5,Tyson Rowley,112,Optimal Collagen Plus,4,34,,34,1.67036E+12
+1.67036E+12,5,Tyson Rowley,1,Digestion,4,12.75,,12.75,1.67036E+12
+1.67036E+12,5,Tyson Rowley,14,Flora Plus,4,12.75,,12.75,1.67036E+12
+1.67036E+12,5,Tyson Rowley,13,Fat/Sugar/Trim,4,12.75,,12.75,1.67036E+12
+1.67036E+12,5,Tyson Rowley,12,EFA - Essential Fatty Acids,4,13.81,,13.81,1.67036E+12
+1.67036E+12,5,Tyson Rowley,22,Opti T,6,13.6,,13.6,1.67036E+12
+1.67036E+12,3,Tonya Crane,14,Flora Plus,3,12.75,,12.75,1.67036E+12
+1.67036E+12,3,Tonya Crane,21,Opti-Nitric,1,12.8,,12.8,1.67036E+12
+1.67036E+12,3,Tonya Crane,12,EFA - Essential Fatty Acids,1,13.81,,13.81,1.67036E+12
+1.67036E+12,3,Tonya Crane,1,Digestion,1,12.75,,12.75,1.67036E+12
+1.67036E+12,3,Tonya Crane,3,Whole Food Vitamin/Mineral,1,12.75,,12.75,1.67036E+12
+1.67036E+12,3,Tonya Crane,19,Longevi-D k2,1,13.6,,13.6,1.67036E+12
+1.67036E+12,3,Tonya Crane,89,"Tru-Energy Pak (4 Muscle Rx, 2 Cort-Adrena, 2 DAK1K2, 4 B Awake)",1,37.4,,37.4,1.67036E+12
+1.67036E+12,1,Tiffany Voorhees,1,Digestion,1,12.75,,12.75,1.67036E+12
+1.67036E+12,1,Tiffany Voorhees,14,Flora Plus,2,12.75,,12.75,1.67036E+12
+1.67036E+12,1,Tiffany Voorhees,21,Opti-Nitric,2,12.8,,12.8,1.67036E+12
+1.67036E+12,1,Tiffany Voorhees,113,Daily Nutrient Essential Pak,2,55.25,,55.25,1.67036E+12
+1.67036E+12,2,Mindy Rowley,1,Digestion,4,12.75,,12.75,1.67036E+12
+1.67036E+12,2,Mindy Rowley,3,Whole Food Vitamin/Mineral,2,12.75,,12.75,1.67036E+12
+1.67036E+12,2,Mindy Rowley,7,BonePlus Calcium,2,12.75,,12.75,1.67036E+12
+1.67036E+12,2,Mindy Rowley,11,Defense,2,13.6,,13.6,1.67036E+12
+1.67036E+12,2,Mindy Rowley,13,Fat/Sugar/Trim,4,12.75,,12.75,1.67036E+12
+1.67036E+12,2,Mindy Rowley,110,Female + B,3,12.75,,12.75,1.67036E+12
+1.67036E+12,2,Mindy Rowley,14,Flora Plus,6,12.75,,12.75,1.67036E+12
+1.67036E+12,2,Mindy Rowley,15,Iron,1,12.75,,12.75,1.67036E+12
+1.67036E+12,2,Mindy Rowley,18,Liver/Kidney,2,12.75,,12.75,1.67036E+12
+1.67036E+12,2,Mindy Rowley,22,Opti T,2,13.6,,13.6,1.67036E+12
+1.67036E+12,2,Mindy Rowley,35,Opti-Immune VRL,2,13.6,,13.6,1.67036E+12
+1.67036E+12,2,Mindy Rowley,40,Opti-Methyl-B,2,12.8,,12.8,1.67036E+12
+1.67036E+12,2,Mindy Rowley,42,Opti-Para,3,13.6,,13.6,1.67036E+12
+1.67036E+12,2,Mindy Rowley,112,Optimal Collagen Plus,1,34,,34,1.67036E+12
+1.67036E+12,2,Mindy Rowley,92,Optimal Complete Performance (Chocolate),1,34,,34,1.67036E+12
+1.67036E+12,2,Mindy Rowley,19,Longevi-D k2,2,13.6,,13.6,1.67036E+12
+1.67036E+12,1,Tiffany Voorhees,25,Whole C - Chewables,3,9.35,,9.35,1.67096E+12
+1.67036E+12,1,Tiffany Voorhees,35,Opti-Immune VRL,2,13.6,,13.6,1.67096E+12
+1.67036E+12,1,Tiffany Voorhees,1,Digestion,1,12.75,,12.75,1.67096E+12
+1.67036E+12,3,Tonya Crane,7,BonePlus Calcium,1,12.75,,12.75,1.67096E+12
+1.67036E+12,3,Tonya Crane,12,EFA - Essential Fatty Acids,2,13,,13,1.67096E+12
+1.67036E+12,3,Tonya Crane,21,Opti-Nitric,2,13.6,,13.6,1.67096E+12
+1.67036E+12,3,Tonya Crane,94,Optimal Fruit & Veggie Plus,1,32.3,,32.3,1.67096E+12
+1.67036E+12,3,Tonya Crane,1,Digestion,4,12.75,,12.75,1.67096E+12
+1.67036E+12,3,Tonya Crane,3,Whole Food Vitamin/Mineral,2,12.75,,12.75,1.67096E+12
+1.67036E+12,4,Amber Hansen,1,Digestion,1,12.75,,12.75,1.67096E+12
+1.67036E+12,5,Tyson Rowley,18,Liver/Kidney,1,12.75,,12.75,1.67096E+12
+1.67036E+12,6,Rachael Brown,110,Female + B,1,12.75,,12.75,1.67096E+12
+1.67036E+12,6,Rachael Brown,1,Digestion,1,12.75,,12.75,1.67096E+12
+1.67036E+12,7,Shayla Rowley,25,Whole C - Chewables,1,9.35,,9.35,1.67096E+12
+1.67036E+12,7,Shayla Rowley,1,Digestion,2,12.75,,12.75,1.67096E+12
+1.67036E+12,11,Marie Bentley,4,Acute,1,14.45,,14.45,1.67096E+12
+1.67036E+12,2,Mindy Rowley,1,Digestion,1,12.75,,12.75,1.67096E+12
+1.67097E+12,2,Mindy Rowley,11,Defense,3,17,,17,1.67097E+12
+1.67097E+12,2,Mindy Rowley,1,Digestion,3,14.45,,14.45,1.67097E+12
+1.67097E+12,2,Mindy Rowley,45,Essential DAK 1K2,3,15.3,,15.3,1.67097E+12
+1.67097E+12,2,Mindy Rowley,13,Fat/Sugar/Trim,3,14.45,,14.45,1.67097E+12
+1.67097E+12,2,Mindy Rowley,35,Opti-Immune VRL,3,17,,17,1.67097E+12
+1.67097E+12,2,Mindy Rowley,31,Opti-Female,3,16.15,,16.15,1.67097E+12
+1.67097E+12,12,Athena Peters,1,Digestion,10,14.45,,14.45,1.67097E+12
+1.67097E+12,12,Athena Peters,13,Fat/Sugar/Trim,10,14.45,,14.45,1.67097E+12
+1.67097E+12,12,Athena Peters,77,Flora Blitz 100,3,33.15,,33.15,1.67097E+12
+1.67345E+12,2,Mindy Rowley,11,Defense,2,16,,16,1.67363E+12
+1.67345E+12,2,Mindy Rowley,1,Digestion,4,13.6,,13.6,1.67363E+12
+1.67345E+12,2,Mindy Rowley,45,Essential DAK 1K2,5,14.4,,14.4,1.67363E+12
+1.67345E+12,2,Mindy Rowley,13,Fat/Sugar/Trim,3,13.6,,13.6,1.67363E+12
+1.67345E+12,2,Mindy Rowley,77,Flora Blitz 100,3,31.2,,31.2,1.67363E+12
+1.67345E+12,2,Mindy Rowley,14,Flora Plus,3,13.6,,13.6,1.67363E+12
+1.67346E+12,2,Mindy Rowley,18,Liver/Kidney,4,13.6,,13.6,1.67363E+12
+1.67346E+12,2,Mindy Rowley,35,Opti-Immune VRL,3,16,,16,1.67363E+12
+1.67346E+12,12,Athena Peters,13,Fat/Sugar/Trim,3,13.6,,13.6,1.67363E+12
+1.67346E+12,12,Athena Peters,77,Flora Blitz 100,2,31.2,,31.2,1.67363E+12
+1.67346E+12,12,Athena Peters,18,Liver/Kidney,6,13.6,,13.6,1.67363E+12
+1.67346E+12,2,Mindy Rowley,92,Optimal Complete Performance (Chocolate),1,43.2,,43.2,1.67363E+12
+1.67353E+12,5,Tyson Rowley,1,Digestion,1,13.6,,13.6,1.67363E+12
+1.67353E+12,5,Tyson Rowley,12,EFA - Essential Fatty Acids,2,14.4,,14.4,1.67363E+12
+1.67353E+12,5,Tyson Rowley,13,Fat/Sugar/Trim,1,13.6,,13.6,1.67363E+12
+1.67353E+12,8,Chelsea Broderick,82,"NOS Performance Paks (3 Arginine N.O., 1 High Potency Vitamin D3, 2 Crea-Nitric, 1 Methyl-B)",1,31.2,,31.2,1.67363E+12
+1.67353E+12,8,Chelsea Broderick,3,Whole Food Vitamin/Mineral,2,13.6,,13.6,1.67363E+12
+1.67354E+12,7,Shayla Rowley,11,Defense,1,16,,16,1.67363E+12
+1.67354E+12,7,Shayla Rowley,1,Digestion,2,13.6,,13.6,1.67363E+12
+1.67354E+12,7,Shayla Rowley,14,Flora Plus,1,13.6,,13.6,1.67363E+12
+1.67354E+12,7,Shayla Rowley,15,Iron,1,13.6,,13.6,1.67363E+12
+1.67354E+12,5,Tyson Rowley,92,Optimal Complete Performance (Chocolate),1,43.2,,43.2,1.67363E+12
+1.67355E+12,7,Shayla Rowley,92,Optimal Complete Performance (Chocolate),1,43.2,,43.2,1.67363E+12
+1.67355E+12,7,Shayla Rowley,13,Fat/Sugar/Trim,2,13.6,,13.6,1.67363E+12
+1.67356E+12,7,Shayla Rowley,3,Whole Food Vitamin/Mineral,1,13.6,,13.6,1.67363E+12
+1.67356E+12,7,Shayla Rowley,25,Whole C - Chewables,1,11.2,,11.2,1.67363E+12
+1.67363E+12,5,Tyson Rowley,31,Opti-Female,2,15.2,,15.2,1.67363E+12
+1.67761E+12,2,Mindy Rowley,12,EFA - Essential Fatty Acids,2,15.3,,15.3,1.67891E+12
+1.67761E+12,2,Mindy Rowley,13,Fat/Sugar/Trim,3,14.45,,14.45,1.67891E+12
+1.67761E+12,2,Mindy Rowley,45,Essential DAK 1K2,3,15.3,,15.3,1.67891E+12
+1.67761E+12,2,Mindy Rowley,42,Opti-Para,4,15.3,,15.3,1.67891E+12
+1.67762E+12,12,Athena Peters,77,Flora Blitz 100,2,39.95,,39.95,1.67891E+12
+1.67762E+12,12,Athena Peters,13,Fat/Sugar/Trim,2,14.45,,14.45,1.67891E+12
+1.67769E+12,2,Mindy Rowley,26,Zinc-Oxy Spray,4,20.4,,20.4,1.67891E+12
+1.67769E+12,2,Mindy Rowley,49,Essential Therapeutic Melatonin (drops),1,19.55,,19.55,1.67891E+12
+1.67769E+12,2,Mindy Rowley,2,Digestion - Family Size,3,39.95,,39.95,1.67891E+12
+1.6777E+12,2,Mindy Rowley,31,Opti-Female,5,14.45,,14.45,1.67891E+12
+1.6789E+12,8,Chelsea Broderick,22,Opti T,2,17.1,,17.1,1.67951E+12
+1.6789E+12,8,Chelsea Broderick,82,"NOS Performance Paks (3 Arginine N.O., 1 High Potency Vitamin D3, 2 Crea-Nitric, 1 Methyl-B)",1,42.3,,42.3,1.67951E+12
+1.6789E+12,3,Tonya Crane,71,"Allergy Pak (1 Acute, 2 EFA, 2 Opti-Mito-Force, 1 Flora Plus)",2,39.6,,39.6,1.67951E+12
+1.6789E+12,3,Tonya Crane,1,Digestion,1,15.3,,15.3,1.67951E+12
+1.6789E+12,3,Tonya Crane,12,EFA - Essential Fatty Acids,2,16.2,,16.2,1.67951E+12
+1.6789E+12,3,Tonya Crane,13,Fat/Sugar/Trim,1,15.3,,15.3,1.67951E+12
+1.6789E+12,8,Chelsea Broderick,2,Digestion - Family Size,1,42.3,,42.3,1.67951E+12
+1.6789E+12,3,Tonya Crane,31,Opti-Female,1,17.1,,17.1,1.67951E+12
+1.6789E+12,3,Tonya Crane,3,Whole Food Vitamin/Mineral,1,15.3,,15.3,1.67951E+12
+1.67894E+12,5,Tyson Rowley,1,Digestion,1,15.3,,15.3,1.67951E+12
+1.67894E+12,5,Tyson Rowley,12,EFA - Essential Fatty Acids,1,16.2,,16.2,1.67951E+12
+1.67894E+12,5,Tyson Rowley,20,Muscle Rx,2,37.8,,37.8,1.67951E+12
+1.67894E+12,5,Tyson Rowley,92,Optimal Complete Performance (Chocolate),1,48.6,,48.6,1.67951E+12
+1.67894E+12,5,Tyson Rowley,13,Fat/Sugar/Trim,1,15.3,,15.3,1.67951E+12
+1.67944E+12,3,Tonya Crane,48,Essential Magnesium,1,16.2,,16.2,1.67951E+12
+1.67944E+12,5,Tyson Rowley,31,Opti-Female,1,17.1,,17.1,1.67951E+12
+1.67944E+12,3,Tonya Crane,19,Longevi-D k2,2,18,,18,1.67951E+12
+1.68184E+12,2,Mindy Rowley,2,Digestion - Family Size,3,37.6,,37.6,1.683E+12
+1.68184E+12,2,Mindy Rowley,13,Fat/Sugar/Trim,3,13.6,,13.6,1.683E+12
+1.68184E+12,2,Mindy Rowley,42,Opti-Para,4,14.4,,14.4,1.683E+12
+1.68184E+12,2,Mindy Rowley,20,Muscle Rx,2,33.6,,33.6,1.683E+12
+1.68184E+12,2,Mindy Rowley,48,Essential Magnesium,3,14.4,,14.4,1.683E+12
+1.68184E+12,2,Mindy Rowley,77,Flora Blitz 100,3,37.6,,37.6,1.683E+12
+1.68184E+12,2,Mindy Rowley,92,Optimal Complete Performance (Chocolate),1,43.2,,43.2,1.683E+12
+1.682E+12,12,Athena Peters,13,Fat/Sugar/Trim,2,13.6,,13.6,1.683E+12
+1.682E+12,12,Athena Peters,2,Digestion - Family Size,1,37.6,,37.6,1.683E+12
+1.682E+12,12,Athena Peters,77,Flora Blitz 100,5,37.6,,37.6,1.683E+12
+1.68262E+12,3,Tonya Crane,71,"Allergy Pak (1 Acute, 2 EFA, 2 Opti-Mito-Force, 1 Flora Plus)",2,35.2,,35.2,1.68305E+12
+1.68262E+12,3,Tonya Crane,12,EFA - Essential Fatty Acids,2,14.4,,14.4,1.68305E+12
+1.68262E+12,3,Tonya Crane,45,Essential DAK 1K2,1,14.4,,14.4,1.68305E+12
+1.68262E+12,3,Tonya Crane,15,Iron,1,13.6,,13.6,1.68305E+12
+1.68262E+12,3,Tonya Crane,31,Opti-Female,1,15.2,,15.2,1.68305E+12
+1.68299E+12,3,Tonya Crane,91,Optimal Complete Nutrition Plus,1,43.2,,43.2,1.68305E+12
+1.683E+12,8,Chelsea Broderick,13,Fat/Sugar/Trim,6,13.6,,13.6,1.68305E+12
+1.68365E+12,6,Rachael Brown,15,Iron,3,13.6,,13.6,1.68417E+12
+1.68365E+12,6,Rachael Brown,25,Whole C - Chewables,3,11.2,,11.2,1.68417E+12
+1.68392E+12,6,Rachael Brown,19,Longevi-D k2,2,16,,16,1.68417E+12
+1.68392E+12,3,Tonya Crane,3,Whole Food Vitamin/Mineral,2,13.6,,13.6,1.68417E+12
+1.68408E+12,2,Mindy Rowley,92,Optimal Complete Performance (Chocolate),1,43.2,,43.2,1.68417E+12
+1.68408E+12,2,Mindy Rowley,11,Defense,2,16,,16,1.68417E+12
+1.68408E+12,2,Mindy Rowley,7,BonePlus Calcium,2,13.6,,13.6,1.68417E+12
+1.68408E+12,2,Mindy Rowley,112,Optimal Collagen Plus,1,43.2,,43.2,1.68417E+12
+1.68412E+12,2,Mindy Rowley,26,Zinc-Oxy Spray,2,19.2,,19.2,1.68417E+12
+1.68416E+12,8,Chelsea Broderick,82,"NOS Performance Paks (3 Arginine N.O., 1 High Potency Vitamin D3, 2 Crea-Nitric, 1 Methyl-B)",1,37.6,,37.6,1.68417E+12
+1.68416E+12,8,Chelsea Broderick,15,Iron,1,13.6,,13.6,1.68417E+12
+1.68416E+12,8,Chelsea Broderick,45,Essential DAK 1K2,2,14.4,,14.4,1.68417E+12
+1.68417E+12,14,Crystal Petersen,77,Flora Blitz 100,1,37.6,,37.6,1.68419E+12
+1.68417E+12,14,Crystal Petersen,42,Opti-Para,1,14.4,,14.4,1.68419E+12
+1.68417E+12,14,Crystal Petersen,80,"Natural NSAID Pak (2 Protease Anti-Inflam, 1 Joint Nutrients, 1 EFA, 3 Phytonutrients)",1,35.2,,35.2,1.68419E+12
+1.68419E+12,14,Crystal Petersen,3,Whole Food Vitamin/Mineral,1,13.6,,13.6,1.68419E+12
+1.6848E+12,6,Rachael Brown,3,Whole Food Vitamin/Mineral,2,13.6,,13.6,1.6896E+12
+1.68888E+12,8,Chelsea Broderick,13,Fat/Sugar/Trim,2,13.6,,13.6,1.6896E+12
+1.68888E+12,8,Chelsea Broderick,22,Opti T,2,15.2,,15.2,1.6896E+12
+1.68888E+12,8,Chelsea Broderick,82,"NOS Performance Paks (3 Arginine N.O., 1 High Potency Vitamin D3, 2 Crea-Nitric, 1 Methyl-B)",2,37.6,,37.6,1.6896E+12
+1.68888E+12,8,Chelsea Broderick,93,Optimal Complete Performance (Vanilla),1,43.2,,43.2,1.6896E+12
+1.68888E+12,8,Chelsea Broderick,77,Flora Blitz 100,2,37.6,,37.6,1.6896E+12
+1.68888E+12,8,Chelsea Broderick,3,Whole Food Vitamin/Mineral,2,13.6,,13.6,1.6896E+12
+1.68888E+12,8,Chelsea Broderick,45,Essential DAK 1K2,2,14.4,,14.4,1.6896E+12
+1.68905E+12,5,Tyson Rowley,4,Acute,1,17.6,,17.6,1.6896E+12
+1.68905E+12,5,Tyson Rowley,10,Cort Adrena,1,13.6,,13.6,1.6896E+12
+1.68905E+12,5,Tyson Rowley,93,Optimal Complete Performance (Vanilla),1,43.2,,43.2,1.6896E+12
+1.68905E+12,5,Tyson Rowley,20,Muscle Rx,2,33.6,,33.6,1.6896E+12
+1.68905E+12,5,Tyson Rowley,3,Whole Food Vitamin/Mineral,1,13.6,,13.6,1.6896E+12
+1.68905E+12,8,Chelsea Broderick,15,Iron,1,13.6,,13.6,1.6896E+12
+1.68905E+12,3,Tonya Crane,71,"Allergy Pak (1 Acute, 2 EFA, 2 Opti-Mito-Force, 1 Flora Plus)",2,35.2,,35.2,1.6896E+12
+1.68905E+12,3,Tonya Crane,2,Digestion - Family Size,1,37.6,,37.6,1.6896E+12
+1.68905E+12,3,Tonya Crane,12,EFA - Essential Fatty Acids,1,14.4,,14.4,1.6896E+12
+1.68905E+12,3,Tonya Crane,13,Fat/Sugar/Trim,2,13.6,,13.6,1.6896E+12
+1.68905E+12,3,Tonya Crane,31,Opti-Female,2,15.2,,15.2,1.6896E+12
+1.68905E+12,3,Tonya Crane,3,Whole Food Vitamin/Mineral,3,13.6,,13.6,1.6896E+12
+1.68909E+12,1,Tiffany Voorhees,31,Opti-Female,2,15.2,,15.2,1.6896E+12
+1.68909E+12,1,Tiffany Voorhees,3,Whole Food Vitamin/Mineral,2,13.6,,13.6,1.6896E+12
+1.68909E+12,1,Tiffany Voorhees,12,EFA - Essential Fatty Acids,2,14.4,,14.4,1.6896E+12
+1.6891E+12,2,Mindy Rowley,2,Digestion - Family Size,5,37.6,,37.6,1.6896E+12
+1.6891E+12,2,Mindy Rowley,13,Fat/Sugar/Trim,2,13.6,,13.6,1.6896E+12
+1.6891E+12,2,Mindy Rowley,45,Essential DAK 1K2,2,14.4,,14.4,1.6896E+12
+1.6891E+12,2,Mindy Rowley,11,Defense,3,16,,16,1.6896E+12
+1.6891E+12,2,Mindy Rowley,35,Opti-Immune VRL,3,16,,16,1.6896E+12
+1.6891E+12,2,Mindy Rowley,12,EFA - Essential Fatty Acids,3,14.4,,14.4,1.6896E+12
+1.6891E+12,2,Mindy Rowley,31,Opti-Female,3,15.2,,15.2,1.6896E+12
+1.6891E+12,2,Mindy Rowley,3,Whole Food Vitamin/Mineral,3,13.6,,13.6,1.6896E+12
+1.6891E+12,2,Mindy Rowley,14,Flora Plus,5,13.6,,13.6,1.6896E+12
+1.68912E+12,2,Mindy Rowley,92,Optimal Complete Performance (Chocolate),1,43.2,,43.2,1.6896E+12
+1.6896E+12,2,Mindy Rowley,48,Essential Magnesium,2,14.4,,14.4,1.6896E+12
+1.68989E+12,2,Mindy Rowley,7,BonePlus Calcium,4,16.15,,16.15,1.68989E+12
+1.68989E+12,8,Chelsea Broderick,88,"Stress/Anxiety Relief Pak (1 Muscle Rx, 1 Cort-Adrena, 1 Hormonal Blend +B, 1 Magnesium, 2 Calm Nutrients, 1 High CFU Probiotic)",1,44.65,,44.65,1.68989E+12
+1.68989E+12,2,Mindy Rowley,13,Fat/Sugar/Trim,3,16.15,,16.15,1.68989E+12
+1.69024E+12,8,Chelsea Broderick,48,Essential Magnesium,2,16.2,,16.2,1.69282E+12
+1.69282E+12,2,Mindy Rowley,85,"Peptide Support Pak (1 Arginine N.O. 1 Methyl-B, 1 Mito-Force, 2 EFA, 1 Muscle Rx, 1 Vitamin-Mineral, 1 Resveratrol, 1 High CFU Probiotic, 1 Phytonutrients, 1 DAK1K2, 1 P-5-P, 1 NADH, 1 Zinc)",2,42.3,,42.3,1.69282E+12
+1.69282E+12,2,Mindy Rowley,2,Digestion - Family Size,2,42.3,,42.3,1.69282E+12
+1.69282E+12,8,Chelsea Broderick,45,Essential DAK 1K2,1,16.2,,16.2,1.69282E+12
+1.69282E+12,8,Chelsea Broderick,31,Opti-Female,1,17.1,,17.1,1.69282E+12
+1.69282E+12,8,Chelsea Broderick,77,Flora Blitz 100,1,42.3,,42.3,1.69282E+12
+1.69282E+12,8,Chelsea Broderick,15,Iron,1,15.3,,15.3,1.69282E+12
+1.69282E+12,8,Chelsea Broderick,18,Liver/Kidney,2,15.3,,15.3,1.69282E+12
+1.69282E+12,8,Chelsea Broderick,27,Opti-Adrenal,1,17.1,,17.1,1.69282E+12
+1.69282E+12,8,Chelsea Broderick,3,Whole Food Vitamin/Mineral,1,15.3,,15.3,1.69282E+12
+1.69282E+12,8,Chelsea Broderick,81,"Natural Z Pak ( 1 Opti-Adrenal, 1 Opti Methyl B, 1 Opti-Mito-Force, 1 Opti-Immune VRL, 1 Opti-GI, 1 Probiotic, 1 Essential DAK1K2)",2,42.3,,42.3,1.69282E+12
+1.69282E+12,8,Chelsea Broderick,2,Digestion - Family Size,1,42.3,,42.3,1.69282E+12
+1.69336E+12,12,Athena Peters,2,Digestion - Family Size,4,42.3,,42.3,1.69342E+12
+1.69336E+12,12,Athena Peters,48,Essential Magnesium,1,16.2,,16.2,1.69342E+12
+1.69336E+12,12,Athena Peters,13,Fat/Sugar/Trim,8,15.3,,15.3,1.69342E+12
+1.69336E+12,12,Athena Peters,77,Flora Blitz 100,2,42.3,,42.3,1.69342E+12
+1.69344E+12,2,Mindy Rowley,42,Opti-Para,6,14.4,,14.4,1.69402E+12
+1.69344E+12,2,Mindy Rowley,7,BonePlus Calcium,6,13.6,,13.6,1.69402E+12
+1.69344E+12,2,Mindy Rowley,45,Essential DAK 1K2,2,14.4,,14.4,1.69402E+12
+1.69344E+12,2,Mindy Rowley,13,Fat/Sugar/Trim,8,13.6,,13.6,1.69402E+12
+1.69344E+12,2,Mindy Rowley,11,Defense,3,16,,16,1.69402E+12
+1.69344E+12,2,Mindy Rowley,31,Opti-Female,3,15.2,,15.2,1.69402E+12
+1.69344E+12,2,Mindy Rowley,3,Whole Food Vitamin/Mineral,3,13.6,,13.6,1.69402E+12
+1.69344E+12,2,Mindy Rowley,77,Flora Blitz 100,1,37.6,,37.6,1.69402E+12
+1.69344E+12,2,Mindy Rowley,35,Opti-Immune VRL,3,16,,16,1.69402E+12
+1.69344E+12,2,Mindy Rowley,48,Essential Magnesium,5,14.4,,14.4,1.69402E+12
+1.69344E+12,2,Mindy Rowley,18,Liver/Kidney,4,13.6,,13.6,1.69402E+12
+1.69344E+12,10,Dana Bentley,92,Optimal Complete Performance (Chocolate),1,43.2,,43.2,1.69402E+12
+1.69344E+12,10,Dana Bentley,112,Optimal Collagen Plus,1,43.2,,43.2,1.69402E+12
+1.69344E+12,10,Dana Bentley,93,Optimal Complete Performance (Vanilla),1,43.2,,43.2,1.69402E+12
+1.69397E+12,8,Chelsea Broderick,14,Flora Plus,1,13.6,,13.6,1.69402E+12
+1.69397E+12,8,Chelsea Broderick,1,Digestion,1,13.6,,13.6,1.69402E+12
+1.69397E+12,8,Chelsea Broderick,13,Fat/Sugar/Trim,2,13.6,,13.6,1.69402E+12
+1.69398E+12,8,Chelsea Broderick,82,"NOS Performance Paks (3 Arginine N.O., 1 High Potency Vitamin D3, 2 Crea-Nitric, 1 Methyl-B)",1,37.6,,37.6,1.69402E+12
+1.694E+12,10,Dana Bentley,97,"21 Day Blitz Challenge Kit (Flora Blitz 100, Digestion, Pill Pouch, Booklet and Bag)",1,54.4,,54.4,1.69402E+12
+1.694E+12,10,Dana Bentley,12,EFA - Essential Fatty Acids,1,14.4,,14.4,1.69402E+12
+1.694E+12,10,Dana Bentley,18,Liver/Kidney,1,13.6,,13.6,1.69402E+12
+1.694E+12,10,Dana Bentley,31,Opti-Female,1,15.2,,15.2,1.69402E+12
+1.694E+12,3,Tonya Crane,71,"Allergy Pak (1 Acute, 2 EFA, 2 Opti-Mito-Force, 1 Flora Plus)",1,35.2,,35.2,1.69402E+12
+1.694E+12,3,Tonya Crane,12,EFA - Essential Fatty Acids,2,14.4,,14.4,1.69402E+12
+1.694E+12,3,Tonya Crane,45,Essential DAK 1K2,1,14.4,,14.4,1.69402E+12
+1.694E+12,3,Tonya Crane,14,Flora Plus,1,13.6,,13.6,1.69402E+12
+1.69401E+12,3,Tonya Crane,31,Opti-Female,2,15.2,,15.2,1.69402E+12
+1.69401E+12,3,Tonya Crane,35,Opti-Immune VRL,1,16,,16,1.69402E+12
+1.69401E+12,3,Tonya Crane,3,Whole Food Vitamin/Mineral,2,13.6,,13.6,1.69402E+12
+1.69401E+12,1,Tiffany Voorhees,85,"Peptide Support Pak (1 Arginine N.O. 1 Methyl-B, 1 Mito-Force, 2 EFA, 1 Muscle Rx, 1 Vitamin-Mineral, 1 Resveratrol, 1 High CFU Probiotic, 1 Phytonutrients, 1 DAK1K2, 1 P-5-P, 1 NADH, 1 Zinc)",2,37.6,,37.6,1.69402E+12
+1.69401E+12,1,Tiffany Voorhees,42,Opti-Para,1,14.4,,14.4,1.69402E+12
+1.69401E+12,1,Tiffany Voorhees,35,Opti-Immune VRL,2,16,,16,1.69402E+12
+1.69401E+12,1,Tiffany Voorhees,25,Whole C - Chewables,2,11.2,,11.2,1.69402E+12
+1.69401E+12,1,Tiffany Voorhees,77,Flora Blitz 100,2,37.6,,37.6,1.69402E+12
+1.69401E+12,1,Tiffany Voorhees,14,Flora Plus,1,13.6,,13.6,1.69402E+12
+1.69401E+12,1,Tiffany Voorhees,2,Digestion - Family Size,1,37.6,,37.6,1.69402E+12
+1.69401E+12,1,Tiffany Voorhees,31,Opti-Female,2,15.2,,15.2,1.69402E+12
+1.69402E+12,2,Mindy Rowley,26,Zinc-Oxy Spray,2,19.2,,19.2,1.69402E+12
+1.69402E+12,2,Mindy Rowley,114,Essential NADH,2,26.4,,26.4,1.69402E+12
+1.69402E+12,3,Tonya Crane,114,Essential NADH,1,26.4,,26.4,1.69402E+12
+1.69402E+12,8,Chelsea Broderick,22,Opti T,1,15.2,,15.2,1.69402E+12
+1.69402E+12,2,Mindy Rowley,22,Opti T,2,15.2,,15.2,1.69402E+12
+1.69431E+12,10,Dana Bentley,31,Opti-Female,3,15.2,,15.2,1.69775E+12
+1.69626E+12,3,Tonya Crane,27,Opti-Adrenal,2,15.2,,15.2,1.69775E+12
+1.69626E+12,3,Tonya Crane,12,EFA - Essential Fatty Acids,1,14.4,,14.4,1.69775E+12
+1.69626E+12,3,Tonya Crane,31,Opti-Female,2,15.2,,15.2,1.69775E+12
+1.69626E+12,3,Tonya Crane,3,Whole Food Vitamin/Mineral,2,13.6,,13.6,1.69775E+12
+1.69697E+12,3,Tonya Crane,2,Digestion - Family Size,1,37.6,,37.6,1.69775E+12
+1.69697E+12,3,Tonya Crane,14,Flora Plus,2,13.6,,13.6,1.69775E+12
+1.69698E+12,1,Tiffany Voorhees,25,Whole C - Chewables,4,11.2,,11.2,1.69775E+12
+1.69698E+12,1,Tiffany Voorhees,11,Defense,2,16,,16,1.69775E+12
+1.69698E+12,1,Tiffany Voorhees,35,Opti-Immune VRL,2,16,,16,1.69775E+12
+1.69708E+12,2,Mindy Rowley,45,Essential DAK 1K2,3,14.4,,14.4,1.69775E+12
+1.69708E+12,2,Mindy Rowley,11,Defense,3,16,,16,1.69775E+12
+1.69708E+12,2,Mindy Rowley,77,Flora Blitz 100,1,37.6,,37.6,1.69775E+12
+1.69708E+12,2,Mindy Rowley,14,Flora Plus,2,13.6,,13.6,1.69775E+12
+1.69708E+12,2,Mindy Rowley,35,Opti-Immune VRL,2,16,,16,1.69775E+12
+1.69709E+12,2,Mindy Rowley,48,Essential Magnesium,4,14.4,,14.4,1.69775E+12
+1.69709E+12,2,Mindy Rowley,18,Liver/Kidney,2,13.6,,13.6,1.69775E+12
+1.69709E+12,2,Mindy Rowley,27,Opti-Adrenal,4,15.2,,15.2,1.69775E+12
+1.69709E+12,2,Mindy Rowley,2,Digestion - Family Size,2,37.6,,37.6,1.69775E+12
+1.69709E+12,2,Mindy Rowley,85,"Peptide Support Pak (1 Arginine N.O. 1 Methyl-B, 1 Mito-Force, 2 EFA, 1 Muscle Rx, 1 Vitamin-Mineral, 1 Resveratrol, 1 High CFU Probiotic, 1 Phytonutrients, 1 DAK1K2, 1 P-5-P, 1 NADH, 1 Zinc)",1,37.6,,37.6,1.69775E+12
+1.69742E+12,5,Tyson Rowley,12,EFA - Essential Fatty Acids,1,14.4,,14.4,1.69775E+12
+1.69742E+12,5,Tyson Rowley,48,Essential Magnesium,1,14.4,,14.4,1.69775E+12
+1.69742E+12,5,Tyson Rowley,13,Fat/Sugar/Trim,1,13.6,,13.6,1.69775E+12
+1.69742E+12,5,Tyson Rowley,14,Flora Plus,1,13.6,,13.6,1.69775E+12
+1.69742E+12,12,Athena Peters,2,Digestion - Family Size,1,37.6,,37.6,1.69775E+12
+1.69742E+12,12,Athena Peters,13,Fat/Sugar/Trim,2,13.6,,13.6,1.69775E+12
+1.69742E+12,12,Athena Peters,77,Flora Blitz 100,2,37.6,,37.6,1.69775E+12
+1.69747E+12,8,Chelsea Broderick,82,"NOS Performance Paks (3 Arginine N.O., 1 High Potency Vitamin D3, 2 Crea-Nitric, 1 Methyl-B)",1,37.6,,37.6,1.69775E+12
+1.69747E+12,8,Chelsea Broderick,2,Digestion - Family Size,1,37.6,,37.6,1.69775E+12
+1.69747E+12,8,Chelsea Broderick,77,Flora Blitz 100,1,37.6,,37.6,1.69775E+12
+1.69747E+12,8,Chelsea Broderick,14,Flora Plus,1,13.6,,13.6,1.69775E+12
+1.69755E+12,10,Dana Bentley,13,Fat/Sugar/Trim,1,13.6,,13.6,1.69775E+12
+1.69755E+12,10,Dana Bentley,18,Liver/Kidney,1,13.6,,13.6,1.69775E+12
+1.69755E+12,10,Dana Bentley,27,Opti-Adrenal,2,15.2,,15.2,1.69775E+12
+1.69755E+12,10,Dana Bentley,25,Whole C - Chewables,1,11.2,,11.2,1.69775E+12
+1.69756E+12,2,Mindy Rowley,3,Whole Food Vitamin/Mineral,2,13.6,,13.6,1.69775E+12
+1.70067E+12,3,Tonya Crane,71,"Allergy Pak (1 Acute, 2 EFA, 2 Opti-Mito-Force, 1 Flora Plus)",2,35.2,,35.2,1.70153E+12
+1.70067E+12,3,Tonya Crane,12,EFA - Essential Fatty Acids,1,14.4,,14.4,1.70153E+12
+1.70067E+12,3,Tonya Crane,45,Essential DAK 1K2,1,14.4,,14.4,1.70153E+12
+1.70067E+12,3,Tonya Crane,13,Fat/Sugar/Trim,1,13.6,,13.6,1.70153E+12
+1.70067E+12,3,Tonya Crane,15,Iron,1,13.6,,13.6,1.70153E+12
+1.70067E+12,3,Tonya Crane,31,Opti-Female,1,15.2,,15.2,1.70153E+12
+1.70067E+12,3,Tonya Crane,91,Optimal Complete Nutrition Plus,1,43.2,,43.2,1.70153E+12
+1.70067E+12,3,Tonya Crane,3,Whole Food Vitamin/Mineral,1,13.6,,13.6,1.70153E+12
+1.70105E+12,6,Rachael Brown,11,Defense,3,16,,16,1.70153E+12
+1.7012E+12,5,Tyson Rowley,1,Digestion,2,13.6,,13.6,1.70153E+12
+1.70121E+12,5,Tyson Rowley,77,Flora Blitz 100,2,37.6,,37.6,1.70153E+12
+1.70121E+12,5,Tyson Rowley,14,Flora Plus,1,13.6,,13.6,1.70153E+12
+1.70121E+12,5,Tyson Rowley,20,Muscle Rx,1,33.6,,33.6,1.70153E+12
+1.70121E+12,5,Tyson Rowley,85,"Peptide Support Pak (1 Arginine N.O. 1 Methyl-B, 1 Mito-Force, 2 EFA, 1 Muscle Rx, 1 Vitamin-Mineral, 1 Resveratrol, 1 High CFU Probiotic, 1 Phytonutrients, 1 DAK1K2, 1 P-5-P, 1 NADH, 1 Zinc)",1,37.6,,37.6,1.70153E+12
+1.70121E+12,5,Tyson Rowley,3,Whole Food Vitamin/Mineral,1,13.6,,13.6,1.70153E+12
+1.70121E+12,5,Tyson Rowley,19,Longevi-D k2,2,16,,16,1.70153E+12
+1.70123E+12,2,Mindy Rowley,45,Essential DAK 1K2,4,14.4,,14.4,1.70153E+12
+1.70123E+12,2,Mindy Rowley,13,Fat/Sugar/Trim,3,13.6,,13.6,1.70153E+12
+1.70123E+12,2,Mindy Rowley,11,Defense,4,16,,16,1.70153E+12
+1.70123E+12,2,Mindy Rowley,77,Flora Blitz 100,1,37.6,,37.6,1.70153E+12
+1.70123E+12,2,Mindy Rowley,14,Flora Plus,2,13.6,,13.6,1.70153E+12
+1.70123E+12,2,Mindy Rowley,35,Opti-Immune VRL,4,16,,16,1.70153E+12
+1.70123E+12,2,Mindy Rowley,27,Opti-Adrenal,2,15.2,,15.2,1.70153E+12
+1.70123E+12,2,Mindy Rowley,2,Digestion - Family Size,1,37.6,,37.6,1.70153E+12
+1.70123E+12,2,Mindy Rowley,12,EFA - Essential Fatty Acids,3,14.4,,14.4,1.70153E+12
+1.70123E+12,2,Mindy Rowley,85,"Peptide Support Pak (1 Arginine N.O. 1 Methyl-B, 1 Mito-Force, 2 EFA, 1 Muscle Rx, 1 Vitamin-Mineral, 1 Resveratrol, 1 High CFU Probiotic, 1 Phytonutrients, 1 DAK1K2, 1 P-5-P, 1 NADH, 1 Zinc)",3,37.6,,37.6,1.70153E+12
+1.70123E+12,2,Mindy Rowley,23,OxyPure,1,14.4,,14.4,1.70153E+12
+1.70127E+12,1,Tiffany Voorhees,85,"Peptide Support Pak (1 Arginine N.O. 1 Methyl-B, 1 Mito-Force, 2 EFA, 1 Muscle Rx, 1 Vitamin-Mineral, 1 Resveratrol, 1 High CFU Probiotic, 1 Phytonutrients, 1 DAK1K2, 1 P-5-P, 1 NADH, 1 Zinc)",1,37.6,,37.6,1.70153E+12
+1.70127E+12,1,Tiffany Voorhees,27,Opti-Adrenal,2,15.2,,15.2,1.70153E+12
+1.70129E+12,2,Mindy Rowley,112,Optimal Collagen Plus,1,43.2,,43.2,1.70153E+12
+1.70215E+12,2,Mindy Rowley,31,Opti-Female,4,15.84,,15.84,1.70665E+12
+1.70379E+12,2,Mindy Rowley,2,Digestion - Family Size,3,35.2,,35.2,1.70665E+12
+1.70405E+12,3,Tonya Crane,27,Opti-Adrenal,2,15.84,,15.84,1.70665E+12
+1.70405E+12,3,Tonya Crane,71,"Allergy Pak (1 Acute, 2 EFA, 2 Opti-Mito-Force, 1 Flora Plus)",1,34.32,,34.32,1.70665E+12
+1.70405E+12,3,Tonya Crane,12,EFA - Essential Fatty Acids,1,14.96,,14.96,1.70665E+12
+1.70405E+12,3,Tonya Crane,45,Essential DAK 1K2,1,14.96,,14.96,1.70665E+12
+1.70405E+12,3,Tonya Crane,14,Flora Plus,1,14.08,,14.08,1.70665E+12
+1.70405E+12,3,Tonya Crane,15,Iron,1,14.08,,14.08,1.70665E+12
+1.70405E+12,3,Tonya Crane,31,Opti-Female,2,15.84,,15.84,1.70665E+12
+1.70405E+12,3,Tonya Crane,35,Opti-Immune VRL,1,16.28,,16.28,1.70665E+12
+1.70405E+12,3,Tonya Crane,94,Optimal Fruit & Veggie Plus,1,39.6,,39.6,1.70665E+12
+1.70405E+12,3,Tonya Crane,3,Whole Food Vitamin/Mineral,1,14.08,,14.08,1.70665E+12
+1.70508E+12,1,Tiffany Voorhees,85,"Peptide Support Pak (1 Arginine N.O. 1 Methyl-B, 1 Mito-Force, 2 EFA, 1 Muscle Rx, 1 Vitamin-Mineral, 1 Resveratrol, 1 High CFU Probiotic, 1 Phytonutrients, 1 DAK1K2, 1 P-5-P, 1 NADH, 1 Zinc)",1,44,,44,1.70665E+12
+1.70508E+12,1,Tiffany Voorhees,31,Opti-Female,1,15.84,,15.84,1.70665E+12
+1.70508E+12,1,Tiffany Voorhees,27,Opti-Adrenal,1,15.84,,15.84,1.70665E+12
+1.70509E+12,8,Chelsea Broderick,77,Flora Blitz 100,2,34.32,,34.32,1.70665E+12
+1.70509E+12,2,Mindy Rowley,42,Opti-Para,4,14.968,,14.968,1.70665E+12
+1.70509E+12,2,Mindy Rowley,7,BonePlus Calcium,4,14.08,,14.08,1.70665E+12
+1.70509E+12,2,Mindy Rowley,45,Essential DAK 1K2,4,14.96,,14.96,1.70665E+12
+1.70509E+12,2,Mindy Rowley,13,Fat/Sugar/Trim,5,14.96,,14.96,1.70665E+12
+1.70509E+12,2,Mindy Rowley,11,Defense,3,16.28,,16.28,1.70665E+12
+1.70509E+12,2,Mindy Rowley,77,Flora Blitz 100,1,34.32,,34.32,1.70665E+12
+1.70509E+12,2,Mindy Rowley,35,Opti-Immune VRL,2,16.28,,16.28,1.70665E+12
+1.70509E+12,18,Vickie Partida,31,Opti-Female,4,15.84,,15.84,1.70665E+12
+1.70509E+12,2,Mindy Rowley,12,EFA - Essential Fatty Acids,3,14.96,,14.96,1.70665E+12
+1.70509E+12,2,Mindy Rowley,85,"Peptide Support Pak (1 Arginine N.O. 1 Methyl-B, 1 Mito-Force, 2 EFA, 1 Muscle Rx, 1 Vitamin-Mineral, 1 Resveratrol, 1 High CFU Probiotic, 1 Phytonutrients, 1 DAK1K2, 1 P-5-P, 1 NADH, 1 Zinc)",4,44,,44,1.70665E+12
+1.70518E+12,7,Shayla Rowley,35,Opti-Immune VRL,1,16.28,,16.28,1.70665E+12
+1.70518E+12,7,Shayla Rowley,25,Whole C - Chewables,1,10.56,,10.56,1.70665E+12
+1.70518E+12,7,Shayla Rowley,85,"Peptide Support Pak (1 Arginine N.O. 1 Methyl-B, 1 Mito-Force, 2 EFA, 1 Muscle Rx, 1 Vitamin-Mineral, 1 Resveratrol, 1 High CFU Probiotic, 1 Phytonutrients, 1 DAK1K2, 1 P-5-P, 1 NADH, 1 Zinc)",1,44,,44,1.70665E+12
+1.70526E+12,5,Tyson Rowley,2,Digestion - Family Size,1,35.2,,35.2,1.70665E+12
+1.70526E+12,5,Tyson Rowley,12,EFA - Essential Fatty Acids,2,14.96,,14.96,1.70665E+12
+1.70526E+12,5,Tyson Rowley,14,Flora Plus,2,14.08,,14.08,1.70665E+12
+1.70526E+12,5,Tyson Rowley,48,Essential Magnesium,2,14.96,,14.96,1.70665E+12
+1.70665E+12,6,Rachael Brown,3,Whole Food Vitamin/Mineral,2,13.32,,13.32,1.70666E+12
+1.70665E+12,3,Tonya Crane,3,Whole Food Vitamin/Mineral,1,13.32,,13.32,1.70666E+12
+1.70665E+12,2,Mindy Rowley,3,Whole Food Vitamin/Mineral,3,13.32,,13.32,1.70666E+12
+1.70873E+12,3,Tonya Crane,79,"Male Balance Pak (1 Longevi-D-K2, 1 EFA, 2 Opti-T, 1 NADH+DIM, 1 Zinc, 1 Crea-Nitric)",1,34.32,,34.32,1.71044E+12
+1.70873E+12,3,Tonya Crane,78,"Female Balance Pak (1 Cort Adrena, 1 EFA, 1 Opti-T, 1 Essential Control, 1 NADH+DIM,1 Opti-Female,1 High CFU Probiotic)",3,34.32,,34.32,1.71044E+12
+1.70943E+12,2,Mindy Rowley,7,BonePlus Calcium,3,14.08,,14.08,1.71044E+12
+1.70943E+12,2,Mindy Rowley,45,Essential DAK 1K2,3,14.96,,14.96,1.71044E+12
+1.70943E+12,2,Mindy Rowley,13,Fat/Sugar/Trim,10,14.96,,14.96,1.71044E+12
+1.70943E+12,2,Mindy Rowley,11,Defense,5,16.28,,16.28,1.71044E+12
+1.70943E+12,2,Mindy Rowley,31,Opti-Female,3,15.84,,15.84,1.71044E+12
+1.70943E+12,2,Mindy Rowley,3,Whole Food Vitamin/Mineral,3,14.08,,14.08,1.71044E+12
+1.70943E+12,2,Mindy Rowley,77,Flora Blitz 100,1,34.32,,34.32,1.71044E+12
+1.70943E+12,2,Mindy Rowley,14,Flora Plus,1,14.08,,14.08,1.71044E+12
+1.70943E+12,2,Mindy Rowley,35,Opti-Immune VRL,2,16.28,,16.28,1.71044E+12
+1.70943E+12,2,Mindy Rowley,48,Essential Magnesium,2,14.96,,14.96,1.71044E+12
+1.70943E+12,2,Mindy Rowley,27,Opti-Adrenal,1,15.84,,15.84,1.71044E+12
+1.70943E+12,2,Mindy Rowley,2,Digestion - Family Size,3,35.2,,35.2,1.71044E+12
+1.70943E+12,2,Mindy Rowley,85,"Peptide Support Pak (1 Arginine N.O. 1 Methyl-B, 1 Mito-Force, 2 EFA, 1 Muscle Rx, 1 Vitamin-Mineral, 1 Resveratrol, 1 High CFU Probiotic, 1 Phytonutrients, 1 DAK1K2, 1 P-5-P, 1 NADH, 1 Zinc)",2,44,,44,1.71044E+12
+1.70974E+12,9,Alexa Rowley,77,Flora Blitz 100,2,34.32,,34.32,1.71044E+12
+1.71009E+12,5,Tyson Rowley,14,Flora Plus,3,14.08,,14.08,1.71044E+12
+1.71009E+12,5,Tyson Rowley,19,Longevi-D k2,2,16.28,,16.28,1.71044E+12
+1.71009E+12,5,Tyson Rowley,48,Essential Magnesium,2,14.96,,14.96,1.71044E+12
+1.71009E+12,5,Tyson Rowley,20,Muscle Rx,2,30.8,,30.8,1.71044E+12
+1.71009E+12,5,Tyson Rowley,23,OxyPure,2,14.96,,14.96,1.71044E+12
+1.71009E+12,5,Tyson Rowley,78,"Female Balance Pak (1 Cort Adrena, 1 EFA, 1 Opti-T, 1 Essential Control, 1 NADH+DIM,1 Opti-Female,1 High CFU Probiotic)",2,34.32,,34.32,1.71044E+12
+1.71009E+12,5,Tyson Rowley,3,Whole Food Vitamin/Mineral,1,14.08,,14.08,1.71044E+12
+1.71018E+12,3,Tonya Crane,77,Flora Blitz 100,1,34.32,,34.32,1.71044E+12
+1.71018E+12,3,Tonya Crane,2,Digestion - Family Size,1,35.2,,35.2,1.71044E+12
+1.71018E+12,3,Tonya Crane,12,EFA - Essential Fatty Acids,1,14.96,,14.96,1.71044E+12
+1.71018E+12,3,Tonya Crane,45,Essential DAK 1K2,1,14.96,,14.96,1.71044E+12
+1.71034E+12,1,Tiffany Voorhees,78,"Female Balance Pak (1 Cort Adrena, 1 EFA, 1 Opti-T, 1 Essential Control, 1 NADH+DIM,1 Opti-Female,1 High CFU Probiotic)",1,34.32,,34.32,1.71044E+12
+1.71034E+12,1,Tiffany Voorhees,3,Whole Food Vitamin/Mineral,3,14.08,,14.08,1.71044E+12
+1.71034E+12,1,Tiffany Voorhees,79,"Male Balance Pak (1 Longevi-D-K2, 1 EFA, 2 Opti-T, 1 NADH+DIM, 1 Zinc, 1 Crea-Nitric)",1,34.32,,34.32,1.71044E+12
+1.71034E+12,1,Tiffany Voorhees,25,Whole C - Chewables,3,10.56,,10.56,1.71044E+12
+1.71034E+12,1,Tiffany Voorhees,9,Chronic,1,14.08,,14.08,1.71044E+12
+1.71035E+12,2,Mindy Rowley,28,Opti-Black Seed Pearls,2,24.2,,24.2,1.71044E+12
+1.71035E+12,2,Mindy Rowley,51,Essential Control,2,20.24,,20.24,1.71044E+12
+1ee1df96-cc84-4d5b-ad83-531ee0b6f380,1,Tiffany Voorhees,3,Whole Food Vitamin/Mineral,1,,,,
+ce25a05d-0c3e-4e78-a115-82eaea95223e,23,Trisha Power,3,Whole Food Vitamin/Mineral,2,,,,
+47110b6c-d92e-4fc2-90fc-e68c9feb652f,1,Tiffany Voorhees,11,Defense,1,,,,
+f811bc2f-175e-4576-8763-1a1f9702ba67,1,Tiffany Voorhees,12,EFA - Essential Fatty Acids,1,,,,
+89bbcc66-2750-49be-a540-56e034d75dbf,1,Tiffany Voorhees,14,Flora Plus,1,,,,
+ee7b5a9e-e19e-4447-8e24-5bcf1333e403,1,Tiffany Voorhees,19,Longevi-D k2,1,,,,
+8ed2c6be-3e1c-439a-b27a-738c5786108b,23,Trisha Power,19,Longevi-D k2,2,,,,
+5e75fa7d-7cc2-48b0-944b-d7afd86e424b,1,Tiffany Voorhees,25,Whole C - Chewables,1,,,,
+902891e7-0ae9-45f4-9ddc-dd0c8b66ac1c,1,Tiffany Voorhees,31,Opti-Female,4,,,,
+df9c2b84-722c-4a16-a57b-ee28385e6ba3,1,Tiffany Voorhees,35,Opti-Immune VRL,1,,,,
+c028db7e-ea91-4272-8f30-f6cad1d5df13,3,Tonya Crane,77,Flora Blitz 100,1,,,,
+af8bef31-69dd-4b68-af1d-9e04e5a4a814,3,Tonya Crane,78,"Female Balance Pak (1 Cort Adrena, 1 EFA, 1 Opti-T, 1 Essential Control, 1 NADH+DIM,1 Opti-Female,1 High CFU Probiotic)",4,,,,
+a2e32631-cb75-4cdf-8abb-21c5ec0bf52b,8,Chelsea Broderick,67,Z- Custom Health Pak - 90 pk [5 capsules],1,,,,
+9a1a1db5-c225-4d31-8922-b099da443500,8,Chelsea Broderick,70,Z- Custom Health Pak - 90 pk [8 capsules],4,,,,
+e3a2f2e3-8d97-42e9-8b3b-6ba8c412fc64,2,Mindy Rowley,70,Z- Custom Health Pak - 90 pk [8 capsules],4,,,,
+5528259f-2ebb-4483-a3e5-fc8d516877a4,2,Mindy Rowley,69,Z- Custom Health Pak - 90 pk [7 capsules],1,,,,
+0c509187-f0c0-4e57-bfc6-12e8a98d0acb,8,Chelsea Broderick,68,Z- Custom Health Pak - 90 pk [6 capsules],1,,,,
+5afe3415-8ddd-4ccd-9f4d-114d5dc87e4f,1,Tiffany Voorhees,80,"Natural NSAID Pak (2 Protease Anti-Inflam, 1 Joint Nutrients, 1 EFA, 3 Phytonutrients)",1,,,,
+ac178421-f954-4d31-9a3d-1d05d4811199,1,Tiffany Voorhees,4,Acute,1,,,,
+b32ca8a2-9093-4c28-9eb0-ed25df7adf86,1,Tiffany Voorhees,9,Chronic,1,,,,
+5c4eebf1-20d8-4c8d-8ba1-b3fbc4052908,1,Tiffany Voorhees,2,Digestion - Family Size,1,,,,
+5720fb74-a506-4143-94fe-b74fd2209d89,1,Tiffany Voorhees,41,Opti - MitoForce,1,,,,
+0e8f6513-33f2-4ee5-aa78-2b701bb6a9d3,1,Tiffany Voorhees,29,Opti-Brain,1,,,,
+8aabf755-15a6-475b-a754-23302a6999f2,1,Tiffany Voorhees,8,Optimal Calm,1,,,,
+93773cfb-b1f1-4940-8d39-59f0e1fbc8bd,1,Tiffany Voorhees,10,Cort Adrena,1,,,,
+2535579c-cb20-4490-9a94-0a82980ef8b5,1,Tiffany Voorhees,72,"Big C Nutrient Pak #1 (4 EFA (2 per packet), 4 Fat/Sugar Trim (2 per packet), 4 Phytonutrients (2 per packet), 4 DAK1K2 (2 per packet))",1,,,,
+642c4cea-856d-4718-bbec-e2959c1e926c,17,Beth Flournoy,4,Acute,1,,,,

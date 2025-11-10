@@ -1,13 +1,17 @@
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
-  const AdminLineItem = sequelize.define(
-    'AdminLineItem',
+  const UserLineItem = sequelize.define(
+    'UserLineItem',
     {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
+      },
+      userId: {
+        type: DataTypes.UUID,
+        allowNull: false,
       },
       productId: {
         type: DataTypes.INTEGER,
@@ -42,17 +46,22 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
 
-  AdminLineItem.associate = (models) => {
-    AdminLineItem.belongsTo(models.AdminOrder, {
-      foreignKey: 'adminOrderId',
-      as: 'adminOrder',
+  UserLineItem.associate = (models) => {
+    UserLineItem.belongsTo(models.UserOrder, {
+      foreignKey: 'userOrderId',
+      as: 'userOrder',
     });
 
-    AdminLineItem.belongsTo(models.Product, {
+    UserLineItem.belongsTo(models.Product, {
       foreignKey: 'productId',
       as: 'product',
     });
+
+    UserLineItem.belongsTo(models.User, {
+      foreignKey: 'userId',
+      as: 'user',
+    });
   };
 
-  return AdminLineItem;
+  return UserLineItem;
 };
