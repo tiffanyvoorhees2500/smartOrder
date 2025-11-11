@@ -1,7 +1,7 @@
 import './Form.css';
 import axios from 'axios';
 import { StyledForm } from './StyledForm';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { states } from './states';
 import { setToken } from '../../utils/auth';
 import { getAuthHeader, getUserFromToken } from '../../utils/auth';
@@ -92,22 +92,22 @@ export function ManageUsersForm() {
   const [formData, setFormData] = useState(BLANK_FORM);
   
   // Fetch all users (only needed for admins)
-  useEffect(() => {
+  const fetchUsers = useCallback(async () => {
     if (!isAdmin) return;
-
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get(`${base_url}/users`, {
-          headers: getAuthHeader(),
-        });
-        const sorted = response.data.sort((a, b) => a.name.localeCompare(b.name));
-        setUsers(sorted);
-      } catch (err) {
-        console.error('Error fetching users:', err);
-      }
+    try {
+      const response = await axios.get(`${base_url}/users`, {
+        headers: getAuthHeader(),
+      });
+      const sorted = response.data.sort((a, b) => a.name.localeCompare(b.name));
+      setUsers(sorted);
+    } catch (err) {
+      console.error('Error fetching users:', err);
     }
+  }, [isAdmin]);  
+
+  useEffect(() => {
     fetchUsers();
-  }, [isAdmin]);
+  }, [fetchUsers]);
 
   // Non-Admin, autofill their own info
   useEffect(() => {
@@ -172,7 +172,7 @@ export function ManageUsersForm() {
       [name]:
         type === 'checkbox' 
         ? checked 
-        : name === isAdmin 
+        : name === 'isAdmin' 
         ? value === 'true' 
         : value,
     }));
@@ -183,26 +183,55 @@ export function ManageUsersForm() {
     e.preventDefault();
 
     try {
+      const user = getUserFromToken(); // current logged in user
+      const isCreateNew = isAdmin && !selectedUserId;
+
+      let targetID;
+      let method;
+      let url;
+
+      if (isCreateNew) {
+        // Admin is creating a new user
+        method = 'post';
+        url = `${base_url}/users/manage-users`;
+      } else {
+        // Editing a user 
+        method = 'put';
+        targetID = isAdmin 
+          ? selectedUserId || user.id // admin editing another user or self
+          : user.id; // non-admin editing self
+        url = `${base_url}/users/${targetID}`;
+      }
+
+      // Prepare payload
       const payload = { ...formData };
-      if (!selectedUserId) delete payload.id;               // new user → no id
-      if (!payload.password) delete payload.password;       // keep existing pw
 
-      const method = selectedUserId ? 'put' : 'post';
-      const url = selectedUserId
-        ? `${base_url}/users/${selectedUserId}`
-        : `${base_url}/users/manage-users`;
+      // Don't send password if empty
+      if (!payload.password) delete payload.password;   
+      
+      // If Admin, include admin-only fields
+      if (isAdmin) {
+        payload.isAdmin = formData.isAdmin;
+        payload.pricingType = formData.pricingType;
+        payload.discountType = formData.discountType;
+      } else {
+        // Non-admins cannot set these fields
+        delete payload.isAdmin;
+        delete payload.pricingType;
+        delete payload.discountType;
+      }
 
+      // Send request
       const response = await axios[method](url, payload, { headers: getAuthHeader() });
-      const savedUser = response.data;
 
-      // update local list
-      setUsers(prev => {
-        const exists = prev.some(u => u.id === savedUser.id);
-        const updated = exists
-          ? prev.map(u => (u.id === savedUser.id ? savedUser : u))
-          : [...prev, savedUser];
-        return updated.sort((a, b) => a.name.localeCompare(b.name));
-      });
+      // if the logged-in user updated their own info, update the token
+      const updatedUserId = response.data.id || targetID;
+      if (String(updatedUserId) === String(user.id) && response.data.token) {
+        setToken(response.data.token);
+      }
+
+      // update user list for admins
+      if (isAdmin) await fetchUsers(); 
 
       alert('User saved!');
       setSelectedUserId(null); // back to “new user”
@@ -217,10 +246,20 @@ export function ManageUsersForm() {
     if (!selectedUserId || !window.confirm('Delete this user?')) return;
 
     try {
-      await axios.delete(`${base_url}/users/${selectedUserId}`, { headers: getAuthHeader() });
-      setUsers(prev => prev.filter(u => u.id !== Number(selectedUserId)));
+      const response = await axios.delete(`${base_url}/users/${selectedUserId}`, { headers: getAuthHeader() });
+      
+      if (response.data.logout) {
+        alert('Your account has been deleted. Logging out...');
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+        return;
+      }
+      
+      await fetchUsers(); // refresh user list from server
       setSelectedUserId(null);
+      setFormData(BLANK_FORM);
       alert('User deleted');
+
     } catch (err) {
       console.error(err);
       alert('Delete failed');

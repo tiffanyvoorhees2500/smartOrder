@@ -6,15 +6,20 @@ const { User } = db;
 
 // Create a new user
 exports.createUser = async (req, res) => {
-  const { name, email, password, defaultShipToState } = req.body;
+  const { name, email, password, defaultShipToState, isAdmin, pricingType, discountType } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = await User.create({
       name,
       email,
       defaultShipToState,
       password: hashedPassword,
+      isAdmin: isAdmin || false,
+      pricingType: pricingType || 'Retail',
+      discountType: discountType || 'Individual',
     });
+
     res.status(201).json(newUser);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -38,19 +43,16 @@ exports.updateUser = async (req, res) => {
 
     // Admins can update everything
     // Regular users cannot change isAdmin, pricingType, or discountType
-    const updateData = {};
+    const updateData = {
+      name, 
+      email,
+      defaultShipToState,
+    };
 
     if (requester.isAdmin) {
-      updateData.name = name;
-      updateData.email = email;
-      updateData.defaultShipToState = defaultShipToState;
       updateData.isAdmin = isAdmin;
       updateData.pricingType = pricingType;
       updateData.discountType = discountType;
-    } else {
-      updateData.name = name;
-      updateData.email = email;
-      updateData.defaultShipToState = defaultShipToState;
     }
 
     // Only update password if provided
@@ -59,7 +61,26 @@ exports.updateUser = async (req, res) => {
     }
 
     await user.update(updateData);
-    res.json(user);
+
+    // if the logged-in user updated their own info, issue a new token
+    let newToken = null;
+    if (String(requester.id) === String(user.id)) {
+      newToken = jwt.sign(
+        {
+          id: user.id,
+          isAdmin: user.isAdmin,
+          name: user.name,
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' }
+      );
+    }
+        
+    res.json({
+      user, 
+      token: newToken // may be null if NOT updating own profile
+    });
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -68,13 +89,29 @@ exports.updateUser = async (req, res) => {
 // Delete a user
 exports.deleteUser = async (req, res) => {
   const userId = req.params.id;
+  const requester = req.user;
+
+  // Only admins can delete users
+  if (!requester.isAdmin) {
+    return res.status(403).json({ error: "Only admins can delete users." });
+  }
 
   try {
     const user = await User.findByPk(userId);
     if (!user) return res.status(404).json({ error: "User not found" });
 
     await user.destroy();
-    res.json({ message: "User deleted" });
+
+    // If the admin deleted their own account, clear the token
+    const deletedOwnAccount = String(requester.id) === String(user.id);
+
+    res.json({
+      message: deletedOwnAccount
+      ? "Your account has been deleted."
+      : "User deleted.",
+      logout: deletedOwnAccount
+    });
+    
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
