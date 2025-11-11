@@ -1,10 +1,11 @@
 import './Form.css';
 import axios from 'axios';
 import { StyledForm } from './StyledForm';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { states } from './states';
 import { setToken } from '../../utils/auth';
 import { getAuthHeader, getUserFromToken } from '../../utils/auth';
+import { toast } from 'react-toastify';
 
 const base_url = process.env.REACT_APP_API_BASE_URL;
 
@@ -77,6 +78,7 @@ export function ManageUsersForm() {
 
   const [users, setUsers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
   
   const BLANK_FORM = {
     id : null,
@@ -92,22 +94,22 @@ export function ManageUsersForm() {
   const [formData, setFormData] = useState(BLANK_FORM);
   
   // Fetch all users (only needed for admins)
-  useEffect(() => {
+  const fetchUsers = useCallback(async () => {
     if (!isAdmin) return;
-
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get(`${base_url}/users`, {
-          headers: getAuthHeader(),
-        });
-        const sorted = response.data.sort((a, b) => a.name.localeCompare(b.name));
-        setUsers(sorted);
-      } catch (err) {
-        console.error('Error fetching users:', err);
-      }
+    try {
+      const response = await axios.get(`${base_url}/users`, {
+        headers: getAuthHeader(),
+      });
+      const sorted = response.data.sort((a, b) => a.name.localeCompare(b.name));
+      setUsers(sorted);
+    } catch (err) {
+      console.error('Error fetching users:', err);
     }
+  }, [isAdmin]);  
+
+  useEffect(() => {
     fetchUsers();
-  }, [isAdmin]);
+  }, [fetchUsers]);
 
   // Non-Admin, autofill their own info
   useEffect(() => {
@@ -145,6 +147,7 @@ export function ManageUsersForm() {
 
     if (!selectedUserId) {
       setFormData(BLANK_FORM);
+      setFieldErrors({}); // clear error messages
       return;
     }
 
@@ -160,6 +163,7 @@ export function ManageUsersForm() {
         pricingType: user.pricingType || "Retail",
         discountType: user.discountType || "Individual",
       });
+      setFieldErrors({}); // clear error messages
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdmin, selectedUserId, users]);
@@ -172,7 +176,7 @@ export function ManageUsersForm() {
       [name]:
         type === 'checkbox' 
         ? checked 
-        : name === isAdmin 
+        : name === 'isAdmin' 
         ? value === 'true' 
         : value,
     }));
@@ -182,33 +186,68 @@ export function ManageUsersForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!validateForm()) return;
+
     try {
+      const user = getUserFromToken(); // current logged in user
+      const isCreateNew = isAdmin && !selectedUserId;
+
+      let targetID;
+      let method;
+      let url;
+
+      if (isCreateNew) {
+        // Admin is creating a new user
+        method = 'post';
+        url = `${base_url}/users/manage-users`;
+      } else {
+        // Editing a user 
+        method = 'put';
+        targetID = isAdmin 
+          ? selectedUserId || user.id // admin editing another user or self
+          : user.id; // non-admin editing self
+        url = `${base_url}/users/${targetID}`;
+      }
+
+      // Prepare payload
       const payload = { ...formData };
-      if (!selectedUserId) delete payload.id;               // new user → no id
-      if (!payload.password) delete payload.password;       // keep existing pw
 
-      const method = selectedUserId ? 'put' : 'post';
-      const url = selectedUserId
-        ? `${base_url}/users/${selectedUserId}`
-        : `${base_url}/users/manage-users`;
+      // Don't send password if empty
+      if (!payload.password) delete payload.password;   
+      
+      // If Admin, include admin-only fields
+      if (isAdmin) {
+        payload.isAdmin = formData.isAdmin;
+        payload.pricingType = formData.pricingType;
+        payload.discountType = formData.discountType;
+      } else {
+        // Non-admins cannot set these fields
+        delete payload.isAdmin;
+        delete payload.pricingType;
+        delete payload.discountType;
+      }
 
+      // Send request
       const response = await axios[method](url, payload, { headers: getAuthHeader() });
-      const savedUser = response.data;
 
-      // update local list
-      setUsers(prev => {
-        const exists = prev.some(u => u.id === savedUser.id);
-        const updated = exists
-          ? prev.map(u => (u.id === savedUser.id ? savedUser : u))
-          : [...prev, savedUser];
-        return updated.sort((a, b) => a.name.localeCompare(b.name));
-      });
+      // if the logged-in user updated their own info, update the token
+      const updatedUserId = response.data.id || targetID;
+      if (String(updatedUserId) === String(user.id) && response.data.token) {
+        setToken(response.data.token);
+      }
 
-      alert('User saved!');
+      // update user list for admins
+      if (isAdmin) await fetchUsers(); 
+
+      toast.success('User saved!');
       setSelectedUserId(null); // back to “new user”
     } catch (err) {
-      console.error(err);
-      alert('Save failed – see console.');
+      if (err.response && err.response.status === 400) {
+        toast.error(`Save failed: ${err.response.data.error}`);
+      } else {
+        console.error(err);
+        toast.error('Save failed - see console.');
+      }
     }
   };
 
@@ -217,15 +256,42 @@ export function ManageUsersForm() {
     if (!selectedUserId || !window.confirm('Delete this user?')) return;
 
     try {
-      await axios.delete(`${base_url}/users/${selectedUserId}`, { headers: getAuthHeader() });
-      setUsers(prev => prev.filter(u => u.id !== Number(selectedUserId)));
+      const response = await axios.delete(`${base_url}/users/${selectedUserId}`, { headers: getAuthHeader() });
+      
+      if (response.data.logout) {
+        toast.success('Your account has been deleted. Logging out...');
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+        return;
+      }
+      
+      await fetchUsers(); // refresh user list from server
       setSelectedUserId(null);
-      alert('User deleted');
+      setFormData(BLANK_FORM);
+      toast.success('User deleted');
+
     } catch (err) {
       console.error(err);
-      alert('Delete failed');
+      toast.error('Delete failed');
     }
   };
+
+  const validateForm = () => {
+    const errors = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!formData.name.trim()) errors.name = 'Name is required.';
+    if (!formData.email.trim()) errors.email = 'Email is required.';
+    else if (!emailRegex.test(formData.email)) errors.email = 'Invalid email format.';
+
+    if (!formData.id && !formData.password.trim()) {
+      // require password for new users
+      errors.password = 'Password is required.';
+    }
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  }
 
   return (
     <StyledForm onSubmit={handleSubmit} title="Register/Edit Users">
@@ -258,8 +324,9 @@ export function ManageUsersForm() {
           required
           autoComplete='off'
         />
+        {fieldErrors.name && <div className="error-message">{fieldErrors.name}</div>}
       </label>
-
+      
       {/* Email */}
       <label>
         Email
@@ -271,7 +338,8 @@ export function ManageUsersForm() {
           required
           autoComplete='off'
         />
-      </label>
+        {fieldErrors.email && <div className="error-message">{fieldErrors.email}</div>}
+      </label> 
 
       {/* Password */}
       <label>
@@ -284,6 +352,7 @@ export function ManageUsersForm() {
           placeholder={formData.id && formData.password === '' ? 'Leave blank to keep' : ''}
           autoComplete='new-password'
         />
+        {fieldErrors.password && <div className="error-message">{fieldErrors.password}</div>}
       </label>
 
       {/* Default Ship To State */}
