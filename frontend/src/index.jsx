@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ManageUsersForm, LoginForm } from './components/form/Form';
 import Layout from './components/layout/Layout';
 import { isAuthenticated, isAdmin } from './utils/auth';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // ProtectedRoute only renders children if user is logged in
 function ProtectedRoute({ children }) {
@@ -21,6 +23,17 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
+      {/* Toast container */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+      />
+
       <Routes>
         {/* Layout wraps everything so header/footer always show */}
         <Route path="/" element={<Layout />}>

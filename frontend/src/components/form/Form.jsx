@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { states } from './states';
 import { setToken } from '../../utils/auth';
 import { getAuthHeader, getUserFromToken } from '../../utils/auth';
+import { toast } from 'react-toastify';
 
 const base_url = process.env.REACT_APP_API_BASE_URL;
 
@@ -77,6 +78,7 @@ export function ManageUsersForm() {
 
   const [users, setUsers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
   
   const BLANK_FORM = {
     id : null,
@@ -145,6 +147,7 @@ export function ManageUsersForm() {
 
     if (!selectedUserId) {
       setFormData(BLANK_FORM);
+      setFieldErrors({}); // clear error messages
       return;
     }
 
@@ -160,6 +163,7 @@ export function ManageUsersForm() {
         pricingType: user.pricingType || "Retail",
         discountType: user.discountType || "Individual",
       });
+      setFieldErrors({}); // clear error messages
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdmin, selectedUserId, users]);
@@ -181,6 +185,8 @@ export function ManageUsersForm() {
   // Save changes to user
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) return;
 
     try {
       const user = getUserFromToken(); // current logged in user
@@ -233,14 +239,14 @@ export function ManageUsersForm() {
       // update user list for admins
       if (isAdmin) await fetchUsers(); 
 
-      alert('User saved!');
+      toast.success('User saved!');
       setSelectedUserId(null); // back to “new user”
     } catch (err) {
       if (err.response && err.response.status === 400) {
-        alert(`Save failed: ${err.response.data.error}`);
+        toast.error(`Save failed: ${err.response.data.error}`);
       } else {
         console.error(err);
-        alert('Save failed – see console.');
+        toast.error('Save failed - see console.');
       }
     }
   };
@@ -253,7 +259,7 @@ export function ManageUsersForm() {
       const response = await axios.delete(`${base_url}/users/${selectedUserId}`, { headers: getAuthHeader() });
       
       if (response.data.logout) {
-        alert('Your account has been deleted. Logging out...');
+        toast.success('Your account has been deleted. Logging out...');
         localStorage.removeItem('token');
         window.location.href = '/login';
         return;
@@ -262,13 +268,30 @@ export function ManageUsersForm() {
       await fetchUsers(); // refresh user list from server
       setSelectedUserId(null);
       setFormData(BLANK_FORM);
-      alert('User deleted');
+      toast.success('User deleted');
 
     } catch (err) {
       console.error(err);
-      alert('Delete failed');
+      toast.error('Delete failed');
     }
   };
+
+  const validateForm = () => {
+    const errors = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!formData.name.trim()) errors.name = 'Name is required.';
+    if (!formData.email.trim()) errors.email = 'Email is required.';
+    else if (!emailRegex.test(formData.email)) errors.email = 'Invalid email format.';
+
+    if (!formData.id && !formData.password.trim()) {
+      // require password for new users
+      errors.password = 'Password is required.';
+    }
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  }
 
   return (
     <StyledForm onSubmit={handleSubmit} title="Register/Edit Users">
@@ -301,8 +324,9 @@ export function ManageUsersForm() {
           required
           autoComplete='off'
         />
+        {fieldErrors.name && <div className="error-message">{fieldErrors.name}</div>}
       </label>
-
+      
       {/* Email */}
       <label>
         Email
@@ -314,7 +338,8 @@ export function ManageUsersForm() {
           required
           autoComplete='off'
         />
-      </label>
+        {fieldErrors.email && <div className="error-message">{fieldErrors.email}</div>}
+      </label> 
 
       {/* Password */}
       <label>
@@ -327,6 +352,7 @@ export function ManageUsersForm() {
           placeholder={formData.id && formData.password === '' ? 'Leave blank to keep' : ''}
           autoComplete='new-password'
         />
+        {fieldErrors.password && <div className="error-message">{fieldErrors.password}</div>}
       </label>
 
       {/* Default Ship To State */}
