@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       defaultShipToState: {
-        type: Sequelize.ENUM(...US_STATES),
+        type: DataTypes.ENUM(...US_STATES),
         allowNull: false,
       },
       original_id: {
