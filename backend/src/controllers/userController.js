@@ -8,6 +8,12 @@ const { User } = db;
 exports.createUser = async (req, res) => {
   const { name, email, password, defaultShipToState, isAdmin, pricingType, discountType } = req.body;
   try {
+    // Check if user with the same email already exists
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ error: 'User with this email already exists' });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({
@@ -39,6 +45,14 @@ exports.updateUser = async (req, res) => {
     // Regular users can only update their own profile
     if (!requester.isAdmin && requester.id !== user.id) {
       return res.status(403).json({ error: "You can only update your own profile." });
+    }
+
+    // Prevent duplicate email
+    if (email && email !== user.email) {
+      const emailExists = await User.findOne({ where: { email } }); 
+      if (emailExists) {
+        return res.status(400).json({ error: "Email is already in use by another account." });
+      }
     }
 
     // Admins can update everything
@@ -134,18 +148,7 @@ exports.loginUser = async (req, res) => {
     });
 
     res.json({ token });
-    // res.json({
-    //   message: 'Login successful',
-    //   user: {
-    //     id: user._id,
-    //     name: user.name,
-    //     email: user.email,
-    //     defaultShipToState: user.defaultShipToState,
-    //     pricingType: user.pricingType,
-    //     groupType: user.groupType,
-    //   },
-    //   token,
-    // });
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

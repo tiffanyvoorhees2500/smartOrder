@@ -236,8 +236,12 @@ export function ManageUsersForm() {
       alert('User saved!');
       setSelectedUserId(null); // back to “new user”
     } catch (err) {
-      console.error(err);
-      alert('Save failed – see console.');
+      if (err.response && err.response.status === 400) {
+        alert(`Save failed: ${err.response.data.error}`);
+      } else {
+        console.error(err);
+        alert('Save failed – see console.');
+      }
     }
   };
 
