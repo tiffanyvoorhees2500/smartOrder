@@ -47,11 +47,6 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   UserLineItem.associate = (models) => {
-    UserLineItem.belongsTo(models.UserOrder, {
-      foreignKey: 'userOrderId',
-      as: 'userOrder',
-    });
-
     UserLineItem.belongsTo(models.Product, {
       foreignKey: 'productId',
       as: 'product',
@@ -60,6 +55,11 @@ module.exports = (sequelize, DataTypes) => {
     UserLineItem.belongsTo(models.User, {
       foreignKey: 'userId',
       as: 'user',
+    });
+
+    UserLineItem.belongsTo(models.AdminOrder, {
+      foreignKey: 'adminOrderId',
+      as: 'adminOrder',
     });
   };
 

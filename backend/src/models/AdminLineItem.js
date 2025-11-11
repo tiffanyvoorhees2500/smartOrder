@@ -34,10 +34,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         allowNull: false,
       },
-      original_id: {
-        type: DataTypes.BIGINT,
-        allowNull: true,
-      },
     },
     {}
   );

@@ -3,6 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const csv = require('csv-parser');
 const { v4: uuidv4 } = require('uuid');
+const { STRING } = require('sequelize');
+const normalizeOriginalId = require('../utils/normalizeOriginalAdminId');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -15,11 +17,11 @@ module.exports = {
       { type: Sequelize.QueryTypes.SELECT }
     );
 
+    // Build a map of original_id (as string) → AdminOrder.id
     const adminOrderMap = {};
     for (const order of adminOrders) {
-      // Convert safely in case original_id is stored as string or number
-      const key = BigInt(order.original_id);
-      adminOrderMap[key] = order.id;
+      const key = normalizeOriginalId(order.original_id);
+      if (key) adminOrderMap[key] = order.id;
     }
 
     // === Load Products (for mapping original_id → id)
@@ -45,34 +47,29 @@ module.exports = {
       const key = Number(user.original_id);
       userMap[key] = user.id;
     }
-    
 
     // === Read CSV data
     const userLineItems = [];
     const filePath = path.join(__dirname, '../data/userLineItems.csv');
-
-    // Utility: safely convert scientific notation or weird numeric text → BigInt
-    const safeBigInt = (value) => {
-      if (!value) return null;
-      const num = Number(value);
-      if (Number.isNaN(num)) return null;
-      return BigInt(Math.round(num));
-    };
 
     await new Promise((resolve, reject) => {
       fs.createReadStream(filePath)
         .pipe(csv())
         .on('data', (data) => {
           // Skip empty rows
-          if (!data.original_id || !data.userId || !data.adminOrderId || !data.productId) return;
+          if (
+            !data.original_id ||
+            !data.userId ||
+            !data.adminOrderId ||
+            !data.productId
+          )
+            return;
 
-          // === 4️⃣ Convert & map keys
-          const adminOrderKey = safeBigInt(data.adminOrderId.trim());
-          const originalId = safeBigInt(data.original_id.trim());
+          const adminOriginalId = normalizeOriginalId(data.adminOrderId);
           const productIdKey = Number(data.productId.trim());
           const userIdKey = Number(data.userId.trim());
 
-          const adminOrderId = adminOrderMap[adminOrderKey];
+          const adminOrderId = adminOrderMap[adminOriginalId];
           const productId = productMap[productIdKey];
           const userId = userMap[userIdKey];
 
@@ -87,11 +84,15 @@ module.exports = {
 
           // === 5️⃣ Skip if no matches
           if (!adminOrderId) {
-            console.warn(`⚠️ No matching AdminOrder for original_id: ${data.adminOrderId}`);
+            console.warn(
+              `⚠️ No matching AdminOrder for original_id: ${data.adminOrderId}`
+            );
             return;
           }
           if (!productId) {
-            console.warn(`⚠️ No matching Product for productId: ${data.productId}`);
+            console.warn(
+              `⚠️ No matching Product for productId: ${data.productId}`
+            );
             return;
           }
           if (!userId) {
@@ -109,7 +110,6 @@ module.exports = {
             basePrice: parseFloat(data.basePrice) || 0.0,
             percentOff: parseFloat(data.percentOff) || 0.0,
             finalPrice: parseFloat(data.finalPrice) || 0.0,
-            original_id: originalId,
             createdAt: new Date(),
             updatedAt: new Date(),
           });
@@ -121,7 +121,9 @@ module.exports = {
     // === 7️⃣ Bulk insert
     if (userLineItems.length > 0) {
       await queryInterface.bulkInsert('UserLineItems', userLineItems, {});
-      console.log(`✅ Inserted ${userLineItems.length} user line items successfully.`);
+      console.log(
+        `✅ Inserted ${userLineItems.length} user line items successfully.`
+      );
     } else {
       console.log('⚠️ No user line items found to insert.');
     }

@@ -2,17 +2,17 @@
 const US_STATES = require('../utils/stateEnum');
 
 module.exports = (sequelize, DataTypes) => {
-  const AdminOrder = sequelize.define('AdminOrder', {
+  const UserOrder = sequelize.define('UserOrder', {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    orderDate: {
-      type: DataTypes.DATE,
+    adminOrderId: {
+      type: DataTypes.UUID,
       allowNull: false,
     },
-    paidForById: {
+    userId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
@@ -31,34 +31,20 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 0.00,
     },
-    original_id: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    }
   }, {});
 
-  AdminOrder.associate = (models) => {
-    AdminOrder.belongsTo(models.User, {
-      foreignKey: 'paidForById',
-      as: 'paidForBy',
+  UserOrder.associate = (models) => {
+    UserOrder.belongsTo(models.User, {
+      foreignKey: 'userId',
+      as: 'user',
     });
 
-    AdminOrder.hasMany(models.AdminLineItem, {
+    UserOrder.belongsTo(models.AdminOrder, {
       foreignKey: 'adminOrderId',
-      as: 'adminLineItems',
+      as: 'adminOrder',
     });
 
-    AdminOrder.hasMany(models.UserLineItem, {
-      foreignKey: 'adminOrderId',
-      as: 'userLineItems',
-    });
-
-    AdminOrder.hasMany(models.UserOrder, {
-      foreignKey: 'adminOrderId',
-      as: 'userOrders',
-    });
-    
   };
 
-  return AdminOrder;
+  return UserOrder;
 };

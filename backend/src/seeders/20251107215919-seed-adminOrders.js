@@ -4,58 +4,8 @@ const path = require('path');
 const csv = require('csv-parser');
 const { v4: uuidv4 } = require('uuid');
 
-const STATES = [
-  'AL',
-  'AK',
-  'AZ',
-  'AR',
-  'CA',
-  'CO',
-  'CT',
-  'DE',
-  'FL',
-  'GA',
-  'HI',
-  'ID',
-  'IL',
-  'IN',
-  'IA',
-  'KS',
-  'KY',
-  'LA',
-  'ME',
-  'MD',
-  'MA',
-  'MI',
-  'MN',
-  'MS',
-  'MO',
-  'MT',
-  'NE',
-  'NV',
-  'NH',
-  'NJ',
-  'NM',
-  'NY',
-  'NC',
-  'ND',
-  'OH',
-  'OK',
-  'OR',
-  'PA',
-  'RI',
-  'SC',
-  'SD',
-  'TN',
-  'TX',
-  'UT',
-  'VT',
-  'VA',
-  'WA',
-  'WV',
-  'WI',
-  'WY',
-];
+const STATES = require('../utils/stateEnum');
+const normalizeOriginalId = require('../utils/normalizeOriginalAdminId');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -71,6 +21,7 @@ module.exports = {
     for (const user of users) {
       userMap[Number(user.original_id)] = user.id;
     }
+
     const adminOrders = [];
     const filePath = path.join(__dirname, '../data/adminOrders.csv');
 
@@ -79,8 +30,8 @@ module.exports = {
         .pipe(csv())
         .on('data', (data) => {
           // Original AdminOrder ID in CSV
-          const originalId = Number(data.original_id?.trim()) || null;
-          
+          const originalId = normalizeOriginalId(data.original_id);
+
           // Raw paidForById from CSV
           const rawPaidForById = Number(data.paidForById?.trim());
           const paidForById = userMap[rawPaidForById];
