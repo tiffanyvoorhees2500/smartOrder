@@ -25,8 +25,8 @@ module.exports = {
     await new Promise((resolve, reject) => {
       fs.createReadStream(filePath)
         .pipe(csv())
-        .on('data', (row) => {
-          const rawId = row.original_product_id?.trim?.();
+        .on('data', (data) => {
+          const rawId = data.original_product_id?.trim?.();
           const originalId = Number(rawId);
           const productId = productMap[originalId]; // look up the new ID
           if (!productId) {
@@ -39,9 +39,9 @@ module.exports = {
           ingredients.push({
             productId,
             original_product_id: originalId,
-            ingredient: row.ingredient?.trim?.(),
-            number_label: parseFloat(row.number_label) || 0,
-            string_label: row.string_label?.trim?.() || null,
+            ingredient: data.ingredient?.trim?.(),
+            number_label: parseFloat(data.number_label) || 0,
+            string_label: data.string_label?.trim?.() || null,
             createdAt: new Date(),
             updatedAt: new Date(),
           });
