@@ -9,8 +9,8 @@ module.exports = new Sequelize(process.env.DATABASE_URL, {
   logging: false,
   dialectOptions: {
     ssl: {
-        require: true,
-        rejectUnauthorized: false,
-    }
-  }
+      require: process.env.DB_SSL,
+      rejectUnauthorized: false,
+    },
+  },
 });
