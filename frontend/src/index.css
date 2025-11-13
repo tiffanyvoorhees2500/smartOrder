@@ -13,3 +13,25 @@ body {
 .edgeless {
   box-shadow: inset 0 0 10px 0px white;
 }
+
+/* Global CSS */
+.strike {
+  text-decoration: line-through;
+}
+
+.divider, .divider-thick {
+  border-bottom: 2px solid var(--secondary-color);
+  opacity: 0.5;
+  width: 90%;
+  align-self: center;
+}
+
+.divider-thick {
+  border-bottom: 3px solid var(--secondary-color);
+  opacity:1;
+  width:100%;
+}
+
+.bold {
+  font-weight: bold;
+}

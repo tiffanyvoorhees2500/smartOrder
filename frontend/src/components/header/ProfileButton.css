@@ -59,9 +59,3 @@
   border: none;
 }
 
-.divider {
-  border-bottom: 2px solid var(--secondary-color);
-  opacity: 0.5;
-  width: 90%;
-  align-self: center;
-}

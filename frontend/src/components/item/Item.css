@@ -1,0 +1,49 @@
+.itemContainer {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1em auto auto;
+  gap: 0.5em;
+  background-color: white;
+  color: var(--secondary-color);
+  padding: 0.5em;
+  border: 1px solid var(--secondary-color);
+}
+
+/* Item Name */
+.itemContainer h3 {
+  margin: 0;
+  grid-row: 1/3;
+  grid-column: 1/2;
+}
+
+/* Item Description */
+.itemContainer p {
+  grid-row: 2/4;
+  grid-column: 1/2;
+  margin: 0;
+}
+
+/* Item container buttons (Add 2 cart and Save Changes) */
+.itemContainer button {
+  padding: 0.5em;
+  background-color: var(--secondary-color);
+  border: none;
+  border-radius: 5px;
+  color: white;
+  grid-column: 2/4;
+  grid-row: 3/4;
+  min-width: 150px;
+  align-self: flex-end;
+  justify-self: flex-end;
+}
+.itemContainer button:hover {
+  filter: brightness(90%);
+}
+
+/* Set the layout to a stack on smaller screens */
+@media (max-width: 768px) {
+  .itemContainer {
+    display: flex;
+    flex-direction: column;
+  }
+}
