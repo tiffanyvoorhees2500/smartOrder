@@ -39,7 +39,7 @@ export default function ProfileButton() {
         {isAdmin ? (
           <Link to="/manage-users">Manage Users</Link>
         ) : (
-          <Link to="/manage-users">Profile</Link>
+          <Link to="/manage-users">Manage Profile</Link>
         )}
 
         {/* Divider and Logout button */}
