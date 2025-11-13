@@ -42,6 +42,15 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BIGINT,
         allowNull: true,
       },
+      pendingQuantity: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      saveForLater: {
+        type: DataTypes.Boolean,
+        allowNull: false,
+        defaultValue: false
+      }
     },
     {}
   );
