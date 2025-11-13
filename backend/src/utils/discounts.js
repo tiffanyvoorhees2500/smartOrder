@@ -20,4 +20,4 @@ function getDiscountByBottleCount(bottleCount) {
   );
 }
 
-module.exports(DISCOUNT_OPTIONS, getDiscountByBottleCount);
+module.exports = { DISCOUNT_OPTIONS, getDiscountByBottleCount };

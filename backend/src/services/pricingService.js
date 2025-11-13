@@ -18,7 +18,7 @@ const {
 async function calculateUserDiscount(user) {
   let lineItems;
 
-  if (user.type === 'group') {
+  if (user.discountType.toLowerCase() === 'Group') {
     // We need to get all userLineItems where adminOrderId is null and that are in the same location as user
     lineItems = await UserLineItem.findAll({
       where: { adminOrderId: null },
@@ -63,3 +63,5 @@ async function calculateUserDiscount(user) {
     selectedDiscountForPending,
   };
 }
+
+module.exports = { calculateUserDiscount };
