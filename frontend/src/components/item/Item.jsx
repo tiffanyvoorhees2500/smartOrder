@@ -20,30 +20,32 @@ export default function Item({ id, name, description, price, quantity }) {
     <div className="itemContainer">
       {/* Item Name */}
       <h3>{name}</h3>
-      
+
       {/* Item Description */}
       <p>{description}</p>
 
-      {/* The previous item quantity (only visible the quantity has changed) */}
-      {hasChanged && (
-        <PriceQtyGroup
-          selectName={`${id}-qty`}
-          price={price}
-          quantity={quantity}
-          disabled={true}
-          helpText={hasChanged && "Original Value"}
-        />
-      )}
+      <div className="qtyGroups">
+        {/* The previous item quantity (only visible the quantity has changed) */}
+        {hasChanged && (
+          <PriceQtyGroup
+            selectName={`${id}-qty`}
+            price={price}
+            quantity={quantity}
+            disabled={true}
+            helpText={hasChanged && "Original Value"}
+          />
+        )}
 
-      {/* The current item quantity */}
-      <PriceQtyGroup
-        selectName={`${id}-qty-new`}
-        price={price}
-        quantity={newQuantity}
-        setQuantity={setNewQuantity}
-        helpText={hasChanged && "New Value"}
-        showZero={hasChanged}
-      />
+        {/* The current item quantity */}
+        <PriceQtyGroup
+          selectName={`${id}-qty-new`}
+          price={price}
+          quantity={newQuantity}
+          setQuantity={setNewQuantity}
+          helpText={hasChanged && "New Value"}
+          showZero={hasChanged}
+        />
+      </div>
 
       {/* Save this item button (only visible if the quantity has changed) */}
       {hasChanged && <button type="button">Save This Item</button>}
