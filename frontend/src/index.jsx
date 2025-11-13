@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import PriceSheetPage from './PriceSheetPage';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ManageUsersForm, LoginForm } from './components/form/Form';
 import Layout from './components/layout/Layout';
@@ -42,7 +42,7 @@ root.render(
             index
             element={
               <ProtectedRoute>
-                <App />
+                <PriceSheetPage />
               </ProtectedRoute>
             }
           />
