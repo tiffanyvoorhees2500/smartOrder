@@ -23,16 +23,15 @@ module.exports = (sequelize, DataTypes) => {
       },
       basePrice: {
         type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
+        allowNull: true,
       },
       percentOff: {
         type: DataTypes.DECIMAL(5, 2),
-        allowNull: false,
-        defaultValue: 0.0,
+        allowNull: true,
       },
       finalPrice: {
         type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
+        allowNull: true,
       },
       adminOrderId: {
         type: DataTypes.UUID,
