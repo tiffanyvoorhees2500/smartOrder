@@ -26,6 +26,9 @@ export default function PriceQtyGroup({
   const { discount } = context;
 
   let newPrice = price; // Price Calculations
+
+  // Set the prices to 2 decimal places
+  price = price.toFixed(2);
   newPrice = newPrice.toFixed(2);
 
   // The quantity select box
@@ -65,7 +68,7 @@ export default function PriceQtyGroup({
 
         {/* Discount percentage and original price */}
         <div>
-          ${discount}% Off <span className="strike">${price}</span>
+          {discount}% Off <span className="strike">${price}</span>
         </div>
       </div>
 
