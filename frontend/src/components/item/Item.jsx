@@ -12,7 +12,7 @@ import PriceQtyGroup from "./PriceQtyGroup";
  *
  * @returns {JSX.Element}
  */
-export default function Item({ id, name, description, price, quantity }) {
+export default function Item({ id, name, description, price, quantity = null }) {
   const [newQuantity, setNewQuantity] = useState(quantity || 0);
   const hasChanged = newQuantity !== (quantity || 0);
 
