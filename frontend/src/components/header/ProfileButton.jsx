@@ -34,6 +34,14 @@ export default function ProfileButton() {
           </>
         )}
 
+        {/* Divider and Manager Users/Profile */}
+        <div className="divider"></div>
+        {isAdmin ? (
+          <Link to="/manage-users">Manage Users</Link>
+        ) : (
+          <Link to="/manage-users">Manage Profile</Link>
+        )}
+
         {/* Divider and Logout button */}
         <div className="divider"></div>
         <button type="button" onClick={handleLogout}>

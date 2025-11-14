@@ -47,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       saveForLater: {
-        type: DataTypes.Boolean,
+        type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false
       }

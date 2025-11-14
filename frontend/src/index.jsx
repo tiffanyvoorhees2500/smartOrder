@@ -42,7 +42,7 @@ root.render(
             index
             element={
               <ProtectedRoute>
-                <PriceSheetPage />
+                <Navigate to="/current-order" replace />
               </ProtectedRoute>
             }
           />
@@ -51,7 +51,7 @@ root.render(
             path="current-order"
             element={
               <ProtectedRoute>
-                <div>Current Order Page</div>
+                <PriceSheetPage />
               </ProtectedRoute>
             }
           />
