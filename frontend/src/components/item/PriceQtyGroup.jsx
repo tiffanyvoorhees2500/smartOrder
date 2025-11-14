@@ -67,7 +67,7 @@ export default function PriceQtyGroup({
 
         {/* Discount percentage and original price */}
         <div>
-          ${discount}% Off <span className="strike">${price.toFixed(2)}</span>
+          {discount}% Off <span className="strike">${price.toFixed(2)}</span>
         </div>
       </div>
 

@@ -1,7 +1,6 @@
 .itemContainer {
   display: grid;
   grid-template-columns: 2fr minmax(150px, auto);
-  grid-template-rows: 1em auto auto;
   gap: 0.5em;
   background-color: white;
   color: var(--secondary-color);

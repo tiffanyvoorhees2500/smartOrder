@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./Item.css";
 import PriceQtyGroup from "./PriceQtyGroup";
+import { HeaderContext } from "../header/HeaderContext";
 
 /**
  * An item on the price sheet
@@ -12,13 +13,26 @@ import PriceQtyGroup from "./PriceQtyGroup";
  *
  * @returns {JSX.Element}
  */
-export default function Item({ id, name, description, price, quantity = null }) {
+export default function Item({
+  id,
+  name,
+  description,
+  price,
+  quantity = null,
+}) {
+  function AddToCart() {
+    setPendingQuantity(1);
+    headerContext?.setPendingPrice(
+      (currentPendingPrice) => currentPendingPrice + price
+    );
+  }
 
   // if quantity is null, set to 0, otherwise use quantity from db
   const [pendingQuantity, setPendingQuantity] = useState(quantity ?? 0);
-  
   // true when user modifies quantity (quantity can be null)
   const hasChanged = (quantity ?? 0) !== pendingQuantity;
+
+  const headerContext = useContext(HeaderContext);
 
   return (
     <div className="itemContainer">
@@ -56,7 +70,7 @@ export default function Item({ id, name, description, price, quantity = null }) 
 
       {/* Add to cart button (only visible if the quantity is 0 and the quantity has not changed) */}
       {!quantity && !hasChanged && (
-        <button type="button" onClick={() => setPendingQuantity(1)}>
+        <button type="button" onClick={() => AddToCart()}>
           Add to Cart
         </button>
       )}
