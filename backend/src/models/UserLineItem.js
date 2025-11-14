@@ -23,20 +23,19 @@ module.exports = (sequelize, DataTypes) => {
       },
       basePrice: {
         type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
+        allowNull: true,
       },
       percentOff: {
         type: DataTypes.DECIMAL(5, 2),
-        allowNull: false,
-        defaultValue: 0.0,
+        allowNull: true,
       },
       finalPrice: {
         type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
+        allowNull: true,
       },
       adminOrderId: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: true, // rows without adminOrderId belong to the admin current bulk order
       },
       original_id: {
         type: DataTypes.BIGINT,
@@ -49,8 +48,8 @@ module.exports = (sequelize, DataTypes) => {
       saveForLater: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false
-      }
+        defaultValue: false,
+      },
     },
     {}
   );
