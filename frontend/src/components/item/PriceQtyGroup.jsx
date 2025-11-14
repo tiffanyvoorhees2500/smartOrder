@@ -22,11 +22,13 @@ export default function PriceQtyGroup({
   helpText,
   showZero = true,
 }) {
-  const context = useContext(PriceSheetPageContext);
-  const { discount } = context;
+  const { discount } = useContext(PriceSheetPageContext);
 
-  let newPrice = price; // Price Calculations
-  newPrice = newPrice.toFixed(2);
+  const discountedPrice = (price * (1 - discount / 100));
+
+  // Line total (qty * price * (1 - discount))
+  const total = quantity * discountedPrice
+
 
   // The quantity select box
   let quantitySpace = (
@@ -65,7 +67,7 @@ export default function PriceQtyGroup({
 
         {/* Discount percentage and original price */}
         <div>
-          ${discount}% Off <span className="strike">${price}</span>
+          ${discount}% Off <span className="strike">${price.toFixed(2)}</span>
         </div>
       </div>
 
@@ -76,9 +78,9 @@ export default function PriceQtyGroup({
 
         {/* Price */}
         <div className="price">
-          <span>${newPrice}</span>
+          <span>${discountedPrice.toFixed(2)}</span>
           <div className="divider-thick"></div>
-          <span className="bold">${newPrice}</span>
+          <span className="bold">${total.toFixed(2)}</span>
         </div>
       </div>
     </div>

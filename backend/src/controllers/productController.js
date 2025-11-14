@@ -1,10 +1,14 @@
 'use strict';
+
 const db = require('../models');
-const { Product, Ingredient } = db;
+const { Product, Ingredient, UserLineItem } = db;
 exports.getUserProductList = async (req, res) => {
     try {
         const userPricing = req.user.pricingType;
+        const userId = req.user.id;
+        const currentAdminOrderId = null;
         
+        // Fetch products that are not discontinued
         const products = await Product.findAll({
             where: {
                 discontinued: false
@@ -23,6 +27,22 @@ exports.getUserProductList = async (req, res) => {
                     model: Ingredient,
                     as: 'ingredients',  
                     attributes: ['ingredient', 'number_label', 'string_label']
+                },
+                {
+                    model: UserLineItem,
+                    as: 'userLineItems',
+                    where: {
+                        userId: userId, 
+                        adminOrderId: currentAdminOrderId,
+                    },
+                    required: false, // include even if no matching line items
+                    attributes: [
+                        'quantity',
+                        'basePrice',
+                        'percentOff',
+                        'finalPrice',
+                        'pendingQuantity', 'saveForLater'
+                    ],
                 }
             ],
             order: [['name', 'ASC']],
@@ -35,18 +55,33 @@ exports.getUserProductList = async (req, res) => {
             );
 
             const description = sortedIngredients
-            .map(i => `${i.ingredient} [${i.number_label} ${i.string_label})`)
+            .map(i => `${i.ingredient} [${i.number_label} ${i.string_label}]`)
             .join(', ');
+            
+            // Extract UserLineItem details if exists
+            const uli = product.userLineItems[0] || {};
+            const quantity = uli.quantity ?? null; // original quantity
+            const pendingQuantity = uli.pendingQuantity ?? null; // pending quantity
+            const basePrice = uli.basePrice ?? null;
+            const percentOff = uli.percentOff ?? null;
+            const finalPrice = uli.finalPrice ?? null;  
+            const saveForLater = uli.saveForLater ?? false;
+
             
             return {
                 id: product.id,
                 name: product.name,
                 price: Number(userPricing === 'Retail' ? product.retail : product.wholesale),
-                description: description
+                description,
+                quantity,
+                basePrice,
+                percentOff,
+                finalPrice,
+                pendingQuantity,
+                saveForLater,
             };
         });
-
-
+    
         res.status(200).json(formattedProducts);
     } catch (error) {
         console.error('Error fetching products:', error);
