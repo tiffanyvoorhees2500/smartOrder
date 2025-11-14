@@ -6,7 +6,7 @@ exports.getUserProductList = async (req, res) => {
     try {
         const userPricing = req.user.pricingType;
         const userId = req.user.id;
-        const currentAdminOrderId = null;
+        const currentAdminOrderId = null; // current order has no adminOrderId
         
         // Fetch products that are not discontinued
         const products = await Product.findAll({
@@ -60,13 +60,9 @@ exports.getUserProductList = async (req, res) => {
             
             // Extract UserLineItem details if exists
             const uli = product.userLineItems[0] || {};
-            const quantity = uli.quantity ?? null; // original quantity
-            const pendingQuantity = uli.pendingQuantity ?? null; // pending quantity
-            const basePrice = uli.basePrice ?? null;
-            const percentOff = uli.percentOff ?? null;
-            const finalPrice = uli.finalPrice ?? null;  
-            const saveForLater = uli.saveForLater ?? false;
-
+            const quantity = uli.pendingQuantity ?? uli.quantity ?? null; // current saved quantity
+            const originalQuantity = uli.quantity ?? null; // original quantity
+            const pendingQuantity = uli.pendingQuantity ?? 0; // pending quantity
             
             return {
                 id: product.id,
@@ -74,11 +70,8 @@ exports.getUserProductList = async (req, res) => {
                 price: Number(userPricing === 'Retail' ? product.retail : product.wholesale),
                 description,
                 quantity,
-                basePrice,
-                percentOff,
-                finalPrice,
+                originalQuantity,
                 pendingQuantity,
-                saveForLater,
             };
         });
     
