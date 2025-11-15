@@ -28,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       percentOff: {
         type: DataTypes.DECIMAL(5, 2),
         allowNull: true,
+        defaultValue: 0.0,
       },
       finalPrice: {
         type: DataTypes.DECIMAL(10, 2),

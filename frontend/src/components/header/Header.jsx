@@ -5,9 +5,10 @@ import { FaArrowRight, FaShoppingCart } from "react-icons/fa";
 import { HeaderContext } from "./HeaderContext";
 
 export default function Header() {
-  const headerContext = useContext(HeaderContext);
-  const price = headerContext.price || 0;
-  const pendingPrice = headerContext.pendingPrice;
+  const { originalTotal, pendingTotal } = useContext(HeaderContext);
+  // const headerContext = useContext(HeaderContext);
+  // const price = headerContext.price || 0;
+  // const pendingPrice = headerContext.pendingPrice;
 
   return (
     <header className="app-header">
@@ -18,12 +19,12 @@ export default function Header() {
       <nav className="header-nav">
         <div className="shoppingCart">
           <FaShoppingCart />
-          <span className="cart-total">${price.toFixed(2)}</span>
-          {pendingPrice && (
+          <span className="cart-total">${originalTotal.toFixed(2)}</span>
+          {pendingTotal !== null && pendingTotal !== originalTotal && (
             <>
               <FaArrowRight />
               <span className="cart-total-pending">
-                ${pendingPrice.toFixed(2)}
+                ${pendingTotal.toFixed(2)}
               </span>
             </>
           )}
