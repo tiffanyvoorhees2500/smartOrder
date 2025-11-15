@@ -41,7 +41,8 @@ exports.getUserProductList = async (req, res) => {
                         'basePrice',
                         'percentOff',
                         'finalPrice',
-                        'pendingQuantity', 'saveForLater'
+                        'pendingQuantity', 
+                        'saveForLater'
                     ],
                 }
             ],
@@ -62,7 +63,7 @@ exports.getUserProductList = async (req, res) => {
             const uli = product.userLineItems[0] || {};
             const quantity = uli.pendingQuantity ?? uli.quantity ?? null; // current saved quantity
             const originalQuantity = uli.quantity ?? null; // original quantity
-            const pendingQuantity = uli.pendingQuantity ?? 0; // pending quantity
+            const dbPendingQuantity = uli.pendingQuantity ?? 0; // pending quantity
             
             return {
                 id: product.id,
@@ -71,7 +72,7 @@ exports.getUserProductList = async (req, res) => {
                 description,
                 quantity,
                 originalQuantity,
-                pendingQuantity,
+                dbPendingQuantity,
             };
         });
     

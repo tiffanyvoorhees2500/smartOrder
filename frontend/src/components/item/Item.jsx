@@ -1,8 +1,9 @@
-import { useContext, useState } from "react";
+import { useState, useContext } from "react";
 import "./Item.css";
 import PriceQtyGroup from "./PriceQtyGroup";
-import { HeaderContext } from "../header/HeaderContext";
 import axios from "axios";
+import { HeaderContext } from "../header/HeaderContext";
+import { PriceSheetPageContext } from "../../PriceSheetPage";
 
 const base_url = process.env.REACT_APP_API_BASE_URL;
 
@@ -16,32 +17,43 @@ const base_url = process.env.REACT_APP_API_BASE_URL;
  *
  * @returns {JSX.Element}
  */
-export default function Item({ id, name, description, price, quantity, originalQuantity = null, dbPendingQuantity = null}) {
+export default function Item({ 
+  id,
+  name,
+  description,
+  price,
+  quantity,
+  originalQuantity = null,
+  dbPendingQuantity = null}) {
   
-  // State for saved quantity from backend
-  const [savedQuantity, setSavedQuantity] = useState(originalQuantity ?? null);
-
-  // State for new/pending quantity shown in dropdown
-  const [pendingQuantity, setPendingQuantity] = useState(dbPendingQuantity ?? savedQuantity ?? 0);
-
+  const [savedQuantity, setSavedQuantity] = useState(originalQuantity ?? null); // State for saved quantity from backend
+  const [pendingQuantity, setPendingQuantity] = useState(dbPendingQuantity ?? savedQuantity ?? 0); // State for new/pending quantity shown in dropdown
   const [saving, setSaving] = useState(false);
 
-  const [pendingCartQuantity, setPendingCartQuantity] = useState(quantity ?? 0);
-  const headerContext = useContext(HeaderContext);
+  const { setOriginalTotal, setPendingTotal } = useContext(HeaderContext);
+  const { discount } = useContext(PriceSheetPageContext);
+
+  const discountedPrice = price * (1 - discount / 100);
 
   // true when user modifies quantity (quantity can be null)
-  const hasChanged = (savedQuantity ?? 0) !== (pendingQuantity ?? 0);
+  const hasChanged = (savedQuantity ?? 0) !== (pendingQuantity ?? 0); 
+
+  // true when item has 0 original and 0 pending quantities
+  const showAddToCart = (savedQuantity ?? 0) === 0 && (pendingQuantity ?? 0) === 0; 
 
   const saveItem = async () => {
     setSaving(true);
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.post(`${base_url}/user-line-items/save-line-item`, {
+      await axios.post(`${base_url}/user-line-items/save-line-item`, {
         productId: id,
         quantity: pendingQuantity, // send 0 to delete item
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
+
+      const prevSavedQuantity = savedQuantity ?? 0;
+      const newSavedQuantity = pendingQuantity ?? 0;
 
       // Update local state after successful save
       if (pendingQuantity === 0) {
@@ -50,7 +62,11 @@ export default function Item({ id, name, description, price, quantity, originalQ
       } else {
         setSavedQuantity(pendingQuantity);
       }
-      console.log("Save successful:", response.data);
+
+      // Update header totals
+      setOriginalTotal(prev => prev - prevSavedQuantity * discountedPrice + newSavedQuantity * discountedPrice);
+      setPendingTotal(prev => prev - prevSavedQuantity * discountedPrice + newSavedQuantity * discountedPrice);
+      
     } catch (error) {
       console.error("Error saving item:", error);
     } finally {
@@ -59,7 +75,10 @@ export default function Item({ id, name, description, price, quantity, originalQ
   };
 
   const updatePending = async (newPending) => {
+    const prevPending = pendingQuantity ?? 0;
     setPendingQuantity(newPending); // update local state immediately
+    setPendingTotal(prev => prev - prevPending * discountedPrice + (newPending ?? 0) * discountedPrice);
+    
     try {
       const token = localStorage.getItem("token");
       await axios.post(`${base_url}/user-line-items/update-pending-quantity`, {
@@ -67,17 +86,10 @@ export default function Item({ id, name, description, price, quantity, originalQ
         pendingQuantity: newPending,
       }, { headers: { Authorization: `Bearer ${token}` }});
 
-      setPendingCartQuantity(1);
-      headerContext?.setPendingPrice(
-        (currentPendingPrice) => currentPendingPrice + price
-      );
     } catch (error) {
       console.error("Error updating pending quantity:", error);
     }
   };
-
-
-  const headerContext = useContext(HeaderContext);
 
   return (
     <div className="itemContainer">
@@ -118,7 +130,7 @@ export default function Item({ id, name, description, price, quantity, originalQ
       )}
 
       {/* Add to cart button (only visible if the quantity is 0 and the quantity has not changed) */}
-      {!quantity && !hasChanged && (
+      {showAddToCart && (
         <button type="button" onClick={() => updatePending(1)}>
           Add to Cart
         </button>
