@@ -10,13 +10,3 @@
 .footer-left {
   font-size: 0.9rem;
 }
-
-.footer-right {
-  display: flex;
-  align-items: center;
-  font-size: 0.9rem;
-}
-
-.cart-icon {
-  margin-right: 0.25rem;
-}
