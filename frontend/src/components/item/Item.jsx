@@ -15,18 +15,18 @@ const base_url = process.env.REACT_APP_API_BASE_URL;
  *
  * @returns {JSX.Element}
  */
-export default function Item({ id, name, description, price, quantity, originalQuantity = null}) {
+export default function Item({ id, name, description, price, quantity, originalQuantity = null, dbPendingQuantity = null}) {
 
   // State for saved quantity from backend
   const [savedQuantity, setSavedQuantity] = useState(originalQuantity ?? null);
 
   // State for new/pending quantity shown in dropdown
-  const [pendingQuantity, setPendingQuantity] = useState(quantity ?? 0);
-  
-  // true when user modifies quantity (quantity can be null)
-  const hasChanged = (savedQuantity ?? 0) !== (pendingQuantity ?? 0);
+  const [pendingQuantity, setPendingQuantity] = useState(dbPendingQuantity ?? savedQuantity ?? 0);
 
   const [saving, setSaving] = useState(false);
+
+  // true when user modifies quantity (quantity can be null)
+  const hasChanged = (savedQuantity ?? 0) !== (pendingQuantity ?? 0);
 
   const saveItem = async () => {
     setSaving(true);
@@ -94,7 +94,7 @@ export default function Item({ id, name, description, price, quantity, originalQ
           price={price}
           quantity={pendingQuantity}
           setQuantity={updatePending}
-          helpText={hasChanged && "New Value"}
+          helpText={hasChanged ? "New Value" : "" }
           showZero={hasChanged}
         />
       </div>

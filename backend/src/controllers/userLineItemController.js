@@ -72,7 +72,13 @@ exports.updatePendingQuantity = async (req, res) => {
             });
         } else {
             // Update the pendingQuantity of the existing line item
-            await lineItem.update({ pendingQuantity });
+            if (pendingQuantity === 0 && lineItem.quantity === 0) {
+                // If both pendingQuantity and quantity are 0, delete the line item
+                await lineItem.destroy();
+                return res.status(200).json({ message: 'Line item deleted' });
+            } else {
+                await lineItem.update({ pendingQuantity });
+            }
         }
 
         return res.status(200).json({ message: 'Pending quantity updated', lineItem });
