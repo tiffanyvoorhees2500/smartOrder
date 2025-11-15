@@ -4,3 +4,19 @@
   flex-direction: column;
   align-self: flex-start;
 }
+
+/* Search Element */
+.searchElement {
+  padding-bottom: 1rem;
+}
+
+.searchElement label {
+  color: var(--accent-color);
+  font-size: 2rem;
+}
+
+mark {
+  background-color: var(--secondary-color);
+  padding: 0 2px;
+  border-radius: 2px;
+}

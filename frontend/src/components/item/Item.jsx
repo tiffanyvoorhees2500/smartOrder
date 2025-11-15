@@ -1,6 +1,6 @@
-import { useState } from "react";
-import "./Item.css";
-import PriceQtyGroup from "./PriceQtyGroup";
+import { useState } from 'react';
+import './Item.css';
+import PriceQtyGroup from './PriceQtyGroup';
 
 /**
  * An item on the price sheet
@@ -9,26 +9,44 @@ import PriceQtyGroup from "./PriceQtyGroup";
  * @param {string} description - The description of the item
  * @param {number} price - The price of the item
  * @param {number|null} quantity - The quantity of the item
+ * @param {string} searchTerm - The search term that will be highlighted
  *
  * @returns {JSX.Element}
  */
-export default function Item({ id, name, description, price, quantity = null }) {
-
+export default function Item({
+  id,
+  name,
+  description,
+  price,
+  quantity = null,
+  searchTerm,
+}) {
   // if quantity is null, set to 0, otherwise use quantity from db
   const [pendingQuantity, setPendingQuantity] = useState(quantity ?? 0);
-  
+
   // true when user modifies quantity (quantity can be null)
   const hasChanged = (quantity ?? 0) !== pendingQuantity;
 
+  function highlightMatch(text, searchTerm) {
+    if (!searchTerm) return text;
+
+    const regex = new RegExp(`(${searchTerm})`, 'gi');
+    return text
+      .split(regex)
+      .map((part, i) =>
+        regex.test(part) ? <mark key={i}>{part}</mark> : part
+      );
+  }
+
   return (
-    <div className="itemContainer">
+    <div className='itemContainer'>
       {/* Item Name */}
-      <h3>{name}</h3>
+      <h3>{highlightMatch(name, searchTerm)}</h3>
 
       {/* Item Description */}
-      <p>{description}</p>
+      <p>{highlightMatch(description, searchTerm)}</p>
 
-      <div className="qtyGroups">
+      <div className='qtyGroups'>
         {/* The original item quantity (only visible the quantity has changed) */}
         {hasChanged && (
           <PriceQtyGroup
@@ -36,7 +54,7 @@ export default function Item({ id, name, description, price, quantity = null }) 
             price={price}
             quantity={quantity}
             disabled={true}
-            helpText={hasChanged && "Original Value"}
+            helpText={hasChanged && 'Original Value'}
           />
         )}
 
@@ -46,17 +64,17 @@ export default function Item({ id, name, description, price, quantity = null }) 
           price={price}
           quantity={pendingQuantity}
           setQuantity={setPendingQuantity}
-          helpText={hasChanged && "New Value"}
+          helpText={hasChanged && 'New Value'}
           showZero={hasChanged}
         />
       </div>
 
       {/* Save this item button (only visible if the quantity has changed) */}
-      {hasChanged && <button type="button">Save This Item</button>}
+      {hasChanged && <button type='button'>Save This Item</button>}
 
       {/* Add to cart button (only visible if the quantity is 0 and the quantity has not changed) */}
       {!quantity && !hasChanged && (
-        <button type="button" onClick={() => setPendingQuantity(1)}>
+        <button type='button' onClick={() => setPendingQuantity(1)}>
           Add to Cart
         </button>
       )}
