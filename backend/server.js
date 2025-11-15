@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 const db = require('./src/models');
 const userRoutes = require('./src/routes/userRoutes');
 const productRoutes = require('./src/routes/productRoutes');
+const pricingRoutes = require('./src/routes/pricingRoutes');
 
 const { sequelize } = db;
 
@@ -17,6 +18,7 @@ app.use(express.json());
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/pricing', pricingRoutes)
 
 //Default Route
 app.get('/', (req, res) => {

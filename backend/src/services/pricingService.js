@@ -35,7 +35,7 @@ async function calculateUserDiscount(user) {
   }
 
   // Calculate totalBottlesForDiscount
-  const totalBottlesForCurrentQuantityQuantities = lineItems.reduce(
+  const totalBottlesForCurrentQuantities = lineItems.reduce(
     (sum, item) => sum + item.quantity,
     0
   );
@@ -49,7 +49,7 @@ async function calculateUserDiscount(user) {
   }, 0);
 
   const selectedDiscountForCurrent = getDiscountByBottleCount(
-    totalBottlesForCurrentQuantityQuantities
+    totalBottlesForCurrentQuantities
   );
   const selectedDiscountForPending = getDiscountByBottleCount(
     totalBottlesWithPendingQuantities
@@ -57,7 +57,7 @@ async function calculateUserDiscount(user) {
 
   return {
     DISCOUNT_OPTIONS,
-    totalBottlesForCurrentQuantityQuantities,
+    totalBottlesForCurrentQuantities,
     totalBottlesWithPendingQuantities,
     selectedDiscountForCurrent,
     selectedDiscountForPending,

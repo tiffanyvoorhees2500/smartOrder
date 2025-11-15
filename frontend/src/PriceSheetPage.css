@@ -4,3 +4,15 @@
   flex-direction: column;
   align-self: flex-start;
 }
+
+.discountSelectorsDiv {
+  display: flex;
+  gap: 1rem; /* space between selectors */
+  padding-bottom: 1rem;
+}
+
+.discountSelectorsDiv > * {
+  flex: 1 1 0; /* grow to fill, shrink if needed */
+  min-width: 0; /* ensures proper shrinking in flex container */
+  color: var(--primary-color);
+}
