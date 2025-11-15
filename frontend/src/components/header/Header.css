@@ -7,7 +7,7 @@
   align-items: center;
   padding: 0.5rem 1rem;
   background-color: var(--primary-color);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   z-index: 1000;
 }
 
@@ -33,6 +33,13 @@
   font-weight: normal;
 }
 
+.header-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
 .header-nav a {
   margin-left: 1rem;
   text-decoration: none;
@@ -43,4 +50,23 @@
 .header-nav .logout-link {
   margin-left: 2rem; /* separate logoff from nav links */
   font-weight: bold;
+}
+
+.shoppingCart {
+  color: white;
+  display: flex;
+  flex-direction: row;
+  padding: 0.5em;
+  gap:0.2em;
+  background: linear-gradient(
+    to top left,
+    var(--secondary-color) 30%,
+    var(--secondary-color-light) 70%
+  );
+  border-radius: 99px;
+  align-items: center;
+  justify-content: center;
+}
+.shoppingCart svg {
+  height: auto;
 }

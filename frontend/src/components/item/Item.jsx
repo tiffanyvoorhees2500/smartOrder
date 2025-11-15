@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./Item.css";
 import PriceQtyGroup from "./PriceQtyGroup";
+import { HeaderContext } from "../header/HeaderContext";
 import axios from "axios";
 
 const base_url = process.env.REACT_APP_API_BASE_URL;
@@ -16,7 +17,7 @@ const base_url = process.env.REACT_APP_API_BASE_URL;
  * @returns {JSX.Element}
  */
 export default function Item({ id, name, description, price, quantity, originalQuantity = null, dbPendingQuantity = null}) {
-
+  
   // State for saved quantity from backend
   const [savedQuantity, setSavedQuantity] = useState(originalQuantity ?? null);
 
@@ -24,6 +25,9 @@ export default function Item({ id, name, description, price, quantity, originalQ
   const [pendingQuantity, setPendingQuantity] = useState(dbPendingQuantity ?? savedQuantity ?? 0);
 
   const [saving, setSaving] = useState(false);
+
+  const [pendingCartQuantity, setPendingCartQuantity] = useState(quantity ?? 0);
+  const headerContext = useContext(HeaderContext);
 
   // true when user modifies quantity (quantity can be null)
   const hasChanged = (savedQuantity ?? 0) !== (pendingQuantity ?? 0);
@@ -62,11 +66,18 @@ export default function Item({ id, name, description, price, quantity, originalQ
         productId: id,
         pendingQuantity: newPending,
       }, { headers: { Authorization: `Bearer ${token}` }});
+
+      setPendingCartQuantity(1);
+      headerContext?.setPendingPrice(
+        (currentPendingPrice) => currentPendingPrice + price
+      );
     } catch (error) {
       console.error("Error updating pending quantity:", error);
     }
   };
 
+
+  const headerContext = useContext(HeaderContext);
 
   return (
     <div className="itemContainer">
