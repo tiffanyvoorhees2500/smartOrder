@@ -32,7 +32,7 @@ export default function PriceSheetPage() {
           />
         </label>
         
-        {hasPendingChanges && (
+        {originalBulkBottles !== pendingBulkBottles && (
           <label>
             Including Your Pending: {pendingBulkBottles}
             <DiscountSelector
@@ -47,7 +47,7 @@ export default function PriceSheetPage() {
       {/* List of items */}
       <div className='items'>
         {items.map((item) => (
-          <Item key={item.id} {...item} />
+          <Item key={item.id} item={item} />
         ))}
       </div>
     </div>

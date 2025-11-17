@@ -1,7 +1,6 @@
 import React, {
   createContext,
   useState,
-  useContext,
   useEffect,
   useCallback,
 } from 'react';
@@ -65,7 +64,7 @@ export default function HeaderContextProvider({ children }) {
       setPendingDiscount(normalize(selPen));
 
       setOriginalBulkBottles(
-        discountInfo.totalBottlesForCurrentQuantityQuantities ?? 0
+        discountInfo.totalBottlesForCurrentQuantities ?? 0
       );
       setPendingBulkBottles(
         discountInfo.totalBottlesWithPendingQuantities ?? 0
@@ -77,8 +76,8 @@ export default function HeaderContextProvider({ children }) {
         name: p.name,
         description: p.description,
         price: p.price,
-        originalQuantity: p.originalQuantity ?? 0,
-        dbPendingQuantity: p.dbPendingQuantity ?? p.originalQuantity ?? 0,
+        quantity: p.originalQuantity ?? 0,
+        pendingQuantity: p.dbPendingQuantity ?? p.originalQuantity ?? 0,
         productLineItemId: p.productLineItemId ?? null, // if you included line item id
       }));
 
@@ -108,6 +107,7 @@ export default function HeaderContextProvider({ children }) {
     setOriginalTotal(oTotal);
     setPendingTotal(pTotal);
   }, [items, originalDiscount, pendingDiscount]);
+
   // Update pending quantity for one item (optimistic + persist)
   const updatePendingQuantity = useCallback(
     async (productLineItemId, productId, newPending) => {

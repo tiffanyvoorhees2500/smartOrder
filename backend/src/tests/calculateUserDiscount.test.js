@@ -30,7 +30,7 @@ describe('calculateUserDiscount', () => {
 
     const result = await calculateUserDiscount(user);
 
-    expect(result.totalBottlesForCurrentQuantityQuantities).toBe(5); // 3 + 2
+    expect(result.totalBottlesForCurrentQuantities).toBe(5); // 3 + 2
     expect(result.totalBottlesWithPendingQuantities).toBe(7); // 5 (pending) + 2
     expect(result.selectedDiscountForCurrent).toBe(getDiscountByBottleCount(5));
     expect(result.selectedDiscountForPending).toBe(getDiscountByBottleCount(7));
@@ -58,7 +58,7 @@ describe('calculateUserDiscount', () => {
 
     const result = await calculateUserDiscount(user);
 
-    expect(result.totalBottlesForCurrentQuantityQuantities).toBe(5); // 2 + 3
+    expect(result.totalBottlesForCurrentQuantities).toBe(5); // 2 + 3
     expect(result.totalBottlesWithPendingQuantities).toBe(8); // 5 (pending for self) + 3
     expect(result.selectedDiscountForCurrent).toBe(getDiscountByBottleCount(5));
     expect(result.selectedDiscountForPending).toBe(getDiscountByBottleCount(8));
@@ -71,7 +71,7 @@ describe('calculateUserDiscount', () => {
 
     const result = await calculateUserDiscount(user);
 
-    expect(result.totalBottlesForCurrentQuantityQuantities).toBe(0);
+    expect(result.totalBottlesForCurrentQuantities).toBe(0);
     expect(result.totalBottlesWithPendingQuantities).toBe(0);
     expect(result.selectedDiscountForCurrent).toBe(getDiscountByBottleCount(0));
     expect(result.selectedDiscountForPending).toBe(getDiscountByBottleCount(0));
