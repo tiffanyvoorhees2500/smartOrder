@@ -2,8 +2,12 @@
 
 const db = require('../models');
 const { Product, Ingredient, UserLineItem } = db;
+const { calculateUserDiscount } = require('../services/pricingService');
+
 exports.getUserProductList = async (req, res) => {
     try {
+        const discountInfo = await calculateUserDiscount(req.user);
+
         const userPricing = req.user.pricingType;
         const userId = req.user.id;
         const currentAdminOrderId = null; // current order has no adminOrderId
@@ -76,7 +80,10 @@ exports.getUserProductList = async (req, res) => {
             };
         });
     
-        res.status(200).json(formattedProducts);
+        res.status(200).json({
+            products: formattedProducts,
+            discountInfo
+        });
     } catch (error) {
         console.error('Error fetching products:', error);
         res.status(500).json({ message: 'Internal server error' });

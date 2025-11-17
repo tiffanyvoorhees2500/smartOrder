@@ -1,137 +1,88 @@
-import { useState, useContext } from "react";
-import "./Item.css";
-import PriceQtyGroup from "./PriceQtyGroup";
-import axios from "axios";
-import { HeaderContext } from "../header/HeaderContext";
-import { PriceSheetPageContext } from "../../PriceSheetPage";
+import { useState, useContext } from 'react';
+import './Item.css';
+import PriceQtyGroup from './PriceQtyGroup';
+import { HeaderContext } from '../header/HeaderContext';
 
-const base_url = process.env.REACT_APP_API_BASE_URL;
-
-/**
- * An item on the price sheet
- * @param {number} id - The id of the item
- * @param {string} name - The name of the item
- * @param {string} description - The description of the item
- * @param {number} price - The price of the item
- * @param {number|null} quantity - The quantity of the item
- *
- * @returns {JSX.Element}
- */
-export default function Item({ 
+export default function Item({
   id,
   name,
   description,
   price,
-  quantity,
-  originalQuantity = null,
-  dbPendingQuantity = null}) {
-  
-  const [savedQuantity, setSavedQuantity] = useState(originalQuantity ?? null); // State for saved quantity from backend
-  const [pendingQuantity, setPendingQuantity] = useState(dbPendingQuantity ?? savedQuantity ?? 0); // State for new/pending quantity shown in dropdown
+  originalQuantity = 0,
+  dbPendingQuantity = 0,
+  productLineItemId = null,
+}) {
+  const [savedQuantity, setSavedQuantity] = useState(originalQuantity ?? 0); // State for saved quantity from backend
+  const [pendingQuantity, setPendingQuantity] = useState(
+    dbPendingQuantity ?? savedQuantity ?? 0
+  ); // State for new/pending quantity shown in dropdown
   const [saving, setSaving] = useState(false);
 
-  const { setOriginalTotal, setPendingTotal } = useContext(HeaderContext);
-  const { discount } = useContext(PriceSheetPageContext);
+  const { originalDiscount, pendingDiscount, updatePendingQuantity, saveItem } =
+    useContext(HeaderContext);
 
-  const discountedPrice = price * (1 - discount / 100);
+  // recalc when parent context updates: if parent refreshes items, you'll probably unmount/remount,
+  // but to keep local state in sync when backend reloads, add effect (optional)
+  // Omitted here for brevity — if you want, add useEffect to sync savedQuantity when props change.
+  const hasChanged = (savedQuantity ?? 0) !== (pendingQuantity ?? 0);
+  const showAddToCart =
+    (savedQuantity ?? 0) === 0 && (pendingQuantity ?? 0) === 0;
 
-  // true when user modifies quantity (quantity can be null)
-  const hasChanged = (savedQuantity ?? 0) !== (pendingQuantity ?? 0); 
+  const onUpdatePending = async (newQty) => {
+    setPendingQuantity(newQty);
+    // call context to persist + refresh
+    await updatePendingQuantity(productLineItemId, id, newQty);
+    // after updatePendingQuantity completes it reloads pricing, which will sync totals & items
+  };
 
-  // true when item has 0 original and 0 pending quantities
-  const showAddToCart = (savedQuantity ?? 0) === 0 && (pendingQuantity ?? 0) === 0; 
-
-  const saveItem = async () => {
+  const onSave = async () => {
     setSaving(true);
     try {
-      const token = localStorage.getItem("token");
-      await axios.post(`${base_url}/user-line-items/save-line-item`, {
-        productId: id,
-        quantity: pendingQuantity, // send 0 to delete item
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-
-      const prevSavedQuantity = savedQuantity ?? 0;
-      const newSavedQuantity = pendingQuantity ?? 0;
-
-      // Update local state after successful save
-      if (pendingQuantity === 0) {
-        setSavedQuantity(null); // deleted from user line items
-        setPendingQuantity(0);
-      } else {
-        setSavedQuantity(pendingQuantity);
-      }
-
-      // Update header totals
-      setOriginalTotal(prev => prev - prevSavedQuantity * discountedPrice + newSavedQuantity * discountedPrice);
-      setPendingTotal(prev => prev - prevSavedQuantity * discountedPrice + newSavedQuantity * discountedPrice);
-      
-    } catch (error) {
-      console.error("Error saving item:", error);
+      await saveItem(productLineItemId, id);
+      // after saveItem finishes, context reloads pricing and your item will be updated by parent
     } finally {
       setSaving(false);
     }
   };
 
-  const updatePending = async (newPending) => {
-    const prevPending = pendingQuantity ?? 0;
-    setPendingQuantity(newPending); // update local state immediately
-    setPendingTotal(prev => prev - prevPending * discountedPrice + (newPending ?? 0) * discountedPrice);
-    
-    try {
-      const token = localStorage.getItem("token");
-      await axios.post(`${base_url}/user-line-items/update-pending-quantity`, {
-        productId: id,
-        pendingQuantity: newPending,
-      }, { headers: { Authorization: `Bearer ${token}` }});
-
-    } catch (error) {
-      console.error("Error updating pending quantity:", error);
-    }
-  };
+  const actualDiscountToUser = hasChanged ? pendingDiscount : originalDiscount;
 
   return (
-    <div className="itemContainer">
-      {/* Item Name */}
+    <div className='itemContainer'>
       <h3>{name}</h3>
-
-      {/* Item Description */}
       <p>{description}</p>
 
-      <div className="qtyGroups">
-        {/* The original item quantity (only visible the quantity has changed) */}
+      <div className='qtyGroups'>
         {hasChanged && (
           <PriceQtyGroup
             selectName={`${id}-qty`}
             price={price}
+            percentOff={originalDiscount}
             quantity={savedQuantity}
             disabled={true}
-            helpText={hasChanged && "Original Value"}
+            helpText='Original Value'
           />
         )}
 
-        {/* The current item quantity */}
         <PriceQtyGroup
           selectName={`${id}-qty-new`}
           price={price}
+          percentOff={actualDiscountToUser} // Can be original or pending depending on whether there are pendings or not.
           quantity={pendingQuantity}
-          setQuantity={updatePending}
-          helpText={hasChanged ? "New Value" : "" }
+          setQuantity={onUpdatePending}
+          helpText={hasChanged ? 'New Value' : ''}
           showZero={hasChanged}
         />
       </div>
 
-      {/* Save this item button (only visible if the quantity has changed) */}
       {hasChanged && (
-        <button type="button" onClick={saveItem} disabled={saving}>
-          {saving ? "Saving..." : "Save This Item"}
+        <button type='button' onClick={onSave} disabled={saving}>
+          {saving ? 'Saving...' : 'Save This Item'}
         </button>
       )}
 
-      {/* Add to cart button (only visible if the quantity is 0 and the quantity has not changed) */}
       {showAddToCart && (
-        <button type="button" onClick={() => updatePending(1)}>
+        <button type='button' onClick={() => onUpdatePending(1)}>
           Add to Cart
         </button>
       )}
