@@ -14,9 +14,6 @@ export default function PriceSheetPage() {
     setPendingDiscount,
     originalBulkBottles,
     pendingBulkBottles,
-    originalTotal,
-    pendingTotal,
-    hasPendingChanges,
   } = useContext(HeaderContext);
 
   return (
@@ -32,7 +29,7 @@ export default function PriceSheetPage() {
           />
         </label>
         
-        {originalBulkBottles !== pendingBulkBottles && (
+        {/* {hasPendingChanges && ( */}
           <label>
             Including Your Pending: {pendingBulkBottles}
             <DiscountSelector
@@ -41,7 +38,7 @@ export default function PriceSheetPage() {
               options={discountOptions}
             />
           </label>
-        )}
+        {/* )} */}
       </div>
 
       {/* List of items */}

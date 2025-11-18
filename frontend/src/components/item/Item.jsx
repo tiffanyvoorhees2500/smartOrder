@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useContext } from 'react';
 import './Item.css';
 import PriceQtyGroup from './PriceQtyGroup';
 import { HeaderContext } from '../header/HeaderContext';
@@ -9,29 +9,15 @@ export default function Item({ item }) {
     name,
     description,
     price,
-    quantity,
-    pendingQuantity,
+    originalQuantity,
+    dbPendingQuantity,
     productLineItemId,
   } = item;
 
-  const {
-    originalQuantityDiscount,
-    pendingQuantityDiscount,
-    setPendingQuantity,
-    updatePendingQuantity,
-  } = useContext(HeaderContext);
+  const { originalDiscount, pendingDiscount, updatePendingQuantity, saveItem } =
+    useContext(HeaderContext);
 
-  // true if productLineItemId is not null
-  const inCart = !!quantity
-
-  // calculate discounted prices
-  const applyDiscount = (price, discountObj) =>
-    discountObj ? price * (1 - discountObj.discount) : price;
-  const originalDiscountedPrice = applyDiscount(
-    price,
-    originalQuantityDiscount
-  );
-  const pendingDiscountedPrice = applyDiscount(price, pendingQuantityDiscount);
+  const inCart = originalQuantity !== null && dbPendingQuantity !== 0; // show original Qty group even if 0
 
   return (
     <div className='itemContainer'>
@@ -47,11 +33,10 @@ export default function Item({ item }) {
           <PriceQtyGroup
             selectName={`${id}-qty`}
             price={price}
-            discountedPrice={originalDiscountedPrice}
-            discountObj={originalQuantityDiscount} // only for displaying % off
-            quantity={quantity}
+            discount={originalDiscount} // only for displaying % off
+            quantity={originalQuantity}
             disabled={true}
-            helpText={inCart && 'Original Value'}
+            helpText={'Original Value'}
           />
         )}
 
@@ -59,27 +44,28 @@ export default function Item({ item }) {
         <PriceQtyGroup
           selectName={`${id}-qty-new`}
           price={price}
-          discountedPrice={pendingDiscountedPrice}
-          discountObj={pendingQuantityDiscount} // only for displaying % off
-          quantity={pendingQuantity}
-          setQuantity={(newQty) => {
-            updatePendingQuantity?.(productLineItemId, id, newQty); // update parent state
-          }}
-          helpText={inCart && 'New Value'}
+          discount={pendingDiscount} // only for displaying % off
+          quantity={dbPendingQuantity}
+          setQuantity={
+            (newQty) => updatePendingQuantity(productLineItemId, id, newQty) // update parent state
+          }
+          helpText={inCart ? 'New Value' : undefined}
           showZero={inCart}
         />
       </div>
 
       {/* Save this item button (only visible if the quantity has changed) */}
-      {(inCart && quantity !== pendingQuantity) && <button type='button'>Save This Item</button>}
+      {inCart && originalQuantity !== dbPendingQuantity && (
+        <button type='button' onClick={() => saveItem(id)}>
+          Save This Item
+        </button>
+      )}
 
       {/* Add to cart button (only visible if the quantity is 0 and the quantity has not changed) */}
-      {!quantity && !inCart && (
+      {!originalQuantity && !dbPendingQuantity && (
         <button
           type='button'
-          onClick={() => {
-            updatePendingQuantity?.(productLineItemId, id, 1);
-          }}
+          onClick={() => updatePendingQuantity?.(productLineItemId, id, 1)}
         >
           Add to Cart
         </button>

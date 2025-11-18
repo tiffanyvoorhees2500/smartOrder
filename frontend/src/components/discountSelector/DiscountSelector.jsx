@@ -1,12 +1,6 @@
-export default function DiscountSelector({ value, onChange, options }) {
-  // `value` is numeric percent (like 10), but options provide objects with `discount` maybe as fraction
-  // Normalize option discount display value (use percent number in UI)
-  const normalize = (opt) => {
-    if (opt == null) return 0;
-    const d = opt.discount ?? 0;
-    return d < 1 ? d * 100 : d;
-  };
+import { normalizePercent } from '../../utils/normalize';
 
+export default function DiscountSelector({ value, onChange, options }) {
   return (
     <select
       value={value ?? ''}
@@ -16,7 +10,7 @@ export default function DiscountSelector({ value, onChange, options }) {
       }}
     >
       {options.map((opt) => {
-        const pct = normalize(opt);
+        const pct = normalizePercent(opt);
         return (
           <option key={opt.title || pct} value={pct}>
             {opt.title}

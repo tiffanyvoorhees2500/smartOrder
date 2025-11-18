@@ -3,15 +3,15 @@ import './PriceQtyGroup.css';
 export default function PriceQtyGroup({
   selectName,
   price,
-  percentOff = 0,
+  discount = 0, // comes in as normalized % = 15 not .15
   quantity = 0,
+  setQuantity,
   disabled = false,
-  setQuantity = () => {},
   helpText,
   showZero = true,
 }) {
-  const discountedPrice = price * (1 - percentOff / 100);
-  // Line Total multiply price * quantity
+  // calculate discounted prices
+  const discountedPrice = price * (1 - (discount/100)); // Make decimal form
   const total = quantity * discountedPrice;
 
   // The quantity select box
@@ -22,8 +22,8 @@ export default function PriceQtyGroup({
         <select
           name={selectName}
           id={selectName}
-          defaultValue={quantity}
-          onChange={(e) => setQuantity(+e.target.value)}
+          value={quantity}
+          onChange={(e) => setQuantity && setQuantity(+e.target.value)}
           disabled={disabled}
         >
           {Array.from({ length: 100 }, (_, index) => {
@@ -35,8 +35,8 @@ export default function PriceQtyGroup({
     </>
   );
 
-  // If showZero is false and the quantity is 0, hide the select box
-  if (!showZero && quantity === 0) quantitySpace = null;
+  // If showZero is false, hide the select box
+  if (!showZero) quantitySpace = null;
 
   return (
     <div className={`priceQtyGroupContainer`}>
@@ -45,7 +45,7 @@ export default function PriceQtyGroup({
       <div className='helpText'>
         <span>{helpText}</span>
         <div>
-          {percentOff}% Off <span className='strike'>${price.toFixed(2)}</span>
+          {discount}% Off <span className='strike'>${price.toFixed(2)}</span>
         </div>
       </div>
 
