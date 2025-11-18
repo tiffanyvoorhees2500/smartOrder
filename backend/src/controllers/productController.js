@@ -83,6 +83,7 @@ exports.getUserProductList = async (req, res) => {
     });
 
     res.status(200).json({
+      user: { defaultShipToState: req.user.defaultShipToState },
       products: formattedProducts,
       discountInfo,
     });

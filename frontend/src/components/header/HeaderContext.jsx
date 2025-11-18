@@ -8,6 +8,8 @@ export const HeaderContext = createContext();
 export default function HeaderContextProvider({ children }) {
   const token = typeof window !== 'undefined' && localStorage.getItem('token');
 
+  const [user, setUser] = useState(null);
+
   // Core State
   const [items, setItems] = useState([]);
   const [discountOptions, setDiscountOptions] = useState([]);
@@ -36,8 +38,11 @@ export default function HeaderContextProvider({ children }) {
       const res = await axios.get(`${base_url}/products/user-list`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      const user = res.data.user || [];
       const products = res.data.products || [];
       const discountInfo = res.data.discountInfo || {};
+
+      setUser(user);
 
       setDiscountOptions(discountInfo.DISCOUNT_OPTIONS || []);
 
@@ -196,6 +201,10 @@ export default function HeaderContextProvider({ children }) {
         updatePendingQuantity,
         saveItem,
         reloadPricing: loadPricing,
+
+        token,
+        user,
+        setUser,
       }}
     >
       {children}
