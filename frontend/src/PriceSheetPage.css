@@ -5,6 +5,11 @@
   align-self: flex-start;
 }
 
+.priceSheetPage h2 {
+  color: white;
+  text-align: center;
+}
+
 /* Discount Selectors */
 .discountSelectorsDiv {
   display: flex;
@@ -45,4 +50,35 @@ mark {
   background-color: var(--secondary-color);
   padding: 0 2px;
   border-radius: 2px;
+}
+
+.floatingSubmit {
+  position: fixed;
+  right: 2em;
+  bottom: 3em;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+  padding: 0.75em 1.25em;
+  border: none;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  z-index: 10;
+}
+
+.backButton {
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--secondary-color-light);
+  border-radius: 99px;
+  border:none;
+  filter:brightness(130%);
+  width:10em;
+  gap:0.25em;
+  padding:0.25em;
+  font-size: small;
+
 }

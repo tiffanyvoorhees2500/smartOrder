@@ -1,12 +1,12 @@
-import React, { createContext, useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
-import { normalizePercent } from '../../utils/normalize';
+import { createContext, useState, useEffect, useCallback } from "react";
+import axios from "axios";
+import { normalizePercent } from "../../utils/normalize";
 
 const base_url = process.env.REACT_APP_API_BASE_URL;
 export const HeaderContext = createContext();
 
 export default function HeaderContextProvider({ children }) {
-  const token = typeof window !== 'undefined' && localStorage.getItem('token');
+  const token = typeof window !== "undefined" && localStorage.getItem("token");
 
   const [user, setUser] = useState(null);
 
@@ -25,6 +25,9 @@ export default function HeaderContextProvider({ children }) {
   // totals
   const [originalTotal, setOriginalTotal] = useState(0);
   const [pendingTotal, setPendingTotal] = useState(0);
+
+  // Cart
+  const [showCart, setShowCart] = useState(false);
 
   // derived
   const hasPendingChanges = items.some(
@@ -74,7 +77,7 @@ export default function HeaderContextProvider({ children }) {
 
       setItems(normItems);
     } catch (err) {
-      console.error('loadPricing error:', err);
+      console.error("loadPricing error:", err);
     }
   }, [token]);
 
@@ -120,7 +123,7 @@ export default function HeaderContextProvider({ children }) {
           { headers: { Authorization: `Bearer ${token}` } }
         );
       } catch (err) {
-        console.error('updatePendingQuantity error:', err);
+        console.error("updatePendingQuantity error:", err);
       } finally {
         await loadPricing();
       }
@@ -168,7 +171,7 @@ export default function HeaderContextProvider({ children }) {
           }
         );
       } catch (err) {
-        console.error('saveItem error:', err);
+        console.error("saveItem error:", err);
       } finally {
         await loadPricing(); // ensure backend is authoritative
       }
@@ -194,6 +197,7 @@ export default function HeaderContextProvider({ children }) {
         originalTotal,
         pendingTotal,
         hasPendingChanges,
+        showCart,
 
         // setters / actions
         setOriginalDiscount,
@@ -201,6 +205,7 @@ export default function HeaderContextProvider({ children }) {
         updatePendingQuantity,
         saveItem,
         reloadPricing: loadPricing,
+        setShowCart,
 
         token,
         user,
