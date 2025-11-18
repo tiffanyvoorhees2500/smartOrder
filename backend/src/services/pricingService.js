@@ -18,12 +18,13 @@ const {
 async function calculateUserDiscount(user) {
   let lineItems;
 
-  if (user.discountType.toLowerCase() === 'Group') {
+  if (user.discountType.toLowerCase() === 'group') {
     // We need to get all userLineItems where adminOrderId is null and that are in the same location as user
     lineItems = await UserLineItem.findAll({
       where: { adminOrderId: null },
       include: {
         model: User,
+        as: 'user',
         where: { defaultShipToState: user.defaultShipToState },
       },
     });
@@ -35,10 +36,11 @@ async function calculateUserDiscount(user) {
   }
 
   // Calculate totalBottlesForDiscount
-  const totalBottlesForCurrentQuantityQuantities = lineItems.reduce(
+  const totalBottlesForCurrentQuantities = lineItems.reduce(
     (sum, item) => sum + item.quantity,
     0
   );
+
   const totalBottlesWithPendingQuantities = lineItems.reduce((sum, item) => {
     // For yourself, use pendingQuantity if it exists
     if (item.userId === user.id) {
@@ -49,15 +51,15 @@ async function calculateUserDiscount(user) {
   }, 0);
 
   const selectedDiscountForCurrent = getDiscountByBottleCount(
-    totalBottlesForCurrentQuantityQuantities
-  );
+    totalBottlesForCurrentQuantities
+  ).discount;
   const selectedDiscountForPending = getDiscountByBottleCount(
     totalBottlesWithPendingQuantities
-  );
+  ).discount;
 
   return {
     DISCOUNT_OPTIONS,
-    totalBottlesForCurrentQuantityQuantities,
+    totalBottlesForCurrentQuantities,
     totalBottlesWithPendingQuantities,
     selectedDiscountForCurrent,
     selectedDiscountForPending,

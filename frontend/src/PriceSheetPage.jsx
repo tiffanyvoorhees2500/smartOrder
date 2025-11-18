@@ -1,67 +1,113 @@
-import { createContext, useState, useEffect, useContext } from "react";
-import "./PriceSheetPage.css";
-import Item from "./components/item/Item";
-import axios from "axios";
-import { HeaderContext } from "./components/header/HeaderContext";
-
-const base_url = process.env.REACT_APP_API_BASE_URL;
-
-export const PriceSheetPageContext = createContext({
-  discount: 30,
-  setDiscount: () => {},
-});
+import { useContext, useState } from 'react';
+import './PriceSheetPage.css';
+import Item from './components/item/Item';
+import DiscountSelector from './components/discountSelector/DiscountSelector';
+import { HeaderContext } from './components/header/HeaderContext';
+import { states } from './components/form/states';
+import axios from 'axios';
 
 export default function PriceSheetPage() {
-  const [discount, setDiscount] = useState(30);
-  const [items, setItems] = useState([]);
+  const {
+    items,
+    discountOptions,
+    originalDiscount,
+    pendingDiscount,
+    setOriginalDiscount,
+    setPendingDiscount,
+    originalBulkBottles,
+    pendingBulkBottles,
+    user,
+    setUser,
+    token,
+  } = useContext(HeaderContext);
 
-  const { setOriginalTotal, setPendingTotal } = useContext(HeaderContext);
+  const base_url = process.env.REACT_APP_API_BASE_URL;
+  const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    // Fetch list of products
-    const token = localStorage.getItem("token");
-    axios.get(`${base_url}/products/user-list`, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(res => {
-        const items = res.data;
-        setItems(items);
+  const updateUserShipToState = async (e) => {
+    const newState = e.target.value;
+    setUser((prev) => ({ ...prev, defaultShipToState: newState }));
 
-        let originalTotal = 0;
-        let pendingTotal = 0;
+    try {
+      await axios.put(
+        `${base_url}/users/update-ship-to-state`,
+        { defaultShipToState: newState },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-        items.forEach(item => {
-          const saved = item.originalQuantity ?? 0;
-          const pending = item.dbPendingQuantity ?? saved ?? 0;
+  const filteredItems = items.filter((item) => {
+    const term = searchTerm.trim().toLowerCase();
+    return (
+      item.name.toLowerCase().includes(term) ||
+      item.description.toLowerCase().includes(term)
+    );
+  });
 
-          originalTotal += saved * (item.price * (1 - discount / 100));
-          pendingTotal += pending * (item.price * (1 - discount / 100));
-
-        });
-
-        setOriginalTotal(originalTotal);
-        setPendingTotal(pendingTotal);
-    })
-      .catch(err => console.error("Error fetching products:", err));
-  }, [setOriginalTotal, setPendingTotal, discount]);
+  if (!user) return <div>Loading user info...</div>;
 
   return (
-    <PriceSheetPageContext.Provider value={{ discount, setDiscount }}>
-      <div className="priceSheetPage">
-        {/* Temp code to test discount context */}
-        <select onChange={(e) => setDiscount(e.target.value)} value={discount}>
-          <option value={30}>30%</option>
-          <option value={50}>50%</option>
-          <option value={70}>70%</option>
-        </select>
+    <div className='priceSheetPage'>
+      <div className='optionsDiv'>
+        <label>
+          Search Products
+          <input
+            type='text'
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder='Search by name or ingredients...'
+          />
+        </label>
 
-        {/* List of items */}
-        <div className="items">
-          {items.map((item) => (
-            <Item key={item.id} {...item} />
-          ))}
-        </div>
+        {/* User Ship To State */}
+        <label>
+          State
+          <select
+            name='defaultShipToState'
+            value={user?.defaultShipToState || ''}
+            onChange={updateUserShipToState}
+            required
+          >
+            <option value=''>Select a state</option>
+            {states.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
+        </label>
       </div>
-    </PriceSheetPageContext.Provider>
+
+      <div className='discountSelectorsDiv'>
+        {/* Discount Selectors */}
+        <label>
+          Bottles in Bulk Order: {originalBulkBottles}
+          <DiscountSelector
+            value={originalDiscount}
+            onChange={(d) => setOriginalDiscount(d)}
+            options={discountOptions}
+          />
+        </label>
+
+        <label>
+          Including Your Pending: {pendingBulkBottles}
+          <DiscountSelector
+            value={pendingDiscount}
+            onChange={(d) => setPendingDiscount(d)}
+            options={discountOptions}
+          />
+        </label>
+      </div>
+
+      {/* List of items */}
+      <div className='items'>
+        {filteredItems.map((item) => (
+          <Item key={item.id} item={item} searchTerm={searchTerm} />
+        ))}
+      </div>
+    </div>
   );
 }

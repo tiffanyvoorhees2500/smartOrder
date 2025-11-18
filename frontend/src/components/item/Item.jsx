@@ -1,113 +1,52 @@
-import { useState, useContext } from "react";
-import "./Item.css";
-import PriceQtyGroup from "./PriceQtyGroup";
-import axios from "axios";
-import { HeaderContext } from "../header/HeaderContext";
-import { PriceSheetPageContext } from "../../PriceSheetPage";
+import { useContext } from 'react';
+import './Item.css';
+import PriceQtyGroup from './PriceQtyGroup';
+import { HeaderContext } from '../header/HeaderContext';
 
-const base_url = process.env.REACT_APP_API_BASE_URL;
+export default function Item({ item, searchTerm }) {
+  const {
+    id,
+    name,
+    description,
+    price,
+    originalQuantity,
+    dbPendingQuantity,
+    productLineItemId,
+  } = item;
 
-/**
- * An item on the price sheet
- * @param {number} id - The id of the item
- * @param {string} name - The name of the item
- * @param {string} description - The description of the item
- * @param {number} price - The price of the item
- * @param {number|null} quantity - The quantity of the item
- *
- * @returns {JSX.Element}
- */
-export default function Item({ 
-  id,
-  name,
-  description,
-  price,
-  quantity,
-  originalQuantity = null,
-  dbPendingQuantity = null}) {
-  
-  const [savedQuantity, setSavedQuantity] = useState(originalQuantity ?? null); // State for saved quantity from backend
-  const [pendingQuantity, setPendingQuantity] = useState(dbPendingQuantity ?? savedQuantity ?? 0); // State for new/pending quantity shown in dropdown
-  const [saving, setSaving] = useState(false);
+  const { originalDiscount, pendingDiscount, updatePendingQuantity, saveItem } =
+    useContext(HeaderContext);
 
-  const { setOriginalTotal, setPendingTotal } = useContext(HeaderContext);
-  const { discount } = useContext(PriceSheetPageContext);
+  const inCart = originalQuantity !== null && dbPendingQuantity !== 0; // show original Qty group even if 0
 
-  const discountedPrice = price * (1 - discount / 100);
-
-  // true when user modifies quantity (quantity can be null)
-  const hasChanged = (savedQuantity ?? 0) !== (pendingQuantity ?? 0); 
-
-  // true when item has 0 original and 0 pending quantities
-  const showAddToCart = (savedQuantity ?? 0) === 0 && (pendingQuantity ?? 0) === 0; 
-
-  const saveItem = async () => {
-    setSaving(true);
-    try {
-      const token = localStorage.getItem("token");
-      await axios.post(`${base_url}/user-line-items/save-line-item`, {
-        productId: id,
-        quantity: pendingQuantity, // send 0 to delete item
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-
-      const prevSavedQuantity = savedQuantity ?? 0;
-      const newSavedQuantity = pendingQuantity ?? 0;
-
-      // Update local state after successful save
-      if (pendingQuantity === 0) {
-        setSavedQuantity(null); // deleted from user line items
-        setPendingQuantity(0);
-      } else {
-        setSavedQuantity(pendingQuantity);
-      }
-
-      // Update header totals
-      setOriginalTotal(prev => prev - prevSavedQuantity * discountedPrice + newSavedQuantity * discountedPrice);
-      setPendingTotal(prev => prev - prevSavedQuantity * discountedPrice + newSavedQuantity * discountedPrice);
-      
-    } catch (error) {
-      console.error("Error saving item:", error);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const updatePending = async (newPending) => {
-    const prevPending = pendingQuantity ?? 0;
-    setPendingQuantity(newPending); // update local state immediately
-    setPendingTotal(prev => prev - prevPending * discountedPrice + (newPending ?? 0) * discountedPrice);
-    
-    try {
-      const token = localStorage.getItem("token");
-      await axios.post(`${base_url}/user-line-items/update-pending-quantity`, {
-        productId: id,
-        pendingQuantity: newPending,
-      }, { headers: { Authorization: `Bearer ${token}` }});
-
-    } catch (error) {
-      console.error("Error updating pending quantity:", error);
-    }
-  };
+  const highlightMatch = (text) => {
+    if(!searchTerm) return text;
+    const regex = new RegExp(`(${searchTerm})`, 'gi');
+    return text
+      .split(regex)
+      .map((part, i) =>
+        regex.test(part) ? <mark key={i}>{part}</mark> : part
+      );
+  }
 
   return (
-    <div className="itemContainer">
+    <div className='itemContainer'>
       {/* Item Name */}
-      <h3>{name}</h3>
+      <h3>{highlightMatch(name)}</h3>
 
       {/* Item Description */}
-      <p>{description}</p>
+      <p>{highlightMatch(description)}</p>
 
-      <div className="qtyGroups">
-        {/* The original item quantity (only visible the quantity has changed) */}
-        {hasChanged && (
+      <div className='qtyGroups'>
+        {/* The original item quantity (only visible if productLineItemId exists) */}
+        {inCart && (
           <PriceQtyGroup
             selectName={`${id}-qty`}
             price={price}
-            quantity={savedQuantity}
+            discount={originalDiscount} // only for displaying % off
+            quantity={originalQuantity}
             disabled={true}
-            helpText={hasChanged && "Original Value"}
+            helpText={'Original Value'}
           />
         )}
 
@@ -115,23 +54,29 @@ export default function Item({
         <PriceQtyGroup
           selectName={`${id}-qty-new`}
           price={price}
-          quantity={pendingQuantity}
-          setQuantity={updatePending}
-          helpText={hasChanged ? "New Value" : "" }
-          showZero={hasChanged}
+          discount={pendingDiscount} // only for displaying % off
+          quantity={dbPendingQuantity}
+          setQuantity={
+            (newQty) => updatePendingQuantity(productLineItemId, id, newQty) // update parent state
+          }
+          helpText={inCart ? 'New Value' : undefined}
+          showZero={inCart}
         />
       </div>
 
       {/* Save this item button (only visible if the quantity has changed) */}
-      {hasChanged && (
-        <button type="button" onClick={saveItem} disabled={saving}>
-          {saving ? "Saving..." : "Save This Item"}
+      {inCart && originalQuantity !== dbPendingQuantity && (
+        <button type='button' onClick={() => saveItem(id)}>
+          Save This Item
         </button>
       )}
 
       {/* Add to cart button (only visible if the quantity is 0 and the quantity has not changed) */}
-      {showAddToCart && (
-        <button type="button" onClick={() => updatePending(1)}>
+      {!originalQuantity && !dbPendingQuantity && (
+        <button
+          type='button'
+          onClick={() => updatePendingQuantity?.(productLineItemId, id, 1)}
+        >
           Add to Cart
         </button>
       )}

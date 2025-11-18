@@ -4,3 +4,45 @@
   flex-direction: column;
   align-self: flex-start;
 }
+
+/* Discount Selectors */
+.discountSelectorsDiv {
+  display: flex;
+  gap: 1rem; /* space between selectors */
+  padding-bottom: 1rem;
+}
+
+.discountSelectorsDiv > * {
+  flex: 1 1 0; /* grow to fill, shrink if needed */
+  min-width: 0; /* ensures proper shrinking in flex container */
+  color: var(--primary-color);
+}
+
+/* Options */
+.optionsDiv {
+  display: flex;
+  gap: 1rem;
+  padding-bottom: 1rem;
+}
+
+.optionsDiv > * {
+  flex: 1 1 0; /* grow to fill, shrink if needed */
+  min-width: 0; /* ensures proper shrinking in flex container */
+  color: var(--primary-color);
+}
+
+/* -- Search Element */
+.searchElement {
+  padding-bottom: 1rem;
+}
+
+.searchElement label {
+  color: var(--primary-color);
+  font-size: 2rem;
+}
+
+mark {
+  background-color: var(--secondary-color);
+  padding: 0 2px;
+  border-radius: 2px;
+}
