@@ -1,7 +1,7 @@
-import { useContext } from 'react';
-import './Item.css';
-import PriceQtyGroup from './PriceQtyGroup';
-import { HeaderContext } from '../header/HeaderContext';
+import { useContext } from "react";
+import "./Item.css";
+import PriceQtyGroup from "./PriceQtyGroup";
+import { HeaderContext } from "../header/HeaderContext";
 
 export default function Item({ item, searchTerm }) {
   const {
@@ -11,7 +11,7 @@ export default function Item({ item, searchTerm }) {
     price,
     originalQuantity,
     dbPendingQuantity,
-    productLineItemId,
+    productLineItemId
   } = item;
 
   const { originalDiscount, pendingDiscount, updatePendingQuantity, saveItem } =
@@ -20,24 +20,24 @@ export default function Item({ item, searchTerm }) {
   const inCart = originalQuantity !== null && dbPendingQuantity !== 0; // show original Qty group even if 0
 
   const highlightMatch = (text) => {
-    if(!searchTerm) return text;
-    const regex = new RegExp(`(${searchTerm})`, 'gi');
+    if (!searchTerm) return text;
+    const regex = new RegExp(`(${searchTerm})`, "gi");
     return text
       .split(regex)
       .map((part, i) =>
         regex.test(part) ? <mark key={i}>{part}</mark> : part
       );
-  }
+  };
 
   return (
-    <div className='itemContainer'>
+    <div className="itemContainer">
       {/* Item Name */}
       <h3>{highlightMatch(name)}</h3>
 
       {/* Item Description */}
       <p>{highlightMatch(description)}</p>
 
-      <div className='qtyGroups'>
+      <div className="qtyGroups">
         {/* The original item quantity (only visible if productLineItemId exists) */}
         {inCart && (
           <PriceQtyGroup
@@ -46,7 +46,7 @@ export default function Item({ item, searchTerm }) {
             discount={originalDiscount} // only for displaying % off
             quantity={originalQuantity}
             disabled={true}
-            helpText={'Original Value'}
+            helpText={"Original Value"}
           />
         )}
 
@@ -59,14 +59,14 @@ export default function Item({ item, searchTerm }) {
           setQuantity={
             (newQty) => updatePendingQuantity(productLineItemId, id, newQty) // update parent state
           }
-          helpText={inCart ? 'New Value' : undefined}
+          helpText={inCart ? "New Value" : undefined}
           showZero={inCart}
         />
       </div>
 
       {/* Save this item button (only visible if the quantity has changed) */}
       {inCart && originalQuantity !== dbPendingQuantity && (
-        <button type='button' onClick={() => saveItem(id)}>
+        <button type="button" onClick={() => saveItem(id)}>
           Save This Item
         </button>
       )}
@@ -74,7 +74,7 @@ export default function Item({ item, searchTerm }) {
       {/* Add to cart button (only visible if the quantity is 0 and the quantity has not changed) */}
       {!originalQuantity && !dbPendingQuantity && (
         <button
-          type='button'
+          type="button"
           onClick={() => updatePendingQuantity?.(productLineItemId, id, 1)}
         >
           Add to Cart

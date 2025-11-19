@@ -1,58 +1,58 @@
-'use strict';
+"use strict";
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable("Users", {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
-        primaryKey: true,
+        primaryKey: true
       },
       name: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: false
       },
       email: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
+        unique: true
       },
       password: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: false
       },
       isAdmin: {
         type: Sequelize.BOOLEAN,
-        defaultValue: false,
+        defaultValue: false
       },
       pricingType: {
-        type: Sequelize.ENUM('Retail', 'Wholesale'),
-        defaultValue: 'Retail',
-        allowNull: false,
+        type: Sequelize.ENUM("Retail", "Wholesale"),
+        defaultValue: "Retail",
+        allowNull: false
       },
       discountType: {
-        type: Sequelize.ENUM('Group', 'Individual'),
-        defaultValue: 'Individual',
-        allowNull: false,
+        type: Sequelize.ENUM("Group", "Individual"),
+        defaultValue: "Individual",
+        allowNull: false
       },
       defaultShipToState: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('NOW()')
+        defaultValue: Sequelize.literal("NOW()")
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('NOW()')
-      },
+        defaultValue: Sequelize.literal("NOW()")
+      }
     });
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Users');
-  },
+    await queryInterface.dropTable("Users");
+  }
 };

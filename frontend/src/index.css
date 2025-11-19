@@ -1,7 +1,7 @@
 :root {
   /* Add your custom color scheme */
-  --primary-color: #FEFEFE;
-  --secondary-color: #4E888F;
+  --primary-color: #fefefe;
+  --secondary-color: #4e888f;
   --secondary-color-light: #6ba7ae;
   --accent-color: #000000;
 }
@@ -20,7 +20,8 @@ body {
   text-decoration: line-through;
 }
 
-.divider, .divider-thick {
+.divider,
+.divider-thick {
   border-bottom: 2px solid var(--secondary-color);
   opacity: 0.5;
   width: 90%;
@@ -29,8 +30,8 @@ body {
 
 .divider-thick {
   border-bottom: 3px solid var(--secondary-color);
-  opacity:1;
-  width:100%;
+  opacity: 1;
+  width: 100%;
 }
 
 .bold {

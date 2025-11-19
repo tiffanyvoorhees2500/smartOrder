@@ -1,8 +1,8 @@
-const { User, UserLineItem } = require('../models');
+const { User, UserLineItem } = require("../models");
 const {
   DISCOUNT_OPTIONS,
-  getDiscountByBottleCount,
-} = require('../utils/discounts');
+  getDiscountByBottleCount
+} = require("../utils/discounts");
 
 /**
  * Calculate total bottles for discount and normal totals
@@ -18,20 +18,20 @@ const {
 async function calculateUserDiscount(user) {
   let lineItems;
 
-  if (user.discountType.toLowerCase() === 'group') {
+  if (user.discountType.toLowerCase() === "group") {
     // We need to get all userLineItems where adminOrderId is null and that are in the same location as user
     lineItems = await UserLineItem.findAll({
       where: { adminOrderId: null },
       include: {
         model: User,
-        as: 'user',
-        where: { defaultShipToState: user.defaultShipToState },
-      },
+        as: "user",
+        where: { defaultShipToState: user.defaultShipToState }
+      }
     });
   } else {
     // Only need the current users line items where adminOrderId is null
     lineItems = await UserLineItem.findAll({
-      where: { adminOrderId: null, userId: user.id },
+      where: { adminOrderId: null, userId: user.id }
     });
   }
 
@@ -62,7 +62,7 @@ async function calculateUserDiscount(user) {
     totalBottlesForCurrentQuantities,
     totalBottlesWithPendingQuantities,
     selectedDiscountForCurrent,
-    selectedDiscountForPending,
+    selectedDiscountForPending
   };
 }
 

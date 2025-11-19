@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const { UserLineItem } = require('../models');
+const { UserLineItem } = require("../models");
 
 exports.saveCurrentOrderUserLineItem = async (req, res) => {
   try {
@@ -12,17 +12,17 @@ exports.saveCurrentOrderUserLineItem = async (req, res) => {
       where: {
         userId,
         productId,
-        adminOrderId: null,
-      },
+        adminOrderId: null
+      }
     });
 
     if (quantity === 0) {
       // If quantity is zero, delete the line item if it exists
       if (lineItem) {
         await lineItem.destroy();
-        return res.status(200).json({ message: 'Line item deleted' });
+        return res.status(200).json({ message: "Line item deleted" });
       }
-      return res.status(200).json({ message: 'No line item to delete' });
+      return res.status(200).json({ message: "No line item to delete" });
     }
 
     if (!lineItem) {
@@ -32,21 +32,21 @@ exports.saveCurrentOrderUserLineItem = async (req, res) => {
         productId,
         quantity: quantity,
         pendingQuantity: null,
-        adminOrderId: null,
+        adminOrderId: null
       });
-      return res.status(201).json({ message: 'Line item created', lineItem });
+      return res.status(201).json({ message: "Line item created", lineItem });
     } else {
       // If found, update the existing UserLineItem
       await lineItem.update({
         quantity: quantity,
-        pendingQuantity: null, // Clear pendingQuantity after saving
+        pendingQuantity: null // Clear pendingQuantity after saving
       });
 
-      return res.status(201).json({ message: 'Line item updated', lineItem });
+      return res.status(201).json({ message: "Line item updated", lineItem });
     }
   } catch (error) {
-    console.error('Error saving current order user line item:', error);
-    return res.status(500).json({ message: 'Internal server error' });
+    console.error("Error saving current order user line item:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -57,7 +57,7 @@ exports.updatePendingQuantity = async (req, res) => {
 
     // Find existing UserLineItem for this user and product without an adminOrderId
     let lineItem = await UserLineItem.findOne({
-      where: { userId, productId, adminOrderId: null },
+      where: { userId, productId, adminOrderId: null }
     });
 
     if (!lineItem) {
@@ -67,14 +67,14 @@ exports.updatePendingQuantity = async (req, res) => {
         productId,
         quantity: 0,
         pendingQuantity,
-        adminOrderId: null,
+        adminOrderId: null
       });
     } else {
       // Update the pendingQuantity of the existing line item
       if (pendingQuantity === 0 && lineItem.quantity === 0) {
         // If both pendingQuantity and quantity are 0, delete the line item
         await lineItem.destroy();
-        return res.status(200).json({ message: 'Line item deleted' });
+        return res.status(200).json({ message: "Line item deleted" });
       } else {
         await lineItem.update({ pendingQuantity });
       }
@@ -82,9 +82,9 @@ exports.updatePendingQuantity = async (req, res) => {
 
     return res
       .status(200)
-      .json({ message: 'Pending quantity updated', lineItem });
+      .json({ message: "Pending quantity updated", lineItem });
   } catch (error) {
-    console.error('Error updating pending quantity:', error);
-    return res.status(500).json({ message: 'Internal server error' });
+    console.error("Error updating pending quantity:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };

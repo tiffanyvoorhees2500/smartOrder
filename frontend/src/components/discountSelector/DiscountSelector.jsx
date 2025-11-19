@@ -1,9 +1,9 @@
-import { normalizePercent } from '../../utils/normalize';
+import { normalizePercent } from "../../utils/normalize";
 
 export default function DiscountSelector({ value, onChange, options }) {
   return (
     <select
-      value={value ?? ''}
+      value={value ?? ""}
       onChange={(e) => {
         const selectedValue = parseFloat(e.target.value);
         onChange(selectedValue);

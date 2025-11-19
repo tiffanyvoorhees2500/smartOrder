@@ -16,7 +16,7 @@ export function StyledForm({
   children,
   title = "Untitled",
   onSubmit,
-  className = "",
+  className = ""
 }) {
   const [error, setError] = useState("");
 
@@ -39,9 +39,14 @@ export function StyledForm({
     >
       {/* == Logo == */}
       <div className="form-logo">
-        <img src="/logo512.png" alt="Smart Order Logo" width="100" height="100"/>
+        <img
+          src="/logo512.png"
+          alt="Smart Order Logo"
+          width="100"
+          height="100"
+        />
       </div>
-      
+
       {/* == Form Title == */}
       <h2>{title}</h2>
 

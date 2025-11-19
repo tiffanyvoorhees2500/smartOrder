@@ -1,12 +1,12 @@
-import { useContext, useState } from 'react';
-import './PriceSheetPage.css';
-import Item from './components/item/Item';
-import DiscountSelector from './components/discountSelector/DiscountSelector';
-import { HeaderContext } from './components/header/HeaderContext';
-import { states } from './components/form/states';
-import axios from 'axios';
-import Ping from './components/misc/Ping';
-import { FaArrowLeft } from 'react-icons/fa';
+import { useContext, useState } from "react";
+import "./PriceSheetPage.css";
+import Item from "./components/item/Item";
+import DiscountSelector from "./components/discountSelector/DiscountSelector";
+import { HeaderContext } from "./components/header/HeaderContext";
+import { states } from "./components/form/states";
+import axios from "axios";
+import Ping from "./components/misc/Ping";
+import { FaArrowLeft } from "react-icons/fa";
 
 export default function PriceSheetPage() {
   const {
@@ -25,11 +25,11 @@ export default function PriceSheetPage() {
     showCart,
     originalTotal,
     pendingTotal,
-    setShowCart,
+    setShowCart
   } = useContext(HeaderContext);
 
   const base_url = process.env.REACT_APP_API_BASE_URL;
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   const updateUserShipToState = async (e) => {
     const newState = e.target.value;
@@ -59,11 +59,11 @@ export default function PriceSheetPage() {
   if (loadingUser) return <div>Loading user info...</div>;
 
   return (
-    <div className='priceSheetPage'>
+    <div className="priceSheetPage">
       {showCart && (
         <button
-          type='button'
-          className='backButton'
+          type="button"
+          className="backButton"
           onClick={() => setShowCart(false)}
         >
           <FaArrowLeft />
@@ -71,14 +71,14 @@ export default function PriceSheetPage() {
         </button>
       )}
       {showCart && <h2>Current Order for {user.name}</h2>}
-      <div className='optionsDiv'>
+      <div className="optionsDiv">
         <label>
           Search Products
           <input
-            type='text'
+            type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder='Search by name or ingredients...'
+            placeholder="Search by name or ingredients..."
           />
         </label>
 
@@ -86,12 +86,12 @@ export default function PriceSheetPage() {
         <label>
           State
           <select
-            name='defaultShipToState'
-            value={user?.defaultShipToState || ''}
+            name="defaultShipToState"
+            value={user?.defaultShipToState || ""}
             onChange={updateUserShipToState}
             required
           >
-            <option value=''>Select a state</option>
+            <option value="">Select a state</option>
             {states.map((s) => (
               <option key={s} value={s}>
                 {s}
@@ -101,7 +101,7 @@ export default function PriceSheetPage() {
         </label>
       </div>
 
-      <div className='discountSelectorsDiv'>
+      <div className="discountSelectorsDiv">
         {/* Discount Selectors */}
         <label>
           Bottles in Bulk Order: {originalBulkBottles}
@@ -123,14 +123,14 @@ export default function PriceSheetPage() {
       </div>
 
       {/* List of items */}
-      <div className='items'>
+      <div className="items">
         {filteredItems.map((item) => (
           <Item key={item.id} item={item} searchTerm={searchTerm} />
         ))}
       </div>
 
       {originalTotal !== pendingTotal && (
-        <button type='button' className='floatingSubmit'>
+        <button type="button" className="floatingSubmit">
           <Ping />
           Save All Changes
         </button>

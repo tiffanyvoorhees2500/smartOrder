@@ -8,7 +8,7 @@
 export function normalizePercent(value) {
   if (value == null) return 0;
 
-  if (typeof value === 'object' && value.discount != null) {
+  if (typeof value === "object" && value.discount != null) {
     return value.discount < 1 ? value.discount * 100 : value.discount;
   }
 

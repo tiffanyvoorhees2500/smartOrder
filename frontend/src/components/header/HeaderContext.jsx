@@ -40,7 +40,7 @@ export default function HeaderContextProvider({ children }) {
   const loadPricing = useCallback(async () => {
     try {
       const res = await axios.get(`${base_url}/products/user-list`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` }
       });
       const user = res.data.user || [];
       const products = res.data.products || [];
@@ -73,7 +73,7 @@ export default function HeaderContextProvider({ children }) {
         originalQuantity: p.originalQuantity ?? 0,
         dbPendingQuantity: p.dbPendingQuantity ?? p.originalQuantity ?? 0, //editable draft
         quantity: p.dbPendingQuantity ?? p.originalQuantity ?? 0, // for UI display if needed
-        productLineItemId: p.productLineItemId ?? null, // if you included line item id
+        productLineItemId: p.productLineItemId ?? null // if you included line item id
       }));
 
       setItems(normItems);
@@ -147,14 +147,14 @@ export default function HeaderContextProvider({ children }) {
                 ...i,
                 originalQuantity: null,
                 dbPendingQuantity: null,
-                productLineItemId: null,
+                productLineItemId: null
               };
             }
             // Normal save
             return {
               ...i,
               originalQuantity: i.dbPendingQuantity,
-              dbPendingQuantity: i.dbPendingQuantity,
+              dbPendingQuantity: i.dbPendingQuantity
             };
           }
           return i;
@@ -167,10 +167,10 @@ export default function HeaderContextProvider({ children }) {
           `${base_url}/user-line-items/save-line-item`,
           {
             productId,
-            quantity: item?.dbPendingQuantity ?? 0,
+            quantity: item?.dbPendingQuantity ?? 0
           },
           {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `Bearer ${token}` }
           }
         );
       } catch (err) {
@@ -213,7 +213,7 @@ export default function HeaderContextProvider({ children }) {
         token,
         user,
         setUser,
-        loadingUser,
+        loadingUser
       }}
     >
       {children}

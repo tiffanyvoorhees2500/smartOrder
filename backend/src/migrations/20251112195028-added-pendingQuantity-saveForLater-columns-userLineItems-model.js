@@ -1,22 +1,22 @@
-'use strict';
+"use strict";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    await queryInterface.addColumn('UserLineItems', 'pendingQuantity', {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.addColumn("UserLineItems", "pendingQuantity", {
       type: Sequelize.INTEGER,
-      allowNull: true,
+      allowNull: true
     });
 
-    await queryInterface.addColumn('UserLineItems', 'saveForLater', {
+    await queryInterface.addColumn("UserLineItems", "saveForLater", {
       type: Sequelize.BOOLEAN,
       allowNull: false,
-      defaultValue: false,
+      defaultValue: false
     });
   },
 
-  async down (queryInterface, Sequelize) {
-    await queryInterface.removeColumn('UserLineItems', 'pendingQuantity');
-    await queryInterface.removeColumn('UserLineItems', 'saveForLater');
+  async down(queryInterface, Sequelize) {
+    await queryInterface.removeColumn("UserLineItems", "pendingQuantity");
+    await queryInterface.removeColumn("UserLineItems", "saveForLater");
   }
 };

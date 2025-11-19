@@ -1,43 +1,43 @@
-'use strict';
+"use strict";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     await queryInterface.changeColumn("UserLineItems", "adminOrderId", {
       type: Sequelize.UUID,
-      allowNull: true,
+      allowNull: true
     });
     await queryInterface.changeColumn("UserLineItems", "basePrice", {
-      type: Sequelize.DECIMAL(10,2),
-      allowNull: true,
+      type: Sequelize.DECIMAL(10, 2),
+      allowNull: true
     });
     await queryInterface.changeColumn("UserLineItems", "percentOff", {
-      type: Sequelize.DECIMAL(5,2),
-      allowNull: true,
+      type: Sequelize.DECIMAL(5, 2),
+      allowNull: true
     });
     await queryInterface.changeColumn("UserLineItems", "finalPrice", {
-      type: Sequelize.DECIMAL(10,2),
-      allowNull: true,
+      type: Sequelize.DECIMAL(10, 2),
+      allowNull: true
     });
   },
 
-  async down (queryInterface, Sequelize) {
-   await queryInterface.changeColumn("UserLineItems", "adminOrderId", {
+  async down(queryInterface, Sequelize) {
+    await queryInterface.changeColumn("UserLineItems", "adminOrderId", {
       type: Sequelize.UUID,
-      allowNull: false,
+      allowNull: false
     });
     await queryInterface.changeColumn("UserLineItems", "basePrice", {
-      type: Sequelize.DECIMAL(10,2),
-      allowNull: false,
+      type: Sequelize.DECIMAL(10, 2),
+      allowNull: false
     });
     await queryInterface.changeColumn("UserLineItems", "percentOff", {
-      type: Sequelize.DECIMAL(5,2),
+      type: Sequelize.DECIMAL(5, 2),
       allowNull: false,
       defaultValue: 0.0
     });
     await queryInterface.changeColumn("UserLineItems", "finalPrice", {
-      type: Sequelize.DECIMAL(10,2),
-      allowNull: false,
+      type: Sequelize.DECIMAL(10, 2),
+      allowNull: false
     });
   }
 };

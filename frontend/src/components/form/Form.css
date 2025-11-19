@@ -6,7 +6,7 @@ form {
   border-radius: 10px;
   padding: 1em;
   max-width: 400px;
-  width:100%;
+  width: 100%;
   font-family: sans-serif;
   box-sizing: border-box;
 }
@@ -60,14 +60,14 @@ form button:hover {
 
 .form-buttons {
   display: flex;
-  gap: 1em;         
-  justify-content: center; 
+  gap: 1em;
+  justify-content: center;
 }
 
 .form-buttons button {
   max-width: 50%;
-  width: auto;      
-  flex: 1;          
+  width: auto;
+  flex: 1;
 }
 
 .delete-button {
@@ -90,8 +90,8 @@ form button:hover {
 .error-message {
   color: red;
   text-align: center; /* centers the text horizontally */
-  margin: 10px 0;     /* optional spacing above/below */
-  font-weight: bold;  /* optional emphasis */
+  margin: 10px 0; /* optional spacing above/below */
+  font-weight: bold; /* optional emphasis */
 }
 
 .toggle-group {
@@ -106,7 +106,9 @@ form button:hover {
   border-radius: 20px;
   cursor: pointer;
   user-select: none;
-  transition: background-color 0.2s, color 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
   font-size: smaller;
 }
 
@@ -125,4 +127,3 @@ form button:hover {
   align-items: center;
   gap: 1rem;
 }
-

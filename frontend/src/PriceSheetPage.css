@@ -69,16 +69,15 @@ mark {
 }
 
 .backButton {
-  display:flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--secondary-color-light);
   border-radius: 99px;
-  border:none;
-  filter:brightness(130%);
-  width:10em;
-  gap:0.25em;
-  padding:0.25em;
+  border: none;
+  filter: brightness(130%);
+  width: 10em;
+  gap: 0.25em;
+  padding: 0.25em;
   font-size: small;
-
 }

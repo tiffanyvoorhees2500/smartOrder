@@ -1,4 +1,4 @@
-import './PriceQtyGroup.css';
+import "./PriceQtyGroup.css";
 
 export default function PriceQtyGroup({
   selectName,
@@ -8,10 +8,10 @@ export default function PriceQtyGroup({
   setQuantity,
   disabled = false,
   helpText,
-  showZero = true,
+  showZero = true
 }) {
   // calculate discounted prices
-  const discountedPrice = price * (1 - (discount/100)); // Make decimal form
+  const discountedPrice = price * (1 - discount / 100); // Make decimal form
   const total = quantity * discountedPrice;
 
   // The quantity select box
@@ -40,21 +40,21 @@ export default function PriceQtyGroup({
 
   return (
     <div className={`priceQtyGroupContainer`}>
-      {disabled && <div className='disabledOverlay'></div>}
+      {disabled && <div className="disabledOverlay"></div>}
 
-      <div className='helpText'>
+      <div className="helpText">
         <span>{helpText}</span>
         <div>
-          {discount}% Off <span className='strike'>${price.toFixed(2)}</span>
+          {discount}% Off <span className="strike">${price.toFixed(2)}</span>
         </div>
       </div>
 
-      <div className='priceQtyGroup'>
+      <div className="priceQtyGroup">
         {quantitySpace}
-        <div className='price'>
+        <div className="price">
           <span>${discountedPrice.toFixed(2)}</span>
-          <div className='divider-thick'></div>
-          <span className='bold'>${total.toFixed(2)}</span>
+          <div className="divider-thick"></div>
+          <span className="bold">${total.toFixed(2)}</span>
         </div>
       </div>
     </div>
