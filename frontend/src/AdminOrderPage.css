@@ -1,0 +1,27 @@
+.adminOrderPage {
+  align-self: flex-start;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+
+.adminOrderPage > h2 {
+  color: white;
+  text-align: center;
+}
+
+.adminSection {
+  background-color: hsla(0, 0%, 100%, 0.2);
+  padding: 0.25em;
+  color: white;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+
+.orderItems {
+  overflow: hidden;
+  border-radius: 15px;
+}

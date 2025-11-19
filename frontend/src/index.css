@@ -21,7 +21,8 @@ body {
 }
 
 .divider,
-.divider-thick {
+.divider-thick,
+.divider-light {
   border-bottom: 2px solid var(--secondary-color);
   opacity: 0.5;
   width: 90%;
@@ -34,6 +35,28 @@ body {
   width: 100%;
 }
 
+.divider-light {
+  border-bottom: 2px solid var(--secondary-color-light);
+  opacity: 0.75;
+  filter: brightness(110%);
+  width: 100%;
+}
+
 .bold {
   font-weight: bold;
+}
+
+.highlightButton {
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+  padding: 0.75em 1.25em;
+  border: none;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
 }

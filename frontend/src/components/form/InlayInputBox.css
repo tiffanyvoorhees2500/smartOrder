@@ -1,0 +1,27 @@
+.inlayInput {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--primary-color);
+  padding: 0.5em;
+  border-radius: 5px;
+  border: 1px solid gray;
+  box-sizing: border-box;
+}
+
+.inlayInput:has(input:focus) {
+  outline: 1px solid black;
+}
+
+.inlayInput span {
+  color: gray;
+  font-size: small;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.inlayInput input,
+.inlayInput select {
+  border: none;
+  outline: none;
+  padding: 0;
+}

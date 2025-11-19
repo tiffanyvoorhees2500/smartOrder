@@ -1,0 +1,47 @@
+.adminItemContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-radius: inherit;
+  border: none;
+  box-sizing: border-box;
+}
+
+.adminItemsLeft {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: auto auto 1fr;
+  gap: 0.25em;
+}
+
+.adminItemsRight {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding: 0.25em;
+}
+
+.bulkQtyNameContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+  align-items: flex-end;
+  font-family: Arial, Helvetica, sans-serif;
+  grid-column: 1 / span 4;
+}
+
+.bulkQty {
+  aspect-ratio: 1/1;
+  background-color: var(--accent-color);
+  color: white;
+  display: flex;
+  width: 40px;
+  align-items: center;
+  justify-content: center;
+  font-size: x-large;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.bulkName {
+  font-size: x-large;
+}

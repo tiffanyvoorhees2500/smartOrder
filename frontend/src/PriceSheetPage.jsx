@@ -130,7 +130,7 @@ export default function PriceSheetPage() {
       </div>
 
       {originalTotal !== pendingTotal && (
-        <button type="button" className="floatingSubmit">
+        <button type="button" className="floatingSubmit highlightButton">
           <Ping />
           Save All Changes
         </button>

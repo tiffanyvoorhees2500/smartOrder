@@ -1,0 +1,32 @@
+.adminListHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  padding: 1em;
+}
+
+.adminListHeader .headerRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr minmax(20%, 200px);
+  align-items: center;
+  gap: 1em;
+}
+
+.adminListHeader input {
+  border: none;
+}
+
+input,
+label {
+  min-width: 0 !important;
+}
+
+@media screen and (max-width: 600px) {
+  .adminListHeader .headerRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .headerRow button {
+    grid-column: 2/3;
+  }
+}
