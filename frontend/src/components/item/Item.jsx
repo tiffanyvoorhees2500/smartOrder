@@ -17,7 +17,8 @@ export default function Item({ item, searchTerm }) {
   const { originalDiscount, pendingDiscount, updatePendingQuantity, saveItem } =
     useContext(HeaderContext);
 
-  const inCart = originalQuantity !== null && dbPendingQuantity !== 0; // show original Qty group even if 0
+  // if either quantity is greater than zero, consider the item "in the cart"  
+  const inCart = (originalQuantity ?? 0) > 0 || dbPendingQuantity > 0;
 
   const highlightMatch = (text) => {
     if(!searchTerm) return text;
@@ -64,7 +65,7 @@ export default function Item({ item, searchTerm }) {
         />
       </div>
 
-      {/* Save this item button (only visible if the quantity has changed) */}
+      {/* Save this item button (only visible if the quantity is different than pending) */}
       {inCart && originalQuantity !== dbPendingQuantity && (
         <button type='button' onClick={() => saveItem(id)}>
           Save This Item
