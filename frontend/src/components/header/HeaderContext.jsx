@@ -9,6 +9,7 @@ export default function HeaderContextProvider({ children }) {
   const token = typeof window !== "undefined" && localStorage.getItem("token");
 
   const [user, setUser] = useState(null);
+  const [loadingUser, setLoadingUser] = useState(true);
 
   // Core State
   const [items, setItems] = useState([]);
@@ -79,6 +80,8 @@ export default function HeaderContextProvider({ children }) {
     } catch (err) {
       console.error("loadPricing error:", err);
     }
+
+    setLoadingUser(false);
   }, [token]);
 
   // Recalculate totals whenever items or discounts change
@@ -108,7 +111,7 @@ export default function HeaderContextProvider({ children }) {
       // productLineItemId may be null if user has no line item yet; you might need API that accepts productId
       setItems((prev) =>
         prev.map((i) => {
-          if (i.productLineItemId === productLineItemId || i.id === productId) {
+          if (i.id === productId) {
             return { ...i, dbPendingQuantity: newPending };
           }
           return i;
@@ -210,6 +213,7 @@ export default function HeaderContextProvider({ children }) {
         token,
         user,
         setUser,
+        loadingUser,
       }}
     >
       {children}
