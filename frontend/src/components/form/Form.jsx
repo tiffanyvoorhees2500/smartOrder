@@ -1,17 +1,17 @@
-import './Form.css';
-import axios from 'axios';
-import { StyledForm } from './StyledForm';
-import { useState, useEffect, useCallback } from 'react';
-import { states } from './states';
-import { setToken } from '../../utils/auth';
-import { getAuthHeader, getUserFromToken } from '../../utils/auth';
-import { toast } from 'react-toastify';
+import "./Form.css";
+import axios from "axios";
+import { StyledForm } from "./StyledForm";
+import { useState, useEffect, useCallback } from "react";
+import { states } from "./states";
+import { setToken } from "../../utils/auth";
+import { getAuthHeader, getUserFromToken } from "../../utils/auth";
+import { toast } from "react-toastify";
 
 const base_url = process.env.REACT_APP_API_BASE_URL;
 
 /* Login Form */
 export function LoginForm() {
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -20,27 +20,27 @@ export function LoginForm() {
 
     // Client-side validation
     if (!email || !password) {
-      setErrorMessage('Please enter both email and password.');
+      setErrorMessage("Please enter both email and password.");
       return;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setErrorMessage('Please enter a valid email address.');
+      setErrorMessage("Please enter a valid email address.");
       return;
     }
 
     try {
       const response = await axios.post(`${base_url}/users/login`, {
         email,
-        password,
+        password
       });
 
       setToken(response.data.token);
-      window.location.href = '/';
+      window.location.href = "/";
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error("Login failed:", error);
       // Show a generic error message
-      setErrorMessage('Invalid credentials. Try again.');
+      setErrorMessage("Invalid credentials. Try again.");
     }
   }
 
@@ -79,33 +79,33 @@ export function ManageUsersForm() {
   const [users, setUsers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [fieldErrors, setFieldErrors] = useState({});
-  
+
   const BLANK_FORM = {
-    id : null,
-    name: '',
-    email: '',
-    password: '',
-    defaultShipToState: 'UT',
+    id: null,
+    name: "",
+    email: "",
+    password: "",
+    defaultShipToState: "UT",
     isAdmin: false,
-    pricingType: 'Retail',
-    discountType: 'Individual',
+    pricingType: "Retail",
+    discountType: "Individual"
   };
 
   const [formData, setFormData] = useState(BLANK_FORM);
-  
+
   // Fetch all users (only needed for admins)
   const fetchUsers = useCallback(async () => {
     if (!isAdmin) return;
     try {
       const response = await axios.get(`${base_url}/users`, {
-        headers: getAuthHeader(),
+        headers: getAuthHeader()
       });
       const sorted = response.data.sort((a, b) => a.name.localeCompare(b.name));
       setUsers(sorted);
     } catch (err) {
-      console.error('Error fetching users:', err);
+      console.error("Error fetching users:", err);
     }
-  }, [isAdmin]);  
+  }, [isAdmin]);
 
   useEffect(() => {
     fetchUsers();
@@ -121,7 +121,7 @@ export function ManageUsersForm() {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${base_url}/users/${userId}`, {
-          headers: getAuthHeader(),
+          headers: getAuthHeader()
         });
 
         setFormData({
@@ -132,11 +132,11 @@ export function ManageUsersForm() {
           defaultShipToState: response.data.defaultShipToState || "UT",
           isAdmin: response.data.isAdmin || false,
           pricingType: response.data.pricingType || "Retail",
-          discountType: response.data.discountType || "Individual",
+          discountType: response.data.discountType || "Individual"
         });
       } catch (err) {
-        console.error('Error fetching user data:', err);
-      } 
+        console.error("Error fetching user data:", err);
+      }
     };
     fetchData();
   }, [isAdmin]);
@@ -151,17 +151,17 @@ export function ManageUsersForm() {
       return;
     }
 
-    const user = users.find(u => String(u.id) === String(selectedUserId));
+    const user = users.find((u) => String(u.id) === String(selectedUserId));
     if (user) {
       setFormData({
-        id: user.id,  
+        id: user.id,
         name: user.name || "",
         email: user.email || "",
         password: "",
         defaultShipToState: user.defaultShipToState || "UT",
         isAdmin: user.isAdmin || false,
         pricingType: user.pricingType || "Retail",
-        discountType: user.discountType || "Individual",
+        discountType: user.discountType || "Individual"
       });
       setFieldErrors({}); // clear error messages
     }
@@ -170,15 +170,15 @@ export function ManageUsersForm() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    
-    setFormData(prev => ({
+
+    setFormData((prev) => ({
       ...prev,
       [name]:
-        type === 'checkbox' 
-        ? checked 
-        : name === 'isAdmin' 
-        ? value === 'true' 
-        : value,
+        type === "checkbox"
+          ? checked
+          : name === "isAdmin"
+            ? value === "true"
+            : value
     }));
   };
 
@@ -198,12 +198,12 @@ export function ManageUsersForm() {
 
       if (isCreateNew) {
         // Admin is creating a new user
-        method = 'post';
+        method = "post";
         url = `${base_url}/users/manage-users`;
       } else {
-        // Editing a user 
-        method = 'put';
-        targetID = isAdmin 
+        // Editing a user
+        method = "put";
+        targetID = isAdmin
           ? selectedUserId || user.id // admin editing another user or self
           : user.id; // non-admin editing self
         url = `${base_url}/users/${targetID}`;
@@ -213,8 +213,8 @@ export function ManageUsersForm() {
       const payload = { ...formData };
 
       // Don't send password if empty
-      if (!payload.password) delete payload.password;   
-      
+      if (!payload.password) delete payload.password;
+
       // If Admin, include admin-only fields
       if (isAdmin) {
         payload.isAdmin = formData.isAdmin;
@@ -228,7 +228,9 @@ export function ManageUsersForm() {
       }
 
       // Send request
-      const response = await axios[method](url, payload, { headers: getAuthHeader() });
+      const response = await axios[method](url, payload, {
+        headers: getAuthHeader()
+      });
 
       // if the logged-in user updated their own info, update the token
       const updatedUserId = response.data.id || targetID;
@@ -237,42 +239,44 @@ export function ManageUsersForm() {
       }
 
       // update user list for admins
-      if (isAdmin) await fetchUsers(); 
+      if (isAdmin) await fetchUsers();
 
-      toast.success('User saved!');
+      toast.success("User saved!");
       setSelectedUserId(null); // back to “new user”
     } catch (err) {
       if (err.response && err.response.status === 400) {
         toast.error(`Save failed: ${err.response.data.error}`);
       } else {
         console.error(err);
-        toast.error('Save failed - see console.');
+        toast.error("Save failed - see console.");
       }
     }
   };
 
-  // Delete user 
+  // Delete user
   const handleDelete = async () => {
-    if (!selectedUserId || !window.confirm('Delete this user?')) return;
+    if (!selectedUserId || !window.confirm("Delete this user?")) return;
 
     try {
-      const response = await axios.delete(`${base_url}/users/${selectedUserId}`, { headers: getAuthHeader() });
-      
+      const response = await axios.delete(
+        `${base_url}/users/${selectedUserId}`,
+        { headers: getAuthHeader() }
+      );
+
       if (response.data.logout) {
-        toast.success('Your account has been deleted. Logging out...');
-        localStorage.removeItem('token');
-        window.location.href = '/login';
+        toast.success("Your account has been deleted. Logging out...");
+        localStorage.removeItem("token");
+        window.location.href = "/login";
         return;
       }
-      
+
       await fetchUsers(); // refresh user list from server
       setSelectedUserId(null);
       setFormData(BLANK_FORM);
-      toast.success('User deleted');
-
+      toast.success("User deleted");
     } catch (err) {
       console.error(err);
-      toast.error('Delete failed');
+      toast.error("Delete failed");
     }
   };
 
@@ -280,28 +284,28 @@ export function ManageUsersForm() {
     const errors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!formData.name.trim()) errors.name = 'Name is required.';
-    if (!formData.email.trim()) errors.email = 'Email is required.';
-    else if (!emailRegex.test(formData.email)) errors.email = 'Invalid email format.';
+    if (!formData.name.trim()) errors.name = "Name is required.";
+    if (!formData.email.trim()) errors.email = "Email is required.";
+    else if (!emailRegex.test(formData.email))
+      errors.email = "Invalid email format.";
 
     if (!formData.id && !formData.password.trim()) {
       // require password for new users
-      errors.password = 'Password is required.';
+      errors.password = "Password is required.";
     }
 
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
-  }
+  };
 
   return (
     <StyledForm onSubmit={handleSubmit} title="Register/Edit Users">
-      
       {/* Select User dropdown - Admins only */}
       {isAdmin && (
         <label>
           Select User:
           <select
-            value={selectedUserId || ''}
+            value={selectedUserId || ""}
             onChange={(e) => setSelectedUserId(e.target.value || null)}
           >
             <option value="">-- New User --</option>
@@ -322,11 +326,13 @@ export function ManageUsersForm() {
           value={formData.name}
           onChange={handleChange}
           required
-          autoComplete='off'
+          autoComplete="off"
         />
-        {fieldErrors.name && <div className="error-message">{fieldErrors.name}</div>}
+        {fieldErrors.name && (
+          <div className="error-message">{fieldErrors.name}</div>
+        )}
       </label>
-      
+
       {/* Email */}
       <label>
         Email
@@ -336,10 +342,12 @@ export function ManageUsersForm() {
           value={formData.email}
           onChange={handleChange}
           required
-          autoComplete='off'
+          autoComplete="off"
         />
-        {fieldErrors.email && <div className="error-message">{fieldErrors.email}</div>}
-      </label> 
+        {fieldErrors.email && (
+          <div className="error-message">{fieldErrors.email}</div>
+        )}
+      </label>
 
       {/* Password */}
       <label>
@@ -349,10 +357,14 @@ export function ManageUsersForm() {
           type="password"
           value={formData.password}
           onChange={handleChange}
-          placeholder={formData.id && formData.password === '' ? 'Leave blank to keep' : ''}
-          autoComplete='new-password'
+          placeholder={
+            formData.id && formData.password === "" ? "Leave blank to keep" : ""
+          }
+          autoComplete="new-password"
         />
-        {fieldErrors.password && <div className="error-message">{fieldErrors.password}</div>}
+        {fieldErrors.password && (
+          <div className="error-message">{fieldErrors.password}</div>
+        )}
       </label>
 
       {/* Default Ship To State */}
@@ -380,7 +392,7 @@ export function ManageUsersForm() {
           <label className="inline-label">
             Admin:
             <div className="toggle-group">
-              <label className={`toggle ${formData.isAdmin ? 'active' : ''}`}>
+              <label className={`toggle ${formData.isAdmin ? "active" : ""}`}>
                 <input
                   type="radio"
                   name="isAdmin"
@@ -392,7 +404,7 @@ export function ManageUsersForm() {
               </label>
 
               <label
-                className={`toggle ${formData.isAdmin === false ? 'active' : ''}`}
+                className={`toggle ${formData.isAdmin === false ? "active" : ""}`}
               >
                 <input
                   type="radio"
@@ -412,14 +424,14 @@ export function ManageUsersForm() {
             <div className="toggle-group">
               <label
                 className={`toggle ${
-                  formData.pricingType === 'Retail' ? 'active' : ''
+                  formData.pricingType === "Retail" ? "active" : ""
                 }`}
               >
                 <input
                   type="radio"
                   name="pricingType"
                   value="Retail"
-                  checked={formData.pricingType === 'Retail'}
+                  checked={formData.pricingType === "Retail"}
                   onChange={handleChange}
                 />
                 Retail
@@ -427,14 +439,14 @@ export function ManageUsersForm() {
 
               <label
                 className={`toggle ${
-                  formData.pricingType === 'Wholesale' ? 'active' : ''
+                  formData.pricingType === "Wholesale" ? "active" : ""
                 }`}
               >
                 <input
                   type="radio"
                   name="pricingType"
                   value="Wholesale"
-                  checked={formData.pricingType === 'Wholesale'}
+                  checked={formData.pricingType === "Wholesale"}
                   onChange={handleChange}
                 />
                 Wholesale
@@ -448,14 +460,14 @@ export function ManageUsersForm() {
             <div className="toggle-group">
               <label
                 className={`toggle ${
-                  formData.discountType === 'Individual' ? 'active' : ''
+                  formData.discountType === "Individual" ? "active" : ""
                 }`}
               >
                 <input
                   type="radio"
                   name="discountType"
                   value="Individual"
-                  checked={formData.discountType === 'Individual'}
+                  checked={formData.discountType === "Individual"}
                   onChange={handleChange}
                 />
                 Individual
@@ -463,14 +475,14 @@ export function ManageUsersForm() {
 
               <label
                 className={`toggle ${
-                  formData.discountType === 'Group' ? 'active' : ''
+                  formData.discountType === "Group" ? "active" : ""
                 }`}
               >
                 <input
                   type="radio"
                   name="discountType"
                   value="Group"
-                  checked={formData.discountType === 'Group'}
+                  checked={formData.discountType === "Group"}
                   onChange={handleChange}
                 />
                 Group
@@ -479,14 +491,18 @@ export function ManageUsersForm() {
           </label>
         </>
       )}
-     
+
       <div className="form-buttons">
         {/* Save Button */}
         <button type="submit">Save</button>
 
         {/* Delete Button - Admins only */}
         {isAdmin && selectedUserId && (
-          <button type="button" className="delete-button" onClick={handleDelete}>
+          <button
+            type="button"
+            className="delete-button"
+            onClick={handleDelete}
+          >
             Delete
           </button>
         )}

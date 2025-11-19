@@ -1,15 +1,15 @@
-'use strict';
-const fs = require('fs');
-const path = require('path');
-const csv = require('csv-parser');
-const { v4: uuidv4 } = require('uuid');
-const { STRING } = require('sequelize');
-const normalizeOriginalId = require('../utils/normalizeOriginalAdminId');
+"use strict";
+const fs = require("fs");
+const path = require("path");
+const csv = require("csv-parser");
+const { v4: uuidv4 } = require("uuid");
+const { STRING } = require("sequelize");
+const normalizeOriginalId = require("../utils/normalizeOriginalAdminId");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    console.log('📥 Starting userLineItems seed...');
+    console.log("📥 Starting userLineItems seed...");
 
     // === Load Admin Orders (for mapping original_id → id)
     const adminOrders = await queryInterface.sequelize.query(
@@ -50,12 +50,12 @@ module.exports = {
 
     // === Read CSV data
     const userLineItems = [];
-    const filePath = path.join(__dirname, '../data/userLineItems.csv');
+    const filePath = path.join(__dirname, "../data/userLineItems.csv");
 
     await new Promise((resolve, reject) => {
       fs.createReadStream(filePath)
         .pipe(csv())
-        .on('data', (data) => {
+        .on("data", (data) => {
           // Skip empty rows
           if (
             !data.original_id ||
@@ -111,26 +111,26 @@ module.exports = {
             percentOff: parseFloat(data.percentOff) || 0.0,
             finalPrice: parseFloat(data.finalPrice) || 0.0,
             createdAt: new Date(),
-            updatedAt: new Date(),
+            updatedAt: new Date()
           });
         })
-        .on('end', resolve)
-        .on('error', reject);
+        .on("end", resolve)
+        .on("error", reject);
     });
 
     // === 7️⃣ Bulk insert
     if (userLineItems.length > 0) {
-      await queryInterface.bulkInsert('UserLineItems', userLineItems, {});
+      await queryInterface.bulkInsert("UserLineItems", userLineItems, {});
       console.log(
         `✅ Inserted ${userLineItems.length} user line items successfully.`
       );
     } else {
-      console.log('⚠️ No user line items found to insert.');
+      console.log("⚠️ No user line items found to insert.");
     }
   },
 
   async down(queryInterface) {
-    await queryInterface.bulkDelete('UserLineItems', null, {});
-    console.log('🗑️ Deleted all UserLineItems.');
-  },
+    await queryInterface.bulkDelete("UserLineItems", null, {});
+    console.log("🗑️ Deleted all UserLineItems.");
+  }
 };

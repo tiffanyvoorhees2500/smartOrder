@@ -1,72 +1,72 @@
-'use strict';
+"use strict";
 
-const US_STATES = require('../utils/stateEnum');
+const US_STATES = require("../utils/stateEnum");
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
-    'User',
+    "User",
     {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
+        primaryKey: true
       },
       name: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       email: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
         validate: {
-          isEmail: true,  
-        } 
+          isEmail: true
+        }
       },
       password: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       isAdmin: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false,
+        defaultValue: false
       },
       pricingType: {
-        type: DataTypes.ENUM('Retail', 'Wholesale'),
-        defaultValue: 'Retail',
-        allowNull: false,
+        type: DataTypes.ENUM("Retail", "Wholesale"),
+        defaultValue: "Retail",
+        allowNull: false
       },
       discountType: {
-        type: DataTypes.ENUM('Group', 'Individual'),
-        defaultValue: 'Individual',
-        allowNull: false,
+        type: DataTypes.ENUM("Group", "Individual"),
+        defaultValue: "Individual",
+        allowNull: false
       },
       defaultShipToState: {
         type: DataTypes.ENUM(...US_STATES),
-        allowNull: false,
+        allowNull: false
       },
       original_id: {
         type: DataTypes.INTEGER,
-        allowNull: true,
-      },
+        allowNull: true
+      }
     },
     {}
   );
 
   User.associate = (models) => {
     User.hasMany(models.AdminOrder, {
-      foreignKey: 'paidForById',
-      as: 'adminOrdersPaidFor',
+      foreignKey: "paidForById",
+      as: "adminOrdersPaidFor"
     });
 
     User.hasMany(models.UserLineItem, {
-      foreignKey: 'userId',
-      as: 'userLineItems',
+      foreignKey: "userId",
+      as: "userLineItems"
     });
 
     User.hasMany(models.UserOrder, {
-      foreignKey: 'userId',
-      as: 'userOrders',
+      foreignKey: "userId",
+      as: "userOrders"
     });
   };
 

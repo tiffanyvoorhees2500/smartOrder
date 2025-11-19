@@ -1,15 +1,15 @@
 const DISCOUNT_OPTIONS = [
-  { title: '0-14 Bottles [0% Off]', min: 0, max: 14, discount: 0.0 },
-  { title: '15-34 Bottles [10% Off]', min: 15, max: 34, discount: 0.1 },
-  { title: '35-69 Bottles [15% Off]', min: 35, max: 69, discount: 0.15 },
-  { title: '70+ Bottles [18% Off]', min: 70, max: Infinity, discount: 0.18 },
+  { title: "0-14 Bottles [0% Off]", min: 0, max: 14, discount: 0.0 },
+  { title: "15-34 Bottles [10% Off]", min: 15, max: 34, discount: 0.1 },
+  { title: "35-69 Bottles [15% Off]", min: 35, max: 69, discount: 0.15 },
+  { title: "70+ Bottles [18% Off]", min: 70, max: Infinity, discount: 0.18 },
   {
-    title: '20% Phone Discount',
+    title: "20% Phone Discount",
     min: null,
     max: null,
     discount: 0.2,
-    manualOnly: true,
-  },
+    manualOnly: true
+  }
 ];
 
 /**

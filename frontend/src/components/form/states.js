@@ -49,5 +49,5 @@ export const states = [
   "WA",
   "WV",
   "WI",
-  "WY",
+  "WY"
 ];

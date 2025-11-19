@@ -1,14 +1,14 @@
-'use strict';
-const fs = require('fs');
-const path = require('path');
-const csv = require('csv-parser');
-const { v4: uuidv4 } = require('uuid');
-const { STRING } = require('sequelize');
+"use strict";
+const fs = require("fs");
+const path = require("path");
+const csv = require("csv-parser");
+const { v4: uuidv4 } = require("uuid");
+const { STRING } = require("sequelize");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    console.log('📥 Starting adminLineItems seed...');
+    console.log("📥 Starting adminLineItems seed...");
 
     // === Load Admin Orders (for mapping original_id → id)
     const adminOrders = await queryInterface.sequelize.query(
@@ -23,8 +23,8 @@ module.exports = {
 
       // Ensure key is a string, handling possible scientific notation
       let key = order.original_id.toString();
-      if (key.toUpperCase().includes('E')) {
-        key = Number(key).toLocaleString('fullwide', { useGrouping: false });
+      if (key.toUpperCase().includes("E")) {
+        key = Number(key).toLocaleString("fullwide", { useGrouping: false });
       }
 
       adminOrderMap[key] = order.id;
@@ -44,7 +44,7 @@ module.exports = {
 
     // === 3️⃣ Read CSV data
     const adminLineItems = [];
-    const filePath = path.join(__dirname, '../data/adminLineItems.csv');
+    const filePath = path.join(__dirname, "../data/adminLineItems.csv");
 
     // Utility: safely convert scientific notation or weird numeric text → BigInt
     const safeBigInt = (value) => {
@@ -57,7 +57,7 @@ module.exports = {
     await new Promise((resolve, reject) => {
       fs.createReadStream(filePath)
         .pipe(csv())
-        .on('data', (data) => {
+        .on("data", (data) => {
           // Skip empty rows
           if (!data.original_id || !data.adminOrderId || !data.productId)
             return;
@@ -66,9 +66,9 @@ module.exports = {
           let adminOriginalId = data.adminOrderId?.trim();
           if (!adminOriginalId) return;
 
-          if (adminOriginalId.toUpperCase().includes('E')) {
+          if (adminOriginalId.toUpperCase().includes("E")) {
             adminOriginalId = Number(adminOriginalId).toLocaleString(
-              'fullwide',
+              "fullwide",
               { useGrouping: false }
             );
           }
@@ -111,26 +111,26 @@ module.exports = {
             percentOff: parseFloat(data.percentOff) || 0.0,
             finalPrice: parseFloat(data.finalPrice) || 0.0,
             createdAt: new Date(),
-            updatedAt: new Date(),
+            updatedAt: new Date()
           });
         })
-        .on('end', resolve)
-        .on('error', reject);
+        .on("end", resolve)
+        .on("error", reject);
     });
 
     // === 7️⃣ Bulk insert
     if (adminLineItems.length > 0) {
-      await queryInterface.bulkInsert('AdminLineItems', adminLineItems, {});
+      await queryInterface.bulkInsert("AdminLineItems", adminLineItems, {});
       console.log(
         `✅ Inserted ${adminLineItems.length} admin line items successfully.`
       );
     } else {
-      console.log('⚠️ No admin line items found to insert.');
+      console.log("⚠️ No admin line items found to insert.");
     }
   },
 
   async down(queryInterface) {
-    await queryInterface.bulkDelete('AdminLineItems', null, {});
-    console.log('🗑️ Deleted all AdminLineItems.');
-  },
+    await queryInterface.bulkDelete("AdminLineItems", null, {});
+    console.log("🗑️ Deleted all AdminLineItems.");
+  }
 };

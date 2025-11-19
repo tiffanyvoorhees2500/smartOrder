@@ -1,70 +1,70 @@
-'use strict';
+"use strict";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('AdminLineItems', {
+    await queryInterface.createTable("AdminLineItems", {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         allowNull: false,
-        primaryKey: true,
+        primaryKey: true
       },
       productId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Products', // name of the target table
-          key: 'id',
+          model: "Products", // name of the target table
+          key: "id"
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE"
       },
       adminOrderId: {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'AdminOrders', // name of the target table
-          key: 'id',
+          model: "AdminOrders", // name of the target table
+          key: "id"
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE"
       },
       quantity: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: false
       },
       basePrice: {
         type: Sequelize.DECIMAL(10, 2),
-        allowNull: false,
+        allowNull: false
       },
       percentOff: {
         type: Sequelize.DECIMAL(5, 2),
         allowNull: false,
-        defaultValue: 0.0,
+        defaultValue: 0.0
       },
       finalPrice: {
         type: Sequelize.DECIMAL(10, 2),
-        allowNull: false,
+        allowNull: false
       },
       original_id: {
         type: Sequelize.BIGINT,
-        allowNull: true,
+        allowNull: true
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP")
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-      },
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP")
+      }
     });
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('AdminLineItems');
-  },
+    await queryInterface.dropTable("AdminLineItems");
+  }
 };

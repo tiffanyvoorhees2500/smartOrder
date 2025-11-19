@@ -1,6 +1,6 @@
-const db = require('../models/index.js');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const db = require("../models/index.js");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const { User } = db;
 
@@ -13,7 +13,7 @@ exports.createUser = async (req, res) => {
     defaultShipToState,
     isAdmin,
     pricingType,
-    discountType,
+    discountType
   } = req.body;
   try {
     // Check if user with the same email already exists
@@ -21,7 +21,7 @@ exports.createUser = async (req, res) => {
     if (existingUser) {
       return res
         .status(400)
-        .json({ error: 'User with this email already exists' });
+        .json({ error: "User with this email already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -32,8 +32,8 @@ exports.createUser = async (req, res) => {
       defaultShipToState,
       password: hashedPassword,
       isAdmin: isAdmin || false,
-      pricingType: pricingType || 'Retail',
-      discountType: discountType || 'Individual',
+      pricingType: pricingType || "Retail",
+      discountType: discountType || "Individual"
     });
 
     res.status(201).json(newUser);
@@ -53,18 +53,18 @@ exports.updateUser = async (req, res) => {
     defaultShipToState,
     isAdmin,
     pricingType,
-    discountType,
+    discountType
   } = req.body;
 
   try {
     const user = await User.findByPk(userId);
-    if (!user) return res.status(404).json({ error: 'User not found' });
+    if (!user) return res.status(404).json({ error: "User not found" });
 
     // Regular users can only update their own profile
     if (!requester.isAdmin && requester.id !== user.id) {
       return res
         .status(403)
-        .json({ error: 'You can only update your own profile.' });
+        .json({ error: "You can only update your own profile." });
     }
 
     // Prevent duplicate email
@@ -73,7 +73,7 @@ exports.updateUser = async (req, res) => {
       if (emailExists) {
         return res
           .status(400)
-          .json({ error: 'Email is already in use by another account.' });
+          .json({ error: "Email is already in use by another account." });
       }
     }
 
@@ -82,7 +82,7 @@ exports.updateUser = async (req, res) => {
     const updateData = {
       name,
       email,
-      defaultShipToState,
+      defaultShipToState
     };
 
     if (requester.isAdmin) {
@@ -92,7 +92,7 @@ exports.updateUser = async (req, res) => {
     }
 
     // Only update password if provided
-    if (password && password.trim() !== '') {
+    if (password && password.trim() !== "") {
       updateData.password = await bcrypt.hash(password, 10);
     }
 
@@ -105,16 +105,16 @@ exports.updateUser = async (req, res) => {
         {
           id: user.id,
           isAdmin: user.isAdmin,
-          name: user.name,
+          name: user.name
         },
         process.env.JWT_SECRET,
-        { expiresIn: '1h' }
+        { expiresIn: "1h" }
       );
     }
 
     res.json({
       user,
-      token: newToken, // may be null if NOT updating own profile
+      token: newToken // may be null if NOT updating own profile
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -128,12 +128,12 @@ exports.deleteUser = async (req, res) => {
 
   // Only admins can delete users
   if (!requester.isAdmin) {
-    return res.status(403).json({ error: 'Only admins can delete users.' });
+    return res.status(403).json({ error: "Only admins can delete users." });
   }
 
   try {
     const user = await User.findByPk(userId);
-    if (!user) return res.status(404).json({ error: 'User not found' });
+    if (!user) return res.status(404).json({ error: "User not found" });
 
     await user.destroy();
 
@@ -142,9 +142,9 @@ exports.deleteUser = async (req, res) => {
 
     res.json({
       message: deletedOwnAccount
-        ? 'Your account has been deleted.'
-        : 'User deleted.',
-      logout: deletedOwnAccount,
+        ? "Your account has been deleted."
+        : "User deleted.",
+      logout: deletedOwnAccount
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -156,18 +156,18 @@ exports.loginUser = async (req, res) => {
   try {
     const user = await User.findOne({ where: { email } });
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ error: 'Invalid password' });
+      return res.status(401).json({ error: "Invalid password" });
     }
 
     const token = jwt.sign(
       { id: user.id, isAdmin: user.isAdmin, name: user.name },
       process.env.JWT_SECRET,
       {
-        expiresIn: '1h',
+        expiresIn: "1h"
       }
     );
 
@@ -181,14 +181,14 @@ exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.findAll({
       attributes: [
-        'id',
-        'name',
-        'email',
-        'defaultShipToState',
-        'isAdmin',
-        'pricingType',
-        'discountType',
-      ],
+        "id",
+        "name",
+        "email",
+        "defaultShipToState",
+        "isAdmin",
+        "pricingType",
+        "discountType"
+      ]
     });
     res.json(users);
   } catch (err) {
@@ -202,11 +202,11 @@ exports.getUserById = async (req, res) => {
 
   try {
     const user = await User.findByPk(userId, {
-      attributes: { exclude: ['password'] }, // never send the hash
+      attributes: { exclude: ["password"] } // never send the hash
     });
 
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     // Authorization check
@@ -216,43 +216,43 @@ exports.getUserById = async (req, res) => {
     if (!isRequesterAdmin && !isOwnProfile) {
       return res
         .status(403)
-        .json({ error: 'You are not authorized to view this user.' });
+        .json({ error: "You are not authorized to view this user." });
     }
 
     // Return the user
     res.json(user);
   } catch (error) {
-    console.error('getUserById error:', error);
-    res.status(500).json({ error: 'Server error' });
+    console.error("getUserById error:", error);
+    res.status(500).json({ error: "Server error" });
   }
 };
 
 // Update a user's defaultShipToState
 exports.updateUserShipToState = async (req, res) => {
-  console.log('here');
+  console.log("here");
   const requester = req.user;
 
-  console.log('Requester:', requester);
-  console.log('Body:', req.body);
+  console.log("Requester:", requester);
+  console.log("Body:", req.body);
 
   const { defaultShipToState } = req.body;
   const userId = req.params.id || requester.id; // use param if admin, else current user
 
   try {
     const user = await User.findByPk(userId);
-    if (!user) return res.status(404).json({ error: 'User not found' });
+    if (!user) return res.status(404).json({ error: "User not found" });
 
     // Regular users can only update their own profile
     if (!requester.isAdmin && userId !== requester.id) {
       return res
         .status(403)
-        .json({ error: 'You can only update your own profile.' });
+        .json({ error: "You can only update your own profile." });
     }
 
     await user.update({ defaultShipToState });
 
     res.json({
-      user,
+      user
     });
   } catch (error) {
     res.status(500).json({ error: error.message });

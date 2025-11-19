@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-const db = require('../models');
+const db = require("../models");
 const { Product, Ingredient, UserLineItem } = db;
-const { calculateUserDiscount } = require('../services/pricingService');
+const { calculateUserDiscount } = require("../services/pricingService");
 
 exports.getUserProductList = async (req, res) => {
   try {
@@ -15,42 +15,42 @@ exports.getUserProductList = async (req, res) => {
     // Fetch products that are not discontinued
     const products = await Product.findAll({
       where: {
-        discontinued: false,
+        discontinued: false
       },
       attributes: [
-        'id',
-        'name',
-        'retail',
-        'wholesale',
-        'discontinued',
-        'number_in_bottle',
-        'original_id',
+        "id",
+        "name",
+        "retail",
+        "wholesale",
+        "discontinued",
+        "number_in_bottle",
+        "original_id"
       ],
       include: [
         {
           model: Ingredient,
-          as: 'ingredients',
-          attributes: ['ingredient', 'number_label', 'string_label'],
+          as: "ingredients",
+          attributes: ["ingredient", "number_label", "string_label"]
         },
         {
           model: UserLineItem,
-          as: 'userLineItems',
+          as: "userLineItems",
           where: {
             userId: userId,
-            adminOrderId: currentAdminOrderId,
+            adminOrderId: currentAdminOrderId
           },
           required: false, // include even if no matching line items
           attributes: [
-            'quantity',
-            'basePrice',
-            'percentOff',
-            'finalPrice',
-            'pendingQuantity',
-            'saveForLater',
-          ],
-        },
+            "quantity",
+            "basePrice",
+            "percentOff",
+            "finalPrice",
+            "pendingQuantity",
+            "saveForLater"
+          ]
+        }
       ],
-      order: [['name', 'ASC']],
+      order: [["name", "ASC"]]
     });
 
     const formattedProducts = products.map((product) => {
@@ -61,7 +61,7 @@ exports.getUserProductList = async (req, res) => {
 
       const description = sortedIngredients
         .map((i) => `${i.ingredient} [${i.number_label} ${i.string_label}]`)
-        .join(', ');
+        .join(", ");
 
       // Extract UserLineItem details if exists
       const uli = product.userLineItems[0] || {};
@@ -73,22 +73,25 @@ exports.getUserProductList = async (req, res) => {
         id: product.id,
         name: product.name,
         price: Number(
-          userPricing === 'Retail' ? product.retail : product.wholesale
+          userPricing === "Retail" ? product.retail : product.wholesale
         ),
         description,
         quantity,
         originalQuantity,
-        dbPendingQuantity,
+        dbPendingQuantity
       };
     });
 
     res.status(200).json({
-      user: { defaultShipToState: req.user.defaultShipToState, name: req.user.name },
+      user: {
+        defaultShipToState: req.user.defaultShipToState,
+        name: req.user.name
+      },
       products: formattedProducts,
-      discountInfo,
+      discountInfo
     });
   } catch (error) {
-    console.error('Error fetching products:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error("Error fetching products:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };

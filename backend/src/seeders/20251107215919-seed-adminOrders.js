@@ -1,11 +1,11 @@
-'use strict';
-const fs = require('fs');
-const path = require('path');
-const csv = require('csv-parser');
-const { v4: uuidv4 } = require('uuid');
+"use strict";
+const fs = require("fs");
+const path = require("path");
+const csv = require("csv-parser");
+const { v4: uuidv4 } = require("uuid");
 
-const STATES = require('../utils/stateEnum');
-const normalizeOriginalId = require('../utils/normalizeOriginalAdminId');
+const STATES = require("../utils/stateEnum");
+const normalizeOriginalId = require("../utils/normalizeOriginalAdminId");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -23,12 +23,12 @@ module.exports = {
     }
 
     const adminOrders = [];
-    const filePath = path.join(__dirname, '../data/adminOrders.csv');
+    const filePath = path.join(__dirname, "../data/adminOrders.csv");
 
     await new Promise((resolve, reject) => {
       fs.createReadStream(filePath)
         .pipe(csv())
-        .on('data', (data) => {
+        .on("data", (data) => {
           // Original AdminOrder ID in CSV
           const originalId = normalizeOriginalId(data.original_id);
 
@@ -43,8 +43,8 @@ module.exports = {
           }
 
           // Normalize and validate state
-          let shipToState = (data.shipToState || 'UT').trim().toUpperCase();
-          if (!STATES.includes(shipToState)) shipToState = 'UT';
+          let shipToState = (data.shipToState || "UT").trim().toUpperCase();
+          if (!STATES.includes(shipToState)) shipToState = "UT";
 
           adminOrders.push({
             id: uuidv4(),
@@ -55,23 +55,23 @@ module.exports = {
             taxAmount: parseFloat(data.taxAmount) || 0.0,
             original_id: originalId,
             createdAt: new Date(),
-            updatedAt: new Date(),
+            updatedAt: new Date()
           });
         })
-        .on('end', resolve)
-        .on('error', reject);
+        .on("end", resolve)
+        .on("error", reject);
     });
 
     // Bulk insert after CSV read
     if (adminOrders.length > 0) {
-      await queryInterface.bulkInsert('AdminOrders', adminOrders, {});
+      await queryInterface.bulkInsert("AdminOrders", adminOrders, {});
       console.log(`✅ Inserted ${adminOrders.length} admin orders.`);
     } else {
-      console.log('⚠️ No admin orders found to insert.');
+      console.log("⚠️ No admin orders found to insert.");
     }
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('AdminOrders', null, {});
-  },
+    await queryInterface.bulkDelete("AdminOrders", null, {});
+  }
 };

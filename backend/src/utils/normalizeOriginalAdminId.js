@@ -1,4 +1,4 @@
-const BigNumber = require('bignumber.js');
+const BigNumber = require("bignumber.js");
 
 function normalizeOriginalId(idStr) {
   if (!idStr) return null;

@@ -1,7 +1,7 @@
-'use strict';
-const fs = require('fs');
-const path = require('path');
-const csv = require('csv-parser');
+"use strict";
+const fs = require("fs");
+const path = require("path");
+const csv = require("csv-parser");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -20,12 +20,12 @@ module.exports = {
 
     // Parse CSV for Ingredients
     const ingredients = [];
-    const filePath = path.join(__dirname, '../data/ingredients.csv');
+    const filePath = path.join(__dirname, "../data/ingredients.csv");
 
     await new Promise((resolve, reject) => {
       fs.createReadStream(filePath)
         .pipe(csv())
-        .on('data', (data) => {
+        .on("data", (data) => {
           const rawId = data.original_product_id?.trim?.();
           const originalId = Number(rawId);
           const productId = productMap[originalId]; // look up the new ID
@@ -43,24 +43,24 @@ module.exports = {
             number_label: parseFloat(data.number_label) || 0,
             string_label: data.string_label?.trim?.() || null,
             createdAt: new Date(),
-            updatedAt: new Date(),
+            updatedAt: new Date()
           });
         })
-        .on('end', resolve)
-        .on('error', reject);
+        .on("end", resolve)
+        .on("error", reject);
     });
 
     // Insert ingredients into the database
     if (ingredients.length > 0) {
-      await queryInterface.bulkInsert('Ingredients', ingredients, {});
+      await queryInterface.bulkInsert("Ingredients", ingredients, {});
       console.log(`✅ Inserted ${ingredients.length} ingredients.`);
     } else {
-      console.warn('⚠️ No ingredients inserted.');
+      console.warn("⚠️ No ingredients inserted.");
     }
   },
 
   async down(queryInterface, Sequelize) {
     // Optionally delete all ingredients seeded
-    await queryInterface.bulkDelete('Ingredients', null, {});
-  },
+    await queryInterface.bulkDelete("Ingredients", null, {});
+  }
 };
