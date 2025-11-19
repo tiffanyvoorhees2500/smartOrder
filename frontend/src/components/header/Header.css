@@ -57,8 +57,8 @@
   display: flex;
   flex-direction: row;
   padding: 0.5em;
-  gap:0.2em;
-  background: linear-gradient(
+  gap: 0.2em;
+  background-image: linear-gradient(
     to top left,
     var(--secondary-color) 30%,
     var(--secondary-color-light) 70%
@@ -66,7 +66,15 @@
   border-radius: 99px;
   align-items: center;
   justify-content: center;
+  border: none;
+  position:relative;
 }
+
+.shoppingCart.active {
+  filter: brightness(90%);
+  border: 2px solid var(--secondary-color);
+}
+
 .shoppingCart svg {
   height: auto;
 }

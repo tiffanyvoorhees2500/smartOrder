@@ -3,12 +3,11 @@ import "./Header.css";
 import ProfileButton from "./ProfileButton";
 import { FaArrowRight, FaShoppingCart } from "react-icons/fa";
 import { HeaderContext } from "./HeaderContext";
+import Ping from "../misc/Ping";
 
 export default function Header() {
-  const { originalTotal, pendingTotal } = useContext(HeaderContext);
-  // const headerContext = useContext(HeaderContext);
-  // const price = headerContext.price || 0;
-  // const pendingPrice = headerContext.pendingPrice;
+  const { originalTotal, pendingTotal, showCart, setShowCart } =
+    useContext(HeaderContext);
 
   return (
     <header className="app-header">
@@ -17,7 +16,12 @@ export default function Header() {
         <span className="header-title">OHS with Rowley's</span>
       </div>
       <nav className="header-nav">
-        <div className="shoppingCart">
+        <button
+          className={"shoppingCart" + (showCart ? " active" : "")}
+          type="button"
+          onClick={() => setShowCart((cart) => !cart)}
+        >
+          {originalTotal !== pendingTotal && <Ping />}
           <FaShoppingCart />
           <span className="cart-total">${originalTotal.toFixed(2)}</span>
           {pendingTotal !== null && pendingTotal !== originalTotal && (
@@ -28,7 +32,7 @@ export default function Header() {
               </span>
             </>
           )}
-        </div>
+        </button>
         <ProfileButton />
       </nav>
     </header>
