@@ -32,8 +32,8 @@ describe("calculateUserDiscount", () => {
 
     expect(result.totalBottlesForCurrentQuantities).toBe(5); // 3 + 2
     expect(result.totalBottlesWithPendingQuantities).toBe(7); // 5 (pending) + 2
-    expect(result.selectedDiscountForCurrent).toBe(getDiscountByBottleCount(5));
-    expect(result.selectedDiscountForPending).toBe(getDiscountByBottleCount(7));
+    expect(result.selectedDiscountForCurrent).toEqual(getDiscountByBottleCount(5).discount);
+    expect(result.selectedDiscountForPending).toEqual(getDiscountByBottleCount(7).discount);
   });
 
   it("counts only items in same state for Group user, uses pendingQuantity for self", async () => {
@@ -60,8 +60,8 @@ describe("calculateUserDiscount", () => {
 
     expect(result.totalBottlesForCurrentQuantities).toBe(5); // 2 + 3
     expect(result.totalBottlesWithPendingQuantities).toBe(8); // 5 (pending for self) + 3
-    expect(result.selectedDiscountForCurrent).toBe(getDiscountByBottleCount(5));
-    expect(result.selectedDiscountForPending).toBe(getDiscountByBottleCount(8));
+    expect(result.selectedDiscountForCurrent).toEqual(getDiscountByBottleCount(5).discount);
+    expect(result.selectedDiscountForPending).toEqual(getDiscountByBottleCount(8).discount);
   });
 
   it("handles no matching items gracefully", async () => {
@@ -73,7 +73,7 @@ describe("calculateUserDiscount", () => {
 
     expect(result.totalBottlesForCurrentQuantities).toBe(0);
     expect(result.totalBottlesWithPendingQuantities).toBe(0);
-    expect(result.selectedDiscountForCurrent).toBe(getDiscountByBottleCount(0));
-    expect(result.selectedDiscountForPending).toBe(getDiscountByBottleCount(0));
+    expect(result.selectedDiscountForCurrent).toEqual(getDiscountByBottleCount(0).discount);
+    expect(result.selectedDiscountForPending).toEqual(getDiscountByBottleCount(0).discount);
   });
 });
