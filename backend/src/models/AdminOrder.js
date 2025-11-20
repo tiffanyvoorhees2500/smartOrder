@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       orderDate: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW,
+        defaultValue: DataTypes.NOW
       },
       paidForById: {
         type: DataTypes.UUID,
