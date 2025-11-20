@@ -1,3 +1,4 @@
+import InlayInputBox from "../form/InlayInputBox";
 import "./PriceQtyGroup.css";
 
 export default function PriceQtyGroup({
@@ -17,8 +18,12 @@ export default function PriceQtyGroup({
   // The quantity select box
   let quantitySpace = (
     <>
-      {" "}
-      <label htmlFor={selectName} aria-label="quantity" className="quantity">
+      <InlayInputBox
+        htmlFor={selectName}
+        ariaLabel="quantity"
+        className="quantity"
+        title="Quantity"
+      >
         <select
           name={selectName}
           id={selectName}
@@ -30,7 +35,7 @@ export default function PriceQtyGroup({
             return <option key={index}>{index}</option>;
           })}
         </select>
-      </label>
+      </InlayInputBox>
       <span>@</span>
     </>
   );

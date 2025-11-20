@@ -56,15 +56,6 @@ mark {
   position: fixed;
   right: 2em;
   bottom: 3em;
-  background-color: black;
-  color: white;
-  border-radius: 5px;
-  padding: 0.75em 1.25em;
-  border: none;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
   z-index: 10;
 }
 
