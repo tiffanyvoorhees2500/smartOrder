@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       orderDate: {
         type: DataTypes.DATE,
-        allowNull: false
+        allowNull: false,
+        defaultValue: DataTypes.NOW
       },
       paidForById: {
         type: DataTypes.UUID,
