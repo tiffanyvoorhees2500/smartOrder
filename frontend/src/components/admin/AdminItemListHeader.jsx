@@ -20,23 +20,17 @@ export default function AdminItemListHeader({ className, setIsVisible }) {
         {/* Person */}
         <label htmlFor="person">
           Person:
-          <input
-            type="text"
-            name="person"
-            id="person"
-            placeholder="Add a person..."
-          />
+          <select name="person" id="person">
+            <option value="">Add a person...</option>
+          </select>
         </label>
 
         {/* Product */}
         <label htmlFor="product">
           Product:
-          <input
-            type="text"
-            name="product"
-            id="product"
-            placeholder="Add a product..."
-          />
+          <select name="product" id="product">
+            <option value="">Add a product...</option>
+          </select>
         </label>
 
         {/* Confirm Add Button */}
@@ -51,12 +45,22 @@ export default function AdminItemListHeader({ className, setIsVisible }) {
       <div className="headerRow none">
         {/* Shipping Total */}
         <InlayInputBox htmlFor="shipping_total" title="Shipping Total">
-          <input type="text" name="shipping_total" id="shipping_total" />
+          <input
+            type="number"
+            name="shipping_total"
+            id="shipping_total"
+            placeholder="0.00"
+          />
         </InlayInputBox>
 
         {/* Tax Total */}
         <InlayInputBox htmlFor="tax_total" title="Tax Total">
-          <input type="text" name="tax_total " id="tax_total" />
+          <input
+            type="number"
+            name="tax_total "
+            id="tax_total"
+            placeholder="0.00"
+          />
         </InlayInputBox>
 
         {/* Finalize Button */}

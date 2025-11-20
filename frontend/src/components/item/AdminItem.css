@@ -1,9 +1,8 @@
 .adminItemContainer {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 60% 1fr;
   border-radius: inherit;
   border: none;
-  box-sizing: border-box;
 }
 
 .adminItemsLeft {
@@ -44,4 +43,11 @@
 
 .bulkName {
   font-size: x-large;
+}
+
+@media screen and (max-width: 690px) {
+  .adminItemContainer {
+    display:flex;
+    flex-direction: column;
+  }
 }

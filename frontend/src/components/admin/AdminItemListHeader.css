@@ -12,13 +12,9 @@
   gap: 1em;
 }
 
-.adminListHeader input {
+.adminListHeader input,
+.adminListHeader select {
   border: none;
-}
-
-input,
-label {
-  min-width: 0 !important;
 }
 
 @media screen and (max-width: 600px) {

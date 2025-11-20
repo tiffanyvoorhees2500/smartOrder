@@ -21,17 +21,33 @@ export default function AdminItem() {
             type="text"
             name="discount_percentage"
             id="discount_percentage"
+            disabled
           />
         </InlayInputBox>
         <InlayInputBox htmlFor="final" title="Final Price">
-          <input type="text" name="final" id="final" />
+          <input type="text" name="final" id="final" disabled />
         </InlayInputBox>
       </div>
 
       <div className="adminItemsRight">
-        <PriceQtyGroup selectName={"test"} price={15} helpText={"New User 1"} />
-        <PriceQtyGroup selectName={"test"} price={15} helpText={"New User 2"} />
-        <PriceQtyGroup selectName={"test"} price={15} helpText={"New User 3"} />
+        <PriceQtyGroup
+          selectName={"user1"}
+          price={15}
+          helpText={"New User 1"}
+          quantity={50}
+          />
+        <PriceQtyGroup
+          selectName={"user2"}
+          price={155}
+          helpText={"New User 2"}
+          quantity={10}
+          />
+        <PriceQtyGroup
+          selectName={"user3"}
+          price={1}
+          helpText={"New User 3"}
+          quantity={2}
+        />
       </div>
     </div>
   );
