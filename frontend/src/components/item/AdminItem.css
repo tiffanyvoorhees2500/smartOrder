@@ -46,8 +46,13 @@
 }
 
 @media screen and (max-width: 690px) {
+  .adminItemsLeft {
+    border-bottom: 2px solid #6ba7ae96;
+    padding-bottom: 0.25em;
+  }
+
   .adminItemContainer {
-    display:flex;
+    display: flex;
     flex-direction: column;
   }
 }

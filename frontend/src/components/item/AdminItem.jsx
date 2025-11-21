@@ -2,52 +2,88 @@ import "./AdminItem.css";
 import PriceQtyGroup from "./PriceQtyGroup";
 import InlayInputBox from "../form/InlayInputBox";
 
-export default function AdminItem() {
+export default function AdminItem({ adminItem }) {
+  // Set the input element ids for this item
+  const wholesaleInputId = `wholesale_price_${adminItem.id}`;
+  const retailInputId = `retail_price_${adminItem.id}`;
+  const discountInputId = `discount_percentage_${adminItem.id}`;
+  const finalInputId = `final_price_${adminItem.id}`;
+
+  // Calculat the final price
+  const finalPrice = adminItem.userItems
+    .map((x) => {
+      // calculate discounted prices
+      const discountedPrice =
+        x.price * (1 - adminItem.discountPercentage / 100); // Make decimal form
+      const total = x.quantity * discountedPrice;
+      return total;
+    })
+    .reduce((a, b) => a + b, 0);
+
   return (
     <div className="itemContainer adminItemContainer">
       <div className="adminItemsLeft">
+        {/* Container for the bulk quantity and product name */}
         <div className="bulkQtyNameContainer">
-          <span className="bulkQty">3</span>
-          <span className="bulkName">Sample Item</span>
+          <span className="bulkQty">{adminItem.userItems.length}</span>
+          <span className="bulkName">{adminItem.name}</span>
         </div>
-        <InlayInputBox htmlFor="wholesale_price" title="Wholesale Price">
-          <input type="text" name="wholesale_price" id="wholesale_price" />
-        </InlayInputBox>
-        <InlayInputBox htmlFor="retail_price" title="Retail Price">
-          <input type="text" name="retail_price" id="retail_price" />
-        </InlayInputBox>
-        <InlayInputBox htmlFor="discount_percentage" title="Discount %">
+
+        {/* Wholesale Price */}
+        <InlayInputBox htmlFor={wholesaleInputId} title="Wholesale Price">
           <input
-            type="text"
-            name="discount_percentage"
-            id="discount_percentage"
+            type="number"
+            name={wholesaleInputId}
+            id={wholesaleInputId}
+            defaultValue={adminItem.wholesalePrice}
+          />
+        </InlayInputBox>
+
+        {/* Retail Price */}
+        <InlayInputBox htmlFor={retailInputId} title="Retail Price">
+          <input
+            type="number"
+            name={retailInputId}
+            id={retailInputId}
+            defaultValue={adminItem.retailPrice}
+          />
+        </InlayInputBox>
+
+        {/* Discount Percentage */}
+        <InlayInputBox htmlFor={discountInputId} title="Discount %">
+          <input
+            type="number"
+            name={discountInputId}
+            id={discountInputId}
+            defaultValue={adminItem.discountPercentage}
             disabled
           />
         </InlayInputBox>
-        <InlayInputBox htmlFor="final" title="Final Price">
-          <input type="text" name="final" id="final" disabled />
+
+        {/* Final Price */}
+        <InlayInputBox htmlFor={finalInputId} title="Final Price">
+          <input
+            type="number"
+            name={finalInputId}
+            id={finalInputId}
+            defaultValue={finalPrice}
+            disabled
+          />
         </InlayInputBox>
       </div>
 
+      {/* Container for the user items */}
       <div className="adminItemsRight">
-        <PriceQtyGroup
-          selectName={"user1"}
-          price={15}
-          helpText={"New User 1"}
-          quantity={50}
+        {adminItem.userItems.map((userItem) => (
+          <PriceQtyGroup
+            key={`${adminItem.id}-${userItem.userId}`}
+            selectName={`${adminItem.id}-${userItem.userId}-quantity`}
+            price={userItem.price}
+            helpText={userItem.name}
+            quantity={userItem.quantity}
+            discount={adminItem.discountPercentage}
           />
-        <PriceQtyGroup
-          selectName={"user2"}
-          price={155}
-          helpText={"New User 2"}
-          quantity={10}
-          />
-        <PriceQtyGroup
-          selectName={"user3"}
-          price={1}
-          helpText={"New User 3"}
-          quantity={2}
-        />
+        ))}
       </div>
     </div>
   );
