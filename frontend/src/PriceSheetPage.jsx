@@ -4,7 +4,6 @@ import Item from "./components/item/Item";
 import DiscountSelector from "./components/discountSelector/DiscountSelector";
 import { HeaderContext } from "./components/header/HeaderContext";
 import { states } from "./components/form/states";
-import axios from "axios";
 import Ping from "./components/misc/Ping";
 import { FaArrowLeft } from "react-icons/fa";
 
@@ -20,31 +19,14 @@ export default function PriceSheetPage() {
     pendingBulkBottles,
     user,
     loadingUser,
-    setUser,
-    token,
     showCart,
     originalTotal,
     pendingTotal,
-    setShowCart
+    setShowCart,
+    updateUserShipToState,
   } = useContext(HeaderContext);
 
-  const base_url = process.env.REACT_APP_API_BASE_URL;
   const [searchTerm, setSearchTerm] = useState("");
-
-  const updateUserShipToState = async (e) => {
-    const newState = e.target.value;
-    setUser((prev) => ({ ...prev, defaultShipToState: newState }));
-
-    try {
-      await axios.put(
-        `${base_url}/users/update-ship-to-state`,
-        { defaultShipToState: newState },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   const filteredItems = items.filter((item) => {
     const term = searchTerm.trim().toLowerCase();
@@ -88,7 +70,7 @@ export default function PriceSheetPage() {
           <select
             name="defaultShipToState"
             value={user?.defaultShipToState || ""}
-            onChange={updateUserShipToState}
+            onChange={(e) => updateUserShipToState(e.target.value)}
             required
           >
             <option value="">Select a state</option>
