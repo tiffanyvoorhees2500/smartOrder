@@ -222,7 +222,7 @@ export default function HeaderContextProvider({ children }) {
         pendingTotal,
         hasPendingChanges,
         showCart,
-
+        
         // setters / actions
         setOriginalDiscount,
         setPendingDiscount,
@@ -230,6 +230,7 @@ export default function HeaderContextProvider({ children }) {
         saveItem,
         updateUserShipToState,
         setShowCart,
+        loadPricing,
 
         token,
         user,

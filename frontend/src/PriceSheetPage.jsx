@@ -1,4 +1,5 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import "./PriceSheetPage.css";
 import Item from "./components/item/Item";
 import DiscountSelector from "./components/discountSelector/DiscountSelector";
@@ -20,13 +21,19 @@ export default function PriceSheetPage() {
     user,
     loadingUser,
     showCart,
+    setShowCart,
     originalTotal,
     pendingTotal,
-    setShowCart,
     updateUserShipToState,
+    loadPricing,
   } = useContext(HeaderContext);
 
   const [searchTerm, setSearchTerm] = useState("");
+  const location = useLocation();
+
+  useEffect(() => {
+    loadPricing();
+  }, [location.pathname, loadPricing]);
 
   const filteredItems = items.filter((item) => {
     const term = searchTerm.trim().toLowerCase();
