@@ -21,7 +21,7 @@ async function calculateUserDiscount(user) {
   if (user.discountType.toLowerCase() === "group") {
     // We need to get all userLineItems where adminOrderId is null and that are in the same location as user
     lineItems = await UserLineItem.findAll({
-      where: { adminOrderId: null },
+      where: { adminOrderId: null, saveForLater: false },
       include: {
         model: User,
         as: "user",
@@ -66,4 +66,33 @@ async function calculateUserDiscount(user) {
   };
 }
 
-module.exports = { calculateUserDiscount };
+async function calculateAdminDiscount(shipToState) {
+
+  // We need to get all userLineItems where adminOrderId is null and that are in the same location as admin order shipToState
+  const lineItems = await UserLineItem.findAll({
+    where: { adminOrderId: null, saveForLater: false },
+    include: {
+      model: User,
+      as: "user",
+      where: { defaultShipToState: shipToState }
+    }
+  });
+
+  // Calculate totalBottlesForDiscount
+  const totalBottlesForCurrentQuantities = lineItems.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
+
+  const selectedDiscountForCurrent = getDiscountByBottleCount(
+    totalBottlesForCurrentQuantities
+  ).discount;
+
+  return {
+    DISCOUNT_OPTIONS,
+    totalBottlesForCurrentQuantities,
+    selectedDiscountForCurrent,
+  };
+}
+
+module.exports = { calculateUserDiscount, calculateAdminDiscount };
