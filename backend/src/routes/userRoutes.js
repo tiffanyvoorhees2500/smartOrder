@@ -8,13 +8,16 @@ const {
   deleteUser,
   loginUser,
   getUserById,
-  updateUserShipToState
+  updateUserShipToState,
+  getUserDropdownListOptions
 } = require("../controllers/userController");
 const { authenticateToken, requireAdmin } = require("../middleware/auth");
 const router = express.Router();
 
 // All users - Admins only
 router.get("/", authenticateToken, requireAdmin, getAllUsers);
+
+router.get("/dropdown", authenticateToken, requireAdmin, getUserDropdownListOptions);
 
 // Create a new user - Admins only
 router.post("/manage-users", authenticateToken, requireAdmin, createUser);
