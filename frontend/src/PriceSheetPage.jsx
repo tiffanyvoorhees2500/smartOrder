@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 import "./PriceSheetPage.css";
 import Item from "./components/item/Item";
 import DiscountSelector from "./components/discountSelector/DiscountSelector";
@@ -22,10 +23,10 @@ export default function PriceSheetPage() {
     loadingUser,
     showCart,
     setShowCart,
-    originalTotal,
-    pendingTotal,
     updateUserShipToState,
     loadPricing,
+    hasPendingChanges,
+    saveAll,
   } = useContext(HeaderContext);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -37,13 +38,27 @@ export default function PriceSheetPage() {
 
   const filteredItems = items.filter((item) => {
     const term = searchTerm.trim().toLowerCase();
-
-    if (item.quantity === 0 && showCart) return false;
+    if (item.dbPendingQuantity === 0 && showCart) return false;
     return (
       item.name.toLowerCase().includes(term) ||
       item.description.toLowerCase().includes(term)
     );
   });
+
+  const handleSaveAll = async () => {
+    if (!hasPendingChanges) {
+      toast.info("No changes to save.");
+      return;
+    }
+
+    try {
+      await saveAll();
+      toast.success("All changes saved!");
+    } catch (err) {
+      console.error("handleSaveAll error:", err);
+      toast.error("Error saving changes.");
+    }
+  };
 
   if (loadingUser) return <div>Loading user info...</div>;
 
@@ -60,6 +75,7 @@ export default function PriceSheetPage() {
         </button>
       )}
       {showCart && <h2>Current Order for {user.name}</h2>}
+
       <div className="optionsDiv">
         <label>
           Search Products
@@ -71,7 +87,6 @@ export default function PriceSheetPage() {
           />
         </label>
 
-        {/* User Ship To State */}
         <label>
           State
           <select
@@ -91,12 +106,11 @@ export default function PriceSheetPage() {
       </div>
 
       <div className="discountSelectorsDiv">
-        {/* Discount Selectors */}
         <label>
           Bottles in Bulk Order: {originalBulkBottles}
           <DiscountSelector
             value={originalDiscount}
-            onChange={(d) => setOriginalDiscount(d)}
+            onChange={setOriginalDiscount}
             options={discountOptions}
           />
         </label>
@@ -105,21 +119,24 @@ export default function PriceSheetPage() {
           Including Your Pending: {pendingBulkBottles}
           <DiscountSelector
             value={pendingDiscount}
-            onChange={(d) => setPendingDiscount(d)}
+            onChange={setPendingDiscount}
             options={discountOptions}
           />
         </label>
       </div>
 
-      {/* List of items */}
       <div className="items">
         {filteredItems.map((item) => (
           <Item key={item.id} item={item} searchTerm={searchTerm} />
         ))}
       </div>
 
-      {originalTotal !== pendingTotal && (
-        <button type="button" className="floatingSubmit highlightButton">
+      {hasPendingChanges && (
+        <button
+          type="button"
+          className="floatingSubmit highlightButton"
+          onClick={handleSaveAll}
+        >
           <Ping />
           Save All Changes
         </button>
