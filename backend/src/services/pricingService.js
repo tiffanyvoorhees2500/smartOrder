@@ -11,8 +11,8 @@ const {
  * @returns {Promise<Object>} - Summary of bottle counts and discounts
  *   - totalBottlesForCurrentQuantity: sum used to determine discount
  *   - totalBottlesForPendingQuantity: sum of actual quantities for all but user + sum of pendingQuantities if exists else quantity for user
- *   - selectedDiscountForCurrent: discount tier based on totalBottlesForCurrentQuantity
- *   - selectedDiscountForPending: discount tier based on totalBottlesForPendingQuantity
+ *   - selectedDiscountForCurrent: discount % as float based on totalBottlesForCurrentQuantity
+ *   - selectedDiscountForPending: discount % as float  based on totalBottlesForPendingQuantity
  */
 
 async function calculateUserDiscount(user) {

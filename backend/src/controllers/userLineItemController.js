@@ -88,3 +88,58 @@ exports.updatePendingQuantity = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
+exports.saveAll = async (req, res) => {
+  try {
+    const { items } = req.body;
+    const userId = req.user.id;
+
+    if (!Array.isArray(items)) {
+      return res.status(400).json({ message: "Invalid items data" }); 
+    }
+
+    const promises = items.map(async (item) => {
+      const { id: productId, dbPendingQuantity: pendingQuantity } = item;
+
+      if (!productId) return; // Skip items without a valid product ID
+      
+      let lineItem = await UserLineItem.findOne({
+        where: { userId, productId, adminOrderId: null }
+      });
+      
+      if (!lineItem) {
+        // if no line item exists, create one if pendingQuantity > 0
+        if (pendingQuantity > 0) {
+          await UserLineItem.create({
+            userId,
+            productId,
+            quantity: pendingQuantity,
+            pendingQuantity: null,
+            adminOrderId: null
+          });
+        } 
+        return; // skip if pendingQuantity is 0 and no existing line item
+      }
+
+      if (pendingQuantity === 0) {
+        // If pendingQuantity is zero, delete the line item
+      await lineItem.destroy();
+      } else {
+      // Update the line item's quantity and set pendingQuantity = null
+        await lineItem.update({
+          quantity: pendingQuantity,
+          pendingQuantity: null
+        });
+      }
+    });
+
+    await Promise.all(promises);
+    
+    return res.status(200).json({ message: "All items saved successfully" });
+  } catch (error) {
+    console.error("Error saving all user line items:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  } 
+};
+
+

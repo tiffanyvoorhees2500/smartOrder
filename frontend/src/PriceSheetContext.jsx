@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import { normalizePercent } from "../../utils/normalize";
+import { normalizePercent } from "./utils/normalize";
 
 const base_url = process.env.REACT_APP_API_BASE_URL;
 export const HeaderContext = createContext();
@@ -30,11 +30,9 @@ export default function HeaderContextProvider({ children }) {
   // Cart
   const [showCart, setShowCart] = useState(false);
 
-  // derived
-  const hasPendingChanges = items.some(
-    (i) =>
-      i.dbPendingQuantity != null && i.dbPendingQuantity !== i.originalQuantity
-  );
+  // Pending changes: { productId: dbPendingQuantity }
+  const [pendingChanges, setPendingChanges] = useState({});
+  const hasPendingChanges = Object.keys(pendingChanges).length > 0;
 
   // Load items + discount info from backend
   const loadPricing = useCallback(async () => {
@@ -42,6 +40,7 @@ export default function HeaderContextProvider({ children }) {
       const res = await axios.get(`${base_url}/products/user-list`, {
         headers: { Authorization: `Bearer ${token}` }
       });
+
       const user = res.data.user || [];
       const products = res.data.products || [];
       const discountInfo = res.data.discountInfo || {};
@@ -49,50 +48,46 @@ export default function HeaderContextProvider({ children }) {
       setUser(user);
 
       setDiscountOptions(discountInfo.DISCOUNT_OPTIONS || []);
+      setOriginalDiscount(normalizePercent(discountInfo.selectedDiscountForCurrent));
+      setPendingDiscount(normalizePercent(discountInfo.selectedDiscountForPending));
+      setOriginalBulkBottles(discountInfo.totalBottlesForCurrentQuantities ?? 0);
+      setPendingBulkBottles(discountInfo.totalBottlesWithPendingQuantities ?? 0);
 
-      setOriginalDiscount(
-        normalizePercent(discountInfo.selectedDiscountForCurrent)
-      );
-      setPendingDiscount(
-        normalizePercent(discountInfo.selectedDiscountForPending)
-      );
-
-      setOriginalBulkBottles(
-        discountInfo.totalBottlesForCurrentQuantities ?? 0
-      );
-      setPendingBulkBottles(
-        discountInfo.totalBottlesWithPendingQuantities ?? 0
-      );
-
-      // Items: keep fields minimal and consistent
       const normItems = products.map((p) => ({
         id: p.id,
         name: p.name,
         description: p.description,
         price: p.price,
         originalQuantity: p.originalQuantity ?? 0,
-        dbPendingQuantity: p.dbPendingQuantity ?? p.originalQuantity ?? 0, //editable draft
+        dbPendingQuantity: p.dbPendingQuantity ?? p.originalQuantity ?? 0, // editable draft
         quantity: p.dbPendingQuantity ?? p.originalQuantity ?? 0, // for UI display if needed
-        productLineItemId: p.productLineItemId ?? null // if you included line item id
+        productLineItemId: p.productLineItemId ?? null,
       }));
 
       setItems(normItems);
+
+      // Initialize pendingChanges based on differences
+      const initialPendingChanges = {};
+      normItems.forEach((item) => {
+        if ((item.dbPendingQuantity ?? 0) !== (item.originalQuantity ?? 0)) {
+          initialPendingChanges[item.id] = item.dbPendingQuantity ?? 0;
+        }
+      });
+      setPendingChanges(initialPendingChanges);
     } catch (err) {
       console.error("loadPricing error:", err);
     }
-
     setLoadingUser(false);
   }, [token]);
 
-  // Recalculate totals whenever items or discounts change
+  // Recalculate totals whenever items, discounts, or pendingChanges change
   useEffect(() => {
-    // originalDiscount and pendingDiscount are percentages (e.g. 10 for 10%)
     let oTotal = 0;
     let pTotal = 0;
 
     items.forEach((item) => {
       const saved = item.originalQuantity ?? 0;
-      const pending = item.dbPendingQuantity ?? saved;
+      const pending = pendingChanges[item.id] ?? saved;
 
       const origPrice = item.price * (1 - (originalDiscount ?? 0) / 100);
       const pendPrice = item.price * (1 - (pendingDiscount ?? 0) / 100);
@@ -103,22 +98,28 @@ export default function HeaderContextProvider({ children }) {
 
     setOriginalTotal(oTotal);
     setPendingTotal(pTotal);
-  }, [items, originalDiscount, pendingDiscount]);
+  }, [items, originalDiscount, pendingDiscount, pendingChanges]);
 
-  // Update pending quantity for one item (optimistic + persist)
+  // Update pending quantity for a single item (optimistic + persist)
   const updatePendingQuantity = useCallback(
     async (productLineItemId, productId, newPending) => {
-      // productLineItemId may be null if user has no line item yet; you might need API that accepts productId
       setItems((prev) =>
-        prev.map((i) => {
-          if (i.id === productId) {
-            return { ...i, dbPendingQuantity: newPending };
-          }
-          return i;
-        })
+        prev.map((i) =>
+          i.id === productId ? { ...i, dbPendingQuantity: newPending } : i
+        )
       );
 
-      // Persist small write
+      setPendingChanges((prev) => {
+        const original = items.find((i) => i.id === productId)?.originalQuantity ?? 0;
+        const updated = { ...prev };
+        if (newPending === original) {
+          delete updated[productId];
+        } else {
+          updated[productId] = newPending;
+        }
+        return updated;
+      });
+
       try {
         await axios.post(
           `${base_url}/user-line-items/update-pending-quantity`,
@@ -131,58 +132,85 @@ export default function HeaderContextProvider({ children }) {
         await loadPricing();
       }
     },
-    [loadPricing, token]
+    [items, loadPricing, token]
   );
 
-  // Save item: commit draft to original
+  // Save single item
   const saveItem = useCallback(
     async (productId) => {
-      // Optimistic update: set originalQuantity to match pendingQuantity immediately
+      const item = items.find((i) => i.id === productId);
+      if (!item) return;
+      const quantityToSave = item.dbPendingQuantity ?? 0;
+
       setItems((prev) =>
-        prev.map((i) => {
-          if (i.id === productId) {
-            if (i.dbPendingQuantity === 0) {
-              // Line item will be deleted
-              return {
-                ...i,
-                originalQuantity: null,
-                dbPendingQuantity: null,
-                productLineItemId: null
-              };
-            }
-            // Normal save
-            return {
-              ...i,
-              originalQuantity: i.dbPendingQuantity,
-              dbPendingQuantity: i.dbPendingQuantity
-            };
-          }
-          return i;
-        })
+        prev.map((i) =>
+          i.id === productId ? { ...i, originalQuantity: quantityToSave } : i
+        )
       );
 
+      setPendingChanges((prev) => {
+        const updated = { ...prev };
+        delete updated[productId];
+        return updated;
+      });
+
       try {
-        const item = items.find((i) => i.id === productId);
         await axios.post(
           `${base_url}/user-line-items/save-line-item`,
-          {
-            productId,
-            quantity: item?.dbPendingQuantity ?? 0
-          },
-          {
-            headers: { Authorization: `Bearer ${token}` }
-          }
+          { productId, quantity: quantityToSave },
+          { headers: { Authorization: `Bearer ${token}` } }
         );
       } catch (err) {
         console.error("saveItem error:", err);
       } finally {
-        await loadPricing(); // ensure backend is authoritative
+        await loadPricing();
       }
     },
     [items, loadPricing, token]
   );
 
-  // init on mount
+  // Save all pending changes
+  const saveAll = useCallback(async () => {
+    const changedItems = Object.entries(pendingChanges).map(([id, dbPendingQuantity]) => ({
+      id: Number(id),
+      dbPendingQuantity,
+    }));
+
+    if (changedItems.length === 0) return;
+
+    try {
+      await axios.post(
+        `${base_url}/user-line-items/save-all`,
+        { items: changedItems },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      await loadPricing();
+    } catch (err) {
+      console.error("saveAll error:", err);
+    }
+  }, [pendingChanges, loadPricing, token]);
+
+  // Update user Ship To state
+  const updateUserShipToState = useCallback(
+    async (newState) => {
+      if (!token) return;
+      try {
+        setUser((prev) => ({ ...prev, defaultShipToState: newState }));
+
+        await axios.put(
+          `${base_url}/users/update-ship-to-state`,
+          { defaultShipToState: newState },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        await loadPricing();
+      } catch (err) {
+        console.error("updateUserShipToState error:", err);
+      }
+    },
+    [loadPricing, token]
+  );
+
   useEffect(() => {
     loadPricing();
   }, [loadPricing]);
@@ -190,7 +218,6 @@ export default function HeaderContextProvider({ children }) {
   return (
     <HeaderContext.Provider
       value={{
-        // data
         items,
         discountOptions,
         originalDiscount,
@@ -201,19 +228,21 @@ export default function HeaderContextProvider({ children }) {
         pendingTotal,
         hasPendingChanges,
         showCart,
+        pendingChanges,
 
-        // setters / actions
         setOriginalDiscount,
         setPendingDiscount,
         updatePendingQuantity,
         saveItem,
-        reloadPricing: loadPricing,
+        saveAll,
+        updateUserShipToState,
         setShowCart,
+        loadPricing,
 
         token,
         user,
         setUser,
-        loadingUser
+        loadingUser,
       }}
     >
       {children}

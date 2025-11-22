@@ -12,8 +12,8 @@
 }
 
 .inlayInput:has(input:disabled) {
-  filter:brightness(90%);
-  border:none;
+  filter: brightness(90%);
+  border: none;
 }
 
 .inlayInput span {

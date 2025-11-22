@@ -33,6 +33,18 @@ export default function AdminItemListHeader({ className, setIsVisible }) {
           </select>
         </label>
 
+        {/* Quantity */}
+        <label htmlFor="quantity">
+          Quantity:
+          <select name="quantity" id="quantity" defaultValue={0}>
+            {Array.from({ length: 100 }, (_, index) => (
+              <option key={index} value={index}>
+                {index}
+              </option>
+            ))}
+          </select>
+        </label>
+
         {/* Confirm Add Button */}
         <button type="button" className="highlightButton">
           Add To Order
