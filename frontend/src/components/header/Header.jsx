@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import "./Header.css";
 import ProfileButton from "./ProfileButton";
 import { FaArrowRight, FaShoppingCart } from "react-icons/fa";
-import { HeaderContext } from "./HeaderContext";
+import { HeaderContext } from "../../PriceSheetContext";
 import Ping from "../misc/Ping";
 
 export default function Header() {

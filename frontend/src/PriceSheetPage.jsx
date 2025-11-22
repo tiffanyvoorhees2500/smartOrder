@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import "./PriceSheetPage.css";
 import Item from "./components/item/Item";
 import DiscountSelector from "./components/discountSelector/DiscountSelector";
-import { HeaderContext } from "./components/header/HeaderContext";
+import { HeaderContext } from "./PriceSheetContext";
 import { states } from "./components/form/states";
 import Ping from "./components/misc/Ping";
 import { FaArrowLeft } from "react-icons/fa";
