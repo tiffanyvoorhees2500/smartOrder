@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const { User } = db;
+const { getAlphabeticalUserListOptions } = require("../services/userService");
 
 // Create a new user
 exports.createUser = async (req, res) => {
@@ -256,5 +257,16 @@ exports.updateUserShipToState = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+// Return a list of [userId, name] for all users
+exports.getUserDropdownListOptions = async (req, res) => {
+  try {
+    const usersList = await getAlphabeticalUserListOptions();
+    res.status(200).json({ usersList });
+  } catch (error) {
+    console.error("Error fetching user dropdown options:", error);
+    res.status(500).json({ error: "Server error" });
   }
 };

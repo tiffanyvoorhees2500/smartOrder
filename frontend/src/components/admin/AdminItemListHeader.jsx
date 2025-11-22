@@ -1,6 +1,31 @@
+import { useEffect, useState } from "react";
 import InlayInputBox from "../form/InlayInputBox";
 import "./AdminItemListHeader.css";
+import { fetchUserDropdownListOptions} from "../../services/userService";
+
 export default function AdminItemListHeader({ className, setIsVisible }) {
+  const [usersList, setUsersList] = useState([]);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+  const [userError, setUserError] = useState(null);
+
+  useEffect(() => {
+    // Fetch products for admin order page
+    const loadUsersList = async () => {
+      try {
+        const usersList = await fetchUserDropdownListOptions();
+        setUsersList(usersList);
+
+      } catch (error) {
+        console.error("Error fetching admin products:", error);
+        setUserError("Failed to load products.");
+      } finally {
+        setLoadingUsers(false);
+      }
+    };
+
+    loadUsersList();
+  }, []);
+
   return (
     <div className={"adminListHeader " + className}>
       {/* Discount */}
@@ -21,7 +46,22 @@ export default function AdminItemListHeader({ className, setIsVisible }) {
         <label htmlFor="person">
           Person:
           <select name="person" id="person">
-            <option value="">Add a person...</option>
+            <option value="">
+              {loadingUsers
+                ? "Loading users..."
+                : userError
+                ? userError
+                : "Add a user..."}
+            </option>
+            {!loadingUsers &&
+              !userError &&
+              usersList.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.name.length > 100
+                    ? user.name.slice(0, 100) + "..."
+                    : user.name}
+                </option>
+              ))}
           </select>
         </label>
 
