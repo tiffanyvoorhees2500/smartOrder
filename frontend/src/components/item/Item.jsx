@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import "./Item.css";
 import PriceQtyGroup from "./PriceQtyGroup";
-import { HeaderContext } from "../header/HeaderContext";
+import { HeaderContext } from "../../PriceSheetContext";
 
 export default function Item({ item, searchTerm }) {
   const {

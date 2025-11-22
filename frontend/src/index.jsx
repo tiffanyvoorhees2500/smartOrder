@@ -8,7 +8,7 @@ import Layout from "./components/layout/Layout";
 import { isAuthenticated, isAdmin } from "./utils/auth";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import HeaderContextProvider from "./components/header/HeaderContext";
+import HeaderContextProvider from "./PriceSheetContext";
 import AdminOrderPage from "./AdminOrderPage";
 
 // ProtectedRoute only renders children if user is logged in
