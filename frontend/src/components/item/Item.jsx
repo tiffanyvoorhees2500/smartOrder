@@ -17,7 +17,7 @@ export default function Item({ item, searchTerm }) {
   const { originalDiscount, pendingDiscount, updatePendingQuantity, saveItem } =
     useContext(HeaderContext);
 
-  // if either quantity is greater than zero, consider the item "in the cart"  
+  // if either quantity is greater than zero, consider the item "in the cart"
   const inCart = (originalQuantity ?? 0) > 0 || dbPendingQuantity > 0;
 
   const highlightMatch = (text) => {

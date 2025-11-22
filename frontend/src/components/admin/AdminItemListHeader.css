@@ -7,7 +7,7 @@
 
 .adminListHeader .headerRow {
   display: grid;
-  grid-template-columns: 1fr 1fr minmax(20%, 200px);
+  grid-template-columns: repeat(3, 1fr);
   align-items: center;
   gap: 1em;
 }
@@ -17,12 +17,17 @@
   border: none;
 }
 
-@media screen and (max-width: 600px) {
+.headerRow button {
+  grid-column: -2/-1;
+}
+
+@media screen and (max-width: 500px) {
   .adminListHeader .headerRow {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: unset;
   }
+
   .headerRow button {
-    grid-column: 2/3;
+    grid-column: 1 / span all;
+    justify-self: end;
   }
 }

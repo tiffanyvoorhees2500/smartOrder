@@ -17,4 +17,11 @@ router.post(
   controller.updatePendingQuantity
 );
 
+// Save all user line items for the current order
+router.post(
+  "/save-all",
+  authenticateToken,
+  controller.saveAll
+);
+
 module.exports = router;
