@@ -3,13 +3,14 @@
 const db = require("../models");
 const { Product } = db;
 
-exports.getProductListOptions = async () => {
+exports.getAlphabeticalProductListOptions = async () => {
   try {
     // Fetch products that are not discontinued
     const productsList = await Product.findAll({
-        where: { discontinued: false },
-        attributes: ["id", "name"],
-        raw: true
+      where: { discontinued: false },
+      attributes: ["id", "name"],
+      order: [["name", "ASC"]], // Alphabetical order
+      raw: true
     });
 
     return productsList;

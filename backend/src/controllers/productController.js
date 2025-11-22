@@ -6,7 +6,20 @@ const {
   calculateUserDiscount,
   calculateAdminDiscount
 } = require("../services/pricingService");
-const { currentBulkUserLineItemsWithUserAndProducts } = require("../services/userLineItemService");
+const {
+  currentBulkUserLineItemsWithUserAndProducts
+} = require("../services/userLineItemService");
+const { getAlphabeticalProductListOptions } = require("../services/productService");
+
+exports.getProductDropdownListOptions = async (req, res) => {
+  try {
+    const productsList = await getAlphabeticalProductListOptions();
+    res.status(200).json({ productsList });
+  } catch (error) {
+    console.error("Error fetching product dropdown list options:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 exports.getUserProductList = async (req, res) => {
   try {
@@ -113,7 +126,8 @@ exports.getAdminProductList = async (req, res) => {
     const adminPricing = "Wholesale"; // Admins always see wholesale pricing
 
     // Fetch userLineItems for bulk order
-    const userLineItems = await currentBulkUserLineItemsWithUserAndProducts(shipToState);
+    const userLineItems =
+      await currentBulkUserLineItemsWithUserAndProducts(shipToState);
 
     // calculate discount infor for each user in userLineItems
     const userDiscountInfo = {};
@@ -124,12 +138,11 @@ exports.getAdminProductList = async (req, res) => {
       }
     }
 
-
     res.status(200).json({
       adminShipToState: shipToState,
       adminDiscountInfo,
       userDiscountInfo,
-      userLineItems: userLineItems,
+      userLineItems: userLineItems
     });
   } catch (error) {
     console.error("Error fetching products:", error);
