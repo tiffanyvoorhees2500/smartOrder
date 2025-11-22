@@ -38,7 +38,23 @@ export default function PriceSheetPage() {
 
   const filteredItems = items.filter((item) => {
     const term = searchTerm.trim().toLowerCase();
-    if (item.dbPendingQuantity === 0 && showCart) return false;
+
+    // Get product quantities
+    const original = item.originalQuantity ?? 0;
+    const pending = item.dbPendingQuantity ?? 0
+
+    // If cart view is active, filter by rules
+    if (showCart) {
+      const shouldShow = 
+        original !== pending ||
+        original > 0 ||
+        pending > 0;
+      
+      if (!shouldShow) return false;
+    }
+
+    // Search filtering
+    // if (item.dbPendingQuantity === 0 && showCart) return false;
     return (
       item.name.toLowerCase().includes(term) ||
       item.description.toLowerCase().includes(term)
