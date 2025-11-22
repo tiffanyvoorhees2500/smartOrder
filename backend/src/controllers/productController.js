@@ -2,7 +2,11 @@
 
 const db = require("../models");
 const { Product, Ingredient, UserLineItem } = db;
-const { calculateUserDiscount } = require("../services/pricingService");
+const {
+  calculateUserDiscount,
+  calculateAdminDiscount
+} = require("../services/pricingService");
+const { currentBulkUserLineItemsWithUserAndProducts } = require("../services/userLineItemService");
 
 exports.getUserProductList = async (req, res) => {
   try {
@@ -89,6 +93,43 @@ exports.getUserProductList = async (req, res) => {
       },
       products: formattedProducts,
       discountInfo
+    });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+exports.getAdminProductList = async (req, res) => {
+  try {
+    const shipToState = req.query.shipToState;
+    if (!shipToState) {
+      return res
+        .status(400)
+        .json({ message: "shipToState query parameter is required" });
+    }
+
+    const adminDiscountInfo = await calculateAdminDiscount(shipToState);
+    const adminPricing = "Wholesale"; // Admins always see wholesale pricing
+
+    // Fetch userLineItems for bulk order
+    const userLineItems = await currentBulkUserLineItemsWithUserAndProducts(shipToState);
+
+    // calculate discount infor for each user in userLineItems
+    const userDiscountInfo = {};
+    for (const uli of userLineItems) {
+      const user = await db.User.findByPk(uli.userId);
+      if (!userDiscountInfo[user.id]) {
+        userDiscountInfo[user.id] = await calculateUserDiscount(user);
+      }
+    }
+
+
+    res.status(200).json({
+      adminShipToState: shipToState,
+      adminDiscountInfo,
+      userDiscountInfo,
+      userLineItems: userLineItems,
     });
   } catch (error) {
     console.error("Error fetching products:", error);
