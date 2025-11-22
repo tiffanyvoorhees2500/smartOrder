@@ -18,25 +18,21 @@ export default function AdminOrderPage() {
       userItems: [
         {
           userId: 1,
-          price: 15,
           quantity: 50,
           name: "Example User"
         },
         {
           userId: 2,
-          price: 15,
           quantity: 50,
           name: "Example User 2"
         },
         {
           userId: 3,
-          price: 15,
           quantity: 50,
           name: "Example User 3"
         },
         {
           userId: 4,
-          price: 15,
           quantity: 50,
           name: "Example User 4"
         }
@@ -51,7 +47,6 @@ export default function AdminOrderPage() {
       userItems: [
         {
           userId: 1,
-          price: 15,
           quantity: 50,
           name: "Example User 1"
         }
@@ -66,19 +61,16 @@ export default function AdminOrderPage() {
       userItems: [
         {
           userId: 4,
-          price: 12,
           quantity: 60,
           name: "Example User 4"
         },
         {
           userId: 3,
-          price: 18,
           quantity: 40,
           name: "Example User 3"
         },
         {
           userId: 1,
-          price: 11,
           quantity: 70,
           name: "Example User 1"
         }

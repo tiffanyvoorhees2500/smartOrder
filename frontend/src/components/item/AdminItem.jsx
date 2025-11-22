@@ -9,23 +9,19 @@ export default function AdminItem({ adminItem }) {
   const discountInputId = `discount_percentage_${adminItem.id}`;
   const finalInputId = `final_price_${adminItem.id}`;
 
-  // Calculat the final price
-  const finalPrice = adminItem.userItems
-    .map((x) => {
-      // calculate discounted prices
-      const discountedPrice =
-        x.price * (1 - adminItem.discountPercentage / 100); // Make decimal form
-      const total = x.quantity * discountedPrice;
-      return total;
-    })
+  const totalQuantity = adminItem.userItems
+    .map((x) => x.quantity)
     .reduce((a, b) => a + b, 0);
+  const finalPrice =
+    adminItem.wholesalePrice * (1 - adminItem.discountPercentage / 100);
+  const subtotal = finalPrice * totalQuantity;
 
   return (
     <div className="itemContainer adminItemContainer">
       <div className="adminItemsLeft">
         {/* Container for the bulk quantity and product name */}
         <div className="bulkQtyNameContainer">
-          <span className="bulkQty">{adminItem.userItems.length}</span>
+          <span className="bulkQty">{totalQuantity}</span>
           <span className="bulkName">{adminItem.name}</span>
         </div>
 
@@ -70,6 +66,11 @@ export default function AdminItem({ adminItem }) {
             disabled
           />
         </InlayInputBox>
+
+        <div className="subtotal">
+          <div className="divider-thick"></div>
+          <span>${subtotal.toFixed(2)}</span>
+        </div>
       </div>
 
       {/* Container for the user items */}
@@ -78,7 +79,7 @@ export default function AdminItem({ adminItem }) {
           <PriceQtyGroup
             key={`${adminItem.id}-${userItem.userId}`}
             selectName={`${adminItem.id}-${userItem.userId}-quantity`}
-            price={userItem.price}
+            price={adminItem.wholesalePrice}
             helpText={userItem.name}
             quantity={userItem.quantity}
             discount={adminItem.discountPercentage}

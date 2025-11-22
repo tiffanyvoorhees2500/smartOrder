@@ -29,20 +29,26 @@
 }
 
 .bulkQty {
-  aspect-ratio: 1/1;
+  aspect-ratio: 5/4;
   background-color: var(--accent-color);
   color: white;
   display: flex;
-  width: 40px;
   align-items: center;
   justify-content: center;
   font-size: x-large;
   font-weight: bold;
   border-radius: 5px;
+  width: 2em;
 }
 
 .bulkName {
   font-size: x-large;
+}
+
+.subtotal {
+  grid-column: 4/5;
+  text-align: right;
+  font-weight: bold;
 }
 
 @media screen and (max-width: 690px) {
