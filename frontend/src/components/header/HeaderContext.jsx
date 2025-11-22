@@ -182,6 +182,27 @@ export default function HeaderContextProvider({ children }) {
     [items, loadPricing, token]
   );
 
+  const updateUserShipToState = useCallback(
+    async (newState) => {
+      if (!token) return;
+      try {
+        setUser((prev) => ({ ...prev, defaultShipToState: newState }));
+
+        await axios.put(
+          `${base_url}/users/update-ship-to-state`,
+          { defaultShipToState: newState },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        // reload pricing after state change
+        await loadPricing();
+      } catch (err) {
+        console.error("updateUserShipToState error:", err);
+      }
+    },
+    [loadPricing, token]
+  );
+
   // init on mount
   useEffect(() => {
     loadPricing();
@@ -201,14 +222,15 @@ export default function HeaderContextProvider({ children }) {
         pendingTotal,
         hasPendingChanges,
         showCart,
-
+        
         // setters / actions
         setOriginalDiscount,
         setPendingDiscount,
         updatePendingQuantity,
         saveItem,
-        reloadPricing: loadPricing,
+        updateUserShipToState,
         setShowCart,
+        loadPricing,
 
         token,
         user,
