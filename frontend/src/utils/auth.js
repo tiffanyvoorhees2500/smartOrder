@@ -36,14 +36,6 @@ export function isAuthenticated() {
   const payload = getUserFromToken();
   if (!payload) return false;
 
-  // Check if token is expired
-  if (payload.exp && typeof payload.exp === "number") {
-    const now = Date.now() / 1000;
-    if (payload.exp <= now) {
-      removeToken();
-      return false;
-    }
-  }
   return true;
 }
 
