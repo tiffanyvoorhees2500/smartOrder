@@ -2,14 +2,18 @@ import { useEffect, useState } from "react";
 import InlayInputBox from "../form/InlayInputBox";
 import "./AdminItemListHeader.css";
 import { fetchProductDropdownListOptions } from '../../services/productService';
-
-
+import { states } from "../../components/form/states";
 import { fetchUserDropdownListOptions} from "../../services/userService";
+import DiscountSelector from '../selectors/DiscountSelector';
+import ShipToStateSelector from '../selectors/ShipToStateSelector';
 
-export default function AdminItemListHeader({ className, setIsVisible }) {
+export default function AdminItemListHeader({ className, setIsVisible, discountOptions, selectedDiscount, setSelectedDiscount, selectedShipToState, setSelectedShipToState }) {
   const [productsList, setProductsList] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [productError, setProductError] = useState(null);
+  const [usersList, setUsersList] = useState([]);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+  const [userError, setUserError] = useState(null);
 
   useEffect(() => {
     // Fetch products for admin order page
@@ -28,10 +32,6 @@ export default function AdminItemListHeader({ className, setIsVisible }) {
 
     loadProductsList();
   }, []);
-
-  const [usersList, setUsersList] = useState([]);
-  const [loadingUsers, setLoadingUsers] = useState(true);
-  const [userError, setUserError] = useState(null);
 
   useEffect(() => {
     // Fetch products for admin order page
@@ -56,12 +56,23 @@ export default function AdminItemListHeader({ className, setIsVisible }) {
       {/* Discount */}
       <label htmlFor="discount">
         Discount:
-        <select name="discount" id="discount">
-          <option value="0">0%</option>
-          <option value="20">20%</option>
-          <option value="30">30%</option>
-        </select>
+        <DiscountSelector
+        value={selectedDiscount}
+        onChange={setSelectedDiscount}
+        options={discountOptions}
+        />
       </label>
+
+      {/* State Selector */}
+      <ShipToStateSelector
+        label="State"
+        name="defaultShipToState"
+        value={selectedShipToState || ""}
+        options={states}
+        onChange={setSelectedShipToState}
+        required
+        placeholder="Select a state"
+      />
 
       <div className="divider-light" />
 
