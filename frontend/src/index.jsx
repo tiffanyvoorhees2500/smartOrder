@@ -10,6 +10,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import HeaderContextProvider from "./PriceSheetContext";
 import AdminOrderPage from "./AdminOrderPage";
+import UserPastOrderPage from "./UserPastOrderPage";
+
 
 // ProtectedRoute only renders children if user is logged in
 function ProtectedRoute({ children }) {
@@ -62,7 +64,7 @@ root.render(
               path="past-orders"
               element={
                 <ProtectedRoute>
-                  <div>Past Orders Page</div>
+                  <UserPastOrderPage />
                 </ProtectedRoute>
               }
             />
