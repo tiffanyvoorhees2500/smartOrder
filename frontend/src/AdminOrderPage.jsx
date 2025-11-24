@@ -69,7 +69,7 @@ export default function AdminOrderPage() {
       {/* List of Items */}
       <div className="orderItems adminSection">
         {discountedAdminItems.map((adminItem) => (
-          <AdminItem key={adminItem.id} adminItem={adminItem} />
+          <AdminItem key={adminItem.id} adminItem={adminItem} adminDiscountPercentage={selectedDiscount} />
         ))}
       </div>
 

@@ -1,8 +1,9 @@
 import "./AdminItem.css";
 import PriceQtyGroup from "./PriceQtyGroup";
 import InlayInputBox from "../form/InlayInputBox";
+import { normalizePercent } from "../../utils/normalize";
 
-export default function AdminItem({ adminItem }) {
+export default function AdminItem({ adminItem, adminDiscountPercentage }) {
   // Set the input element ids for this item
   const wholesaleInputId = `wholesale_price_${adminItem.id}`;
   const retailInputId = `retail_price_${adminItem.id}`;
@@ -14,7 +15,7 @@ export default function AdminItem({ adminItem }) {
     .reduce((a, b) => a + b, 0);
 
   const finalPrice =
-    (adminItem.wholesale * (1 - adminItem.discountPercentage)) ?? 0;
+    (adminItem.wholesale * (1 - adminDiscountPercentage)) ?? 0;
 
   const subtotal = finalPrice * totalQuantity;
 
@@ -53,7 +54,7 @@ export default function AdminItem({ adminItem }) {
             type="number"
             name={discountInputId}
             id={discountInputId}
-            defaultValue={adminItem.discountPercentage * 100}
+            defaultValue={normalizePercent(adminDiscountPercentage)}
             disabled
           />
         </InlayInputBox>
@@ -84,7 +85,7 @@ export default function AdminItem({ adminItem }) {
             price={adminItem.wholesale}
             helpText={userItem.name}
             quantity={userItem.quantity}
-            discount={adminItem.discountPercentage * 100}
+            discount={normalizePercent(adminItem.discountPercentage)}
           />
         ))}
       </div>
