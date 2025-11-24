@@ -12,8 +12,10 @@ export default function AdminItem({ adminItem }) {
   const totalQuantity = adminItem.userItems
     .map((x) => x.quantity)
     .reduce((a, b) => a + b, 0);
+
   const finalPrice =
-    adminItem.wholesalePrice * (1 - adminItem.discountPercentage / 100);
+    (adminItem.wholesale * (1 - adminItem.discountPercentage)) ?? 0;
+
   const subtotal = finalPrice * totalQuantity;
 
   return (
@@ -31,7 +33,7 @@ export default function AdminItem({ adminItem }) {
             type="number"
             name={wholesaleInputId}
             id={wholesaleInputId}
-            defaultValue={adminItem.wholesalePrice}
+            defaultValue={adminItem.wholesale}
           />
         </InlayInputBox>
 
@@ -41,7 +43,7 @@ export default function AdminItem({ adminItem }) {
             type="number"
             name={retailInputId}
             id={retailInputId}
-            defaultValue={adminItem.retailPrice}
+            defaultValue={adminItem.retail}
           />
         </InlayInputBox>
 
@@ -51,7 +53,7 @@ export default function AdminItem({ adminItem }) {
             type="number"
             name={discountInputId}
             id={discountInputId}
-            defaultValue={adminItem.discountPercentage}
+            defaultValue={adminItem.discountPercentage * 100}
             disabled
           />
         </InlayInputBox>
@@ -79,10 +81,10 @@ export default function AdminItem({ adminItem }) {
           <PriceQtyGroup
             key={`${adminItem.id}-${userItem.userId}`}
             selectName={`${adminItem.id}-${userItem.userId}-quantity`}
-            price={adminItem.wholesalePrice}
+            price={adminItem.wholesale}
             helpText={userItem.name}
             quantity={userItem.quantity}
-            discount={adminItem.discountPercentage}
+            discount={adminItem.discountPercentage * 100}
           />
         ))}
       </div>
