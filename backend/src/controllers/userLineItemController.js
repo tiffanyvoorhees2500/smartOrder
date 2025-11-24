@@ -142,4 +142,45 @@ exports.saveAll = async (req, res) => {
   } 
 };
 
+exports.addUserLineItemFromAdminPage = async (req, res) => {
+  try {
+    // Confirm that logged in user is an admin
+    if (!req.user.isAdmin) {
+      return res.status(403).json({message: "Restricted to Admins only"});
+    }
+
+    const { userId, productId, quantity } = req.body;
+
+    // Validate data
+    if (!userId || !productId || typeof quantity !== "number" || quantity < 1) {
+      return res.status(400).json({ message: "Invalid data" });
+    }
+
+    let lineItem = await UserLineItem.findOne({
+      where: { userId, productId, adminOrderId: null },
+    }); 
+
+    // if there no line item for this product & user, create it, otherwise update the current line
+    if (!lineItem) {
+      lineItem = await UserLineItem.create({
+        userId,
+        productId,
+        quantity,
+        pendingQuantity: null,
+        adminOrderId: null
+      });
+    } else {
+      await lineItem.update({
+        quantity,
+        pendingQuantity: null
+      });
+    }
+
+    res.status(200).json({ message: "Order updated." });
+  } catch (err) {
+    console.error("Admin create line error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 
