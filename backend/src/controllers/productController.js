@@ -1,15 +1,17 @@
 "use strict";
 
 const db = require("../models");
-const { Product, Ingredient, UserLineItem } = db;
+const { Product, Ingredient, UserLineItem, User } = db;
 const {
   calculateUserDiscount,
   calculateAdminDiscount
 } = require("../services/pricingService");
 const {
-  currentBulkUserLineItemsWithUserAndProducts
+  currentBulkUserLineItemsWithUserAndProductsAndQuantity
 } = require("../services/userLineItemService");
-const { getAlphabeticalProductListOptions } = require("../services/productService");
+const {
+  getAlphabeticalProductListOptions
+} = require("../services/productService");
 
 exports.getProductDropdownListOptions = async (req, res) => {
   try {
@@ -123,26 +125,54 @@ exports.getAdminProductList = async (req, res) => {
     }
 
     const adminDiscountInfo = await calculateAdminDiscount(shipToState);
-    const adminPricing = "Wholesale"; // Admins always see wholesale pricing
 
     // Fetch userLineItems for bulk order
     const userLineItems =
-      await currentBulkUserLineItemsWithUserAndProducts(shipToState);
+      await currentBulkUserLineItemsWithUserAndProductsAndQuantity(shipToState);
 
-    // calculate discount infor for each user in userLineItems
+    // Preload user discount info for each unique user
     const userDiscountInfo = {};
     for (const uli of userLineItems) {
-      const user = await db.User.findByPk(uli.userId);
-      if (!userDiscountInfo[user.id]) {
-        userDiscountInfo[user.id] = await calculateUserDiscount(user);
+      if (!userDiscountInfo[uli.userId]) {
+        const user = await User.findByPk(uli.userId);
+        userDiscountInfo[uli.userId] = await calculateUserDiscount(user);
       }
     }
+
+    // Build adminLineItems grouped by product
+    const adminLineItemsMap = {};
+    userLineItems.forEach((uli) => {
+      const productId = uli.productId;
+      if (!adminLineItemsMap[productId]) {
+        adminLineItemsMap[productId] = {
+          id: productId,
+          name: uli.product.name,
+          wholesale: Number(uli.product.wholesale),
+          retail: Number(uli.product.retail),
+          adminQuantity: 0,
+          discountPercentage: adminDiscountInfo.selectedDiscountForCurrent,
+          userItems: []
+        };
+      }
+      adminLineItemsMap[productId].userItems.push({
+        userId: uli.userId,
+        name: uli.user.name,
+        quantity: uli.quantity
+      });
+
+      // update the sum
+      adminLineItemsMap[productId].adminQuantity += uli.quantity;
+    });
+
+    const adminLineItems = Object.values(adminLineItemsMap).sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
 
     res.status(200).json({
       adminShipToState: shipToState,
       adminDiscountInfo,
       userDiscountInfo,
-      userLineItems: userLineItems
+      adminLineItems: adminLineItems
     });
   } catch (error) {
     console.error("Error fetching products:", error);

@@ -3,7 +3,8 @@ import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./PriceSheetPage.css";
 import Item from "./components/item/Item";
-import DiscountSelector from "./components/discountSelector/DiscountSelector";
+import DiscountSelector from "./components/selectors/DiscountSelector";
+import ShipToStateSelector from "./components/selectors/ShipToStateSelector";
 import { HeaderContext } from "./PriceSheetContext";
 import { states } from "./components/form/states";
 import Ping from "./components/misc/Ping";
@@ -26,7 +27,7 @@ export default function PriceSheetPage() {
     updateUserShipToState,
     loadPricing,
     hasPendingChanges,
-    saveAll,
+    saveAll
   } = useContext(HeaderContext);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -41,15 +42,12 @@ export default function PriceSheetPage() {
 
     // Get product quantities
     const original = item.originalQuantity ?? 0;
-    const pending = item.dbPendingQuantity ?? 0
+    const pending = item.dbPendingQuantity ?? 0;
 
     // If cart view is active, filter by rules
     if (showCart) {
-      const shouldShow = 
-        original !== pending ||
-        original > 0 ||
-        pending > 0;
-      
+      const shouldShow = original !== pending || original > 0 || pending > 0;
+
       if (!shouldShow) return false;
     }
 
@@ -103,22 +101,15 @@ export default function PriceSheetPage() {
           />
         </label>
 
-        <label>
-          State
-          <select
-            name="defaultShipToState"
-            value={user?.defaultShipToState || ""}
-            onChange={(e) => updateUserShipToState(e.target.value)}
-            required
-          >
-            <option value="">Select a state</option>
-            {states.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
-        </label>
+        <ShipToStateSelector
+          label="State"
+          name="defaultShipToState"
+          value={user?.defaultShipToState || ""}
+          options={states}
+          onChange={updateUserShipToState}
+          required
+          placeholder="Select a state"
+        />
       </div>
 
       <div className="discountSelectorsDiv">

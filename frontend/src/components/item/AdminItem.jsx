@@ -1,8 +1,10 @@
+import { useMemo } from "react";
 import "./AdminItem.css";
 import PriceQtyGroup from "./PriceQtyGroup";
 import InlayInputBox from "../form/InlayInputBox";
+import { toDecimalPercent, toWholePercent } from "../../utils/normalize";
 
-export default function AdminItem({ adminItem }) {
+export default function AdminItem({ adminItem, adminDiscountPercentage, onQuantityChange }) {
   // Set the input element ids for this item
   const wholesaleInputId = `wholesale_price_${adminItem.id}`;
   const retailInputId = `retail_price_${adminItem.id}`;
@@ -12,8 +14,11 @@ export default function AdminItem({ adminItem }) {
   const totalQuantity = adminItem.userItems
     .map((x) => x.quantity)
     .reduce((a, b) => a + b, 0);
-  const finalPrice =
-    adminItem.wholesalePrice * (1 - adminItem.discountPercentage / 100);
+
+  const finalPrice = useMemo(() => {
+    return (adminItem.wholesale - (adminItem.wholesale * toDecimalPercent(adminDiscountPercentage)))
+  }, [adminItem.wholesale, adminDiscountPercentage]);
+
   const subtotal = finalPrice * totalQuantity;
 
   return (
@@ -31,7 +36,7 @@ export default function AdminItem({ adminItem }) {
             type="number"
             name={wholesaleInputId}
             id={wholesaleInputId}
-            defaultValue={adminItem.wholesalePrice}
+            defaultValue={adminItem.wholesale}
           />
         </InlayInputBox>
 
@@ -41,7 +46,7 @@ export default function AdminItem({ adminItem }) {
             type="number"
             name={retailInputId}
             id={retailInputId}
-            defaultValue={adminItem.retailPrice}
+            defaultValue={adminItem.retail}
           />
         </InlayInputBox>
 
@@ -51,7 +56,7 @@ export default function AdminItem({ adminItem }) {
             type="number"
             name={discountInputId}
             id={discountInputId}
-            defaultValue={adminItem.discountPercentage}
+            value={toWholePercent(adminItem.discountPercentage)}
             disabled
           />
         </InlayInputBox>
@@ -62,7 +67,7 @@ export default function AdminItem({ adminItem }) {
             type="number"
             name={finalInputId}
             id={finalInputId}
-            defaultValue={finalPrice}
+            value={finalPrice}
             disabled
           />
         </InlayInputBox>
@@ -79,10 +84,13 @@ export default function AdminItem({ adminItem }) {
           <PriceQtyGroup
             key={`${adminItem.id}-${userItem.userId}`}
             selectName={`${adminItem.id}-${userItem.userId}-quantity`}
-            price={adminItem.wholesalePrice}
+            price={adminItem.wholesale}
             helpText={userItem.name}
             quantity={userItem.quantity}
-            discount={adminItem.discountPercentage}
+            onQuantityChange={(newQuantity) =>
+              onQuantityChange(adminItem.id, userItem.userId, newQuantity)
+            }
+            discount={toWholePercent(adminItem.discountPercentage)}
           />
         ))}
       </div>
