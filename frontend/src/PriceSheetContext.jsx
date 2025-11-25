@@ -49,10 +49,10 @@ export default function HeaderContextProvider({ children }) {
 
       setDiscountOptions(discountInfo.DISCOUNT_OPTIONS || []);
       setOriginalDiscount(
-        normalizePercent(discountInfo.selectedDiscountForCurrent)
+        toWholePercent(discountInfo.selectedDiscountForCurrent)
       );
       setPendingDiscount(
-        normalizePercent(discountInfo.selectedDiscountForPending)
+        toWholePercent(discountInfo.selectedDiscountForPending)
       );
       setOriginalBulkBottles(
         discountInfo.totalBottlesForCurrentQuantities ?? 0
