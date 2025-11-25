@@ -41,3 +41,10 @@ exports.currentBulkUserLineItemsWithUserAndProductsAndQuantity = async (
   });
   return lineItems;
 };
+
+exports.updateUserLineItemsAdminOrderId = async (userId, productId, adminOrderId) => {
+  return await UserLineItem.update(
+    { adminOrderId },
+    { where: { userId, productId, adminOrderId: null } }
+  );
+};
