@@ -7,7 +7,7 @@ import { fetchUserDropdownListOptions} from "../../services/userService";
 import DiscountSelector from '../selectors/DiscountSelector';
 import ShipToStateSelector from '../selectors/ShipToStateSelector';
 
-export default function AdminItemListHeader({ className, setIsVisible, discountOptions, selectedDiscount, setSelectedDiscount, selectedShipToState, setSelectedShipToState }) {
+export default function AdminItemListHeader({ className, setIsVisible, discountOptions, selectedDiscount, setSelectedDiscount, selectedShipToState, setSelectedShipToState, numberBottles }) {
   const [productsList, setProductsList] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [productError, setProductError] = useState(null);
@@ -62,6 +62,8 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
         options={discountOptions}
         />
       </label>
+
+      <p>Number of Bottles in Bulk Order: {numberBottles}</p>
 
       {/* State Selector */}
       <ShipToStateSelector
