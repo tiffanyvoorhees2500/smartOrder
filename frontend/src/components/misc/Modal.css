@@ -25,14 +25,15 @@
 .modal .modal-content {
   position: relative;
   margin: auto;
-  margin-top: 10%;
-  max-width: 82%;
+  margin-top: 5vh;
+  width: 82%;
   background-color: var(--primary-color);
   border-radius: 15px;
   border: 2px solid var(--secondary-color);
   padding: 0.5em;
   z-index: 20;
   color: black;
+  max-width:800px;
 }
 
 .modal .modal-content > div {
