@@ -1,7 +1,8 @@
+import { useMemo } from "react";
 import "./AdminItem.css";
 import PriceQtyGroup from "./PriceQtyGroup";
 import InlayInputBox from "../form/InlayInputBox";
-import { normalizePercent } from "../../utils/normalize";
+import { toDecimalPercent, toWholePercent } from "../../utils/normalize";
 
 export default function AdminItem({ adminItem, adminDiscountPercentage }) {
   // Set the input element ids for this item
@@ -14,8 +15,9 @@ export default function AdminItem({ adminItem, adminDiscountPercentage }) {
     .map((x) => x.quantity)
     .reduce((a, b) => a + b, 0);
 
-  const finalPrice =
-    (adminItem.wholesale * (1 - adminDiscountPercentage)) ?? 0;
+  const finalPrice = useMemo(() => {
+    return (adminItem.wholesale - (adminItem.wholesale * toDecimalPercent(adminDiscountPercentage)))
+  }, [adminItem.wholesale, adminDiscountPercentage]);
 
   const subtotal = finalPrice * totalQuantity;
 
@@ -54,7 +56,7 @@ export default function AdminItem({ adminItem, adminDiscountPercentage }) {
             type="number"
             name={discountInputId}
             id={discountInputId}
-            defaultValue={normalizePercent(adminDiscountPercentage)}
+            value={toWholePercent(adminItem.discountPercentage)}
             disabled
           />
         </InlayInputBox>
@@ -65,7 +67,7 @@ export default function AdminItem({ adminItem, adminDiscountPercentage }) {
             type="number"
             name={finalInputId}
             id={finalInputId}
-            defaultValue={finalPrice}
+            value={finalPrice}
             disabled
           />
         </InlayInputBox>
@@ -85,7 +87,7 @@ export default function AdminItem({ adminItem, adminDiscountPercentage }) {
             price={adminItem.wholesale}
             helpText={userItem.name}
             quantity={userItem.quantity}
-            discount={normalizePercent(adminItem.discountPercentage)}
+            discount={toWholePercent(adminItem.discountPercentage)}
           />
         ))}
       </div>

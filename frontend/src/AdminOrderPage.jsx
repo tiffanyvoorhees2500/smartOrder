@@ -4,6 +4,7 @@ import AdminItemListHeader from "./components/admin/AdminItemListHeader";
 import AdminOrderModal from "./components/admin/AdminOrderModal";
 import AdminItem from "./components/item/AdminItem";
 import axios from 'axios';
+import { toWholePercent } from "./utils/normalize";
 
 export default function AdminOrderPage() {
   // Feel Free to move to a context if needed
@@ -15,6 +16,7 @@ export default function AdminOrderPage() {
   const [selectedShipToState, setSelectedShipToState] = useState("UT");
   const [discountOptions, setDiscountOptions] = useState([]);
   const [selectedDiscount, setSelectedDiscount] = useState(0);
+  const [numberBottles, setNumberBottles] = useState(0);
 
   useEffect(() => {
     // Fetch admin items from backend API
@@ -25,12 +27,12 @@ export default function AdminOrderPage() {
         });
         
         const data = response.data;
-        console.log("Response Data:", data);
 
         setAdminItems(data.adminLineItems);
         setDiscountOptions(data.adminDiscountInfo.DISCOUNT_OPTIONS || []);
         setSelectedShipToState(data.adminShipToState);
-        setSelectedDiscount(data.adminDiscountInfo.selectedDiscountForCurrent);
+        setSelectedDiscount(toWholePercent(data.adminDiscountInfo.selectedDiscountForCurrent));
+        setNumberBottles(data.adminDiscountInfo.totalBottlesForCurrentQuantities);
       } catch (error) {
         console.error("Error fetching admin items:", error);
       }
@@ -39,6 +41,7 @@ export default function AdminOrderPage() {
     fetchAdminItems();
   }, [base_url, token, selectedShipToState]);
 
+  // Memoized discounted admin items (to avoid unnecessary recalculations)
   const discountedAdminItems = useMemo(() => {
     return adminItems.map(item => {
       return {
@@ -47,8 +50,6 @@ export default function AdminOrderPage() {
       };
     });
   }, [adminItems, selectedDiscount]);
-
-  console.log("Admin Items:", discountedAdminItems);
 
   return (
     <div className="adminOrderPage">
@@ -64,6 +65,7 @@ export default function AdminOrderPage() {
         selectedDiscount={selectedDiscount}
         setSelectedShipToState={setSelectedShipToState}
         selectedShipToState={selectedShipToState}
+        numberBottles={numberBottles}
       />
 
       {/* List of Items */}

@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import { normalizePercent } from "./utils/normalize";
+import { toWholePercent } from "./utils/normalize";
 
 const base_url = process.env.REACT_APP_API_BASE_URL;
 export const HeaderContext = createContext();
@@ -48,8 +48,8 @@ export default function HeaderContextProvider({ children }) {
       setUser(user);
 
       setDiscountOptions(discountInfo.DISCOUNT_OPTIONS || []);
-      setOriginalDiscount(normalizePercent(discountInfo.selectedDiscountForCurrent));
-      setPendingDiscount(normalizePercent(discountInfo.selectedDiscountForPending));
+      setOriginalDiscount(toWholePercent(discountInfo.selectedDiscountForCurrent));
+      setPendingDiscount(toWholePercent(discountInfo.selectedDiscountForPending));
       setOriginalBulkBottles(discountInfo.totalBottlesForCurrentQuantities ?? 0);
       setPendingBulkBottles(discountInfo.totalBottlesWithPendingQuantities ?? 0);
 
