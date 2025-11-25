@@ -1,13 +1,23 @@
 import { useEffect, useState } from "react";
 import InlayInputBox from "../form/InlayInputBox";
 import "./AdminItemListHeader.css";
-import { fetchProductDropdownListOptions } from '../../services/productService';
+import { fetchProductDropdownListOptions } from "../../services/productService";
 import { states } from "../../components/form/states";
-import { fetchUserDropdownListOptions} from "../../services/userService";
-import DiscountSelector from '../selectors/DiscountSelector';
-import ShipToStateSelector from '../selectors/ShipToStateSelector';
+import { fetchUserDropdownListOptions } from "../../services/userService";
+import DiscountSelector from "../selectors/DiscountSelector";
+import ShipToStateSelector from "../selectors/ShipToStateSelector";
 
-export default function AdminItemListHeader({ className, setIsVisible, discountOptions, selectedDiscount, setSelectedDiscount, selectedShipToState, setSelectedShipToState, numberBottles, adminSubtotal }) {
+export default function AdminItemListHeader({
+  className,
+  setIsVisible,
+  discountOptions,
+  selectedDiscount,
+  setSelectedDiscount,
+  selectedShipToState,
+  setSelectedShipToState,
+  numberBottles,
+  adminSubtotal
+}) {
   const [productsList, setProductsList] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [productError, setProductError] = useState(null);
@@ -24,7 +34,6 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
       try {
         const productList = await fetchProductDropdownListOptions();
         setProductsList(productList);
-
       } catch (error) {
         console.error("Error fetching admin products:", error);
         setProductError("Failed to load products.");
@@ -42,7 +51,6 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
       try {
         const usersList = await fetchUserDropdownListOptions();
         setUsersList(usersList);
-
       } catch (error) {
         console.error("Error fetching admin products:", error);
         setUserError("Failed to load products.");
@@ -60,9 +68,9 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
       <label htmlFor="discount">
         Discount:
         <DiscountSelector
-        value={selectedDiscount}
-        onChange={setSelectedDiscount}
-        options={discountOptions}
+          value={selectedDiscount}
+          onChange={setSelectedDiscount}
+          options={discountOptions}
         />
       </label>
 
@@ -91,8 +99,8 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
               {loadingUsers
                 ? "Loading users..."
                 : userError
-                ? userError
-                : "Add a user..."}
+                  ? userError
+                  : "Add a user..."}
             </option>
             {!loadingUsers &&
               !userError &&
@@ -114,8 +122,8 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
               {loadingProducts
                 ? "Loading products..."
                 : productError
-                ? productError
-                : "Add a product..."}
+                  ? productError
+                  : "Add a product..."}
             </option>
             {!loadingProducts &&
               !productError &&
@@ -181,7 +189,12 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
           className="highlightButton"
           onClick={() => setIsVisible(true)}
         >
-          <span><b>${(adminSubtotal + taxAmount + shippingAmount).toFixed(2)} Matches?</b></span>
+          <span>
+            <b>
+              ${(adminSubtotal + taxAmount + shippingAmount).toFixed(2)}{" "}
+              Matches?
+            </b>
+          </span>
           <span>Finalize Order</span>
         </button>
       </div>

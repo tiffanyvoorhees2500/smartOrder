@@ -7,6 +7,7 @@ const db = require("./src/models");
 const userRoutes = require("./src/routes/userRoutes");
 const productRoutes = require("./src/routes/productRoutes");
 const userLineItemRoutes = require("./src/routes/userLineItemRoutes");
+const adminRoutes = require("./src/routes/adminRoutes");
 
 const { sequelize } = db;
 
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/user-line-items", userLineItemRoutes);
+app.use("/api/admin", adminRoutes);
 
 //Default Route
 app.get("/", (req, res) => {

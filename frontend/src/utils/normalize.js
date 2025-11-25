@@ -1,4 +1,3 @@
-
 export function toWholePercent(value) {
   if (value == null) return 0;
 
@@ -22,4 +21,3 @@ export function toDecimalPercent(value) {
   // Whole percent (ex: 15 → 0.15)
   return num / 100;
 }
-

@@ -48,10 +48,18 @@ export default function HeaderContextProvider({ children }) {
       setUser(user);
 
       setDiscountOptions(discountInfo.DISCOUNT_OPTIONS || []);
-      setOriginalDiscount(toWholePercent(discountInfo.selectedDiscountForCurrent));
-      setPendingDiscount(toWholePercent(discountInfo.selectedDiscountForPending));
-      setOriginalBulkBottles(discountInfo.totalBottlesForCurrentQuantities ?? 0);
-      setPendingBulkBottles(discountInfo.totalBottlesWithPendingQuantities ?? 0);
+      setOriginalDiscount(
+        toWholePercent(discountInfo.selectedDiscountForCurrent)
+      );
+      setPendingDiscount(
+        toWholePercent(discountInfo.selectedDiscountForPending)
+      );
+      setOriginalBulkBottles(
+        discountInfo.totalBottlesForCurrentQuantities ?? 0
+      );
+      setPendingBulkBottles(
+        discountInfo.totalBottlesWithPendingQuantities ?? 0
+      );
 
       const normItems = products.map((p) => ({
         id: p.id,
@@ -61,7 +69,7 @@ export default function HeaderContextProvider({ children }) {
         originalQuantity: p.originalQuantity ?? 0,
         dbPendingQuantity: p.dbPendingQuantity ?? p.originalQuantity ?? 0, // editable draft
         quantity: p.dbPendingQuantity ?? p.originalQuantity ?? 0, // for UI display if needed
-        productLineItemId: p.productLineItemId ?? null,
+        productLineItemId: p.productLineItemId ?? null
       }));
 
       setItems(normItems);
@@ -110,7 +118,8 @@ export default function HeaderContextProvider({ children }) {
       );
 
       setPendingChanges((prev) => {
-        const original = items.find((i) => i.id === productId)?.originalQuantity ?? 0;
+        const original =
+          items.find((i) => i.id === productId)?.originalQuantity ?? 0;
         const updated = { ...prev };
         if (newPending === original) {
           delete updated[productId];
@@ -171,10 +180,12 @@ export default function HeaderContextProvider({ children }) {
 
   // Save all pending changes
   const saveAll = useCallback(async () => {
-    const changedItems = Object.entries(pendingChanges).map(([id, dbPendingQuantity]) => ({
-      id: Number(id),
-      dbPendingQuantity,
-    }));
+    const changedItems = Object.entries(pendingChanges).map(
+      ([id, dbPendingQuantity]) => ({
+        id: Number(id),
+        dbPendingQuantity
+      })
+    );
 
     if (changedItems.length === 0) return;
 
@@ -242,7 +253,7 @@ export default function HeaderContextProvider({ children }) {
         token,
         user,
         setUser,
-        loadingUser,
+        loadingUser
       }}
     >
       {children}

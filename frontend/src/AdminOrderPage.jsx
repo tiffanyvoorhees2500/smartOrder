@@ -3,14 +3,14 @@ import "./AdminOrderPage.css";
 import AdminItemListHeader from "./components/admin/AdminItemListHeader";
 import AdminOrderModal from "./components/admin/AdminOrderModal";
 import AdminItem from "./components/item/AdminItem";
-import axios from 'axios';
+import axios from "axios";
 import { toDecimalPercent, toWholePercent } from "./utils/normalize";
 
 export default function AdminOrderPage() {
   // Feel Free to move to a context if needed
   const base_url = process.env.REACT_APP_API_BASE_URL;
   const token = typeof window !== "undefined" && localStorage.getItem("token");
-  
+
   const [isVisible, setIsVisible] = useState(false);
   const [adminItems, setAdminItems] = useState([]);
   const [selectedShipToState, setSelectedShipToState] = useState("UT");
@@ -22,17 +22,24 @@ export default function AdminOrderPage() {
     // Fetch admin items from backend API
     async function fetchAdminItems() {
       try {
-        const response = await axios.get(`${base_url}/products/admin-list?shipToState=${selectedShipToState}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        
+        const response = await axios.get(
+          `${base_url}/products/admin-list?shipToState=${selectedShipToState}`,
+          {
+            headers: { Authorization: `Bearer ${token}` }
+          }
+        );
+
         const data = response.data;
 
         setAdminItems(data.adminLineItems);
         setDiscountOptions(data.adminDiscountInfo.DISCOUNT_OPTIONS || []);
         setSelectedShipToState(data.adminShipToState);
-        setSelectedDiscount(toWholePercent(data.adminDiscountInfo.selectedDiscountForCurrent));
-        setNumberBottles(data.adminDiscountInfo.totalBottlesForCurrentQuantities);
+        setSelectedDiscount(
+          toWholePercent(data.adminDiscountInfo.selectedDiscountForCurrent)
+        );
+        setNumberBottles(
+          data.adminDiscountInfo.totalBottlesForCurrentQuantities
+        );
       } catch (error) {
         console.error("Error fetching admin items:", error);
       }
@@ -59,8 +66,9 @@ export default function AdminOrderPage() {
 
   // Memoized discounted admin items (to avoid unnecessary recalculations) with subtotal calculation
   const discountedAdminItems = useMemo(() => {
-    return adminItems.map(item => {
-      const finalPrice = item.wholesale - item.wholesale * toDecimalPercent(selectedDiscount);
+    return adminItems.map((item) => {
+      const finalPrice =
+        item.wholesale - item.wholesale * toDecimalPercent(selectedDiscount);
       const subtotal = finalPrice * item.adminQuantity;
 
       return {
@@ -74,7 +82,10 @@ export default function AdminOrderPage() {
 
   // Calculate grand total
   const adminSubtotal = useMemo(() => {
-    return discountedAdminItems.reduce((total, item) => total + item.subtotal, 0);
+    return discountedAdminItems.reduce(
+      (total, item) => total + item.subtotal,
+      0
+    );
   }, [discountedAdminItems]);
 
   return (
@@ -98,7 +109,12 @@ export default function AdminOrderPage() {
       {/* List of Items */}
       <div className="orderItems adminSection">
         {discountedAdminItems.map((adminItem) => (
-          <AdminItem key={adminItem.id} adminItem={adminItem} adminDiscountPercentage={selectedDiscount} onQuantityChange={handleQuantityChange} />
+          <AdminItem
+            key={adminItem.id}
+            adminItem={adminItem}
+            adminDiscountPercentage={selectedDiscount}
+            onQuantityChange={handleQuantityChange}
+          />
         ))}
       </div>
 

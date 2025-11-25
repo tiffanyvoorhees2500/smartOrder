@@ -27,7 +27,7 @@ export default function PriceSheetPage() {
     updateUserShipToState,
     loadPricing,
     hasPendingChanges,
-    saveAll,
+    saveAll
   } = useContext(HeaderContext);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -42,15 +42,12 @@ export default function PriceSheetPage() {
 
     // Get product quantities
     const original = item.originalQuantity ?? 0;
-    const pending = item.dbPendingQuantity ?? 0
+    const pending = item.dbPendingQuantity ?? 0;
 
     // If cart view is active, filter by rules
     if (showCart) {
-      const shouldShow = 
-        original !== pending ||
-        original > 0 ||
-        pending > 0;
-      
+      const shouldShow = original !== pending || original > 0 || pending > 0;
+
       if (!shouldShow) return false;
     }
 
