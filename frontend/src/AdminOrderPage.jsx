@@ -10,7 +10,6 @@ export default function AdminOrderPage() {
   // Feel Free to move to a context if needed
   const base_url = process.env.REACT_APP_API_BASE_URL;
   const token = typeof window !== "undefined" && localStorage.getItem("token");
-  
   const [isVisible, setIsVisible] = useState(false);
   const [adminItems, setAdminItems] = useState([]);
   const [selectedShipToState, setSelectedShipToState] = useState("UT");

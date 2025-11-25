@@ -10,7 +10,7 @@ export const fetchProductDropdownListOptions = async () => {
       }
     });
     const data = await response.data;
-    
+
     return data.productsList;
   } catch (error) {
     console.error("Error fetching product dropdown list options:", error);

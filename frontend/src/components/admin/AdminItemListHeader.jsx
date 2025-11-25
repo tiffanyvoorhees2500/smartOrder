@@ -24,7 +24,6 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
       try {
         const productList = await fetchProductDropdownListOptions();
         setProductsList(productList);
-
       } catch (error) {
         console.error("Error fetching admin products:", error);
         setProductError("Failed to load products.");
@@ -42,7 +41,6 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
       try {
         const usersList = await fetchUserDropdownListOptions();
         setUsersList(usersList);
-
       } catch (error) {
         console.error("Error fetching admin products:", error);
         setUserError("Failed to load products.");
@@ -91,8 +89,8 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
               {loadingUsers
                 ? "Loading users..."
                 : userError
-                ? userError
-                : "Add a user..."}
+                  ? userError
+                  : "Add a user..."}
             </option>
             {!loadingUsers &&
               !userError &&
@@ -114,8 +112,8 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
               {loadingProducts
                 ? "Loading products..."
                 : productError
-                ? productError
-                : "Add a product..."}
+                  ? productError
+                  : "Add a product..."}
             </option>
             {!loadingProducts &&
               !productError &&
