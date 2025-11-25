@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import { normalizePercent } from "./utils/normalize";
+import { toWholePercent } from "./utils/normalize";
 
 const base_url = process.env.REACT_APP_API_BASE_URL;
 export const HeaderContext = createContext();
