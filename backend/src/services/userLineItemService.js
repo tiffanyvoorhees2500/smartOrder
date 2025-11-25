@@ -34,3 +34,11 @@ exports.currentBulkUserLineItemsWithUserAndProducts = async (shipToState) => {
     });
     return lineItems;
 }
+
+
+exports.updateUserLineItemsAdminOrderId = async (userId, productId, adminOrderId) => {
+  return await UserLineItem.update(
+    { adminOrderId },
+    { where: { userId, productId, adminOrderId: null } }
+  );
+}
