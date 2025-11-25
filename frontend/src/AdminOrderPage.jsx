@@ -4,7 +4,7 @@ import AdminItemListHeader from "./components/admin/AdminItemListHeader";
 import AdminOrderModal from "./components/admin/AdminOrderModal";
 import AdminItem from "./components/item/AdminItem";
 import axios from 'axios';
-import { toWholePercent } from "./utils/normalize";
+import { toDecimalPercent, toWholePercent } from "./utils/normalize";
 
 export default function AdminOrderPage() {
   // Feel Free to move to a context if needed
@@ -41,15 +41,41 @@ export default function AdminOrderPage() {
     fetchAdminItems();
   }, [base_url, token, selectedShipToState]);
 
-  // Memoized discounted admin items (to avoid unnecessary recalculations)
+  // Handle quantity change in PriceQtyGroup
+  const handleQuantityChange = async (productId, userId, newQuantity) => {
+    try {
+      const response = await axios.patch(
+        `${base_url}/user-line-items`,
+        { productId, userId, quantity: newQuantity },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      // Update admin items with returned updated data
+      setAdminItems(response.data.adminLineItems);
+    } catch (error) {
+      console.error("Failed to update quantity:", error);
+    }
+  };
+
+  // Memoized discounted admin items (to avoid unnecessary recalculations) with subtotal calculation
   const discountedAdminItems = useMemo(() => {
     return adminItems.map(item => {
+      const finalPrice = item.wholesale - item.wholesale * toDecimalPercent(selectedDiscount);
+      const subtotal = finalPrice * item.adminQuantity;
+
       return {
         ...item,
         discountPercentage: selectedDiscount,
+        finalPrice,
+        subtotal
       };
     });
   }, [adminItems, selectedDiscount]);
+
+  // Calculate grand total
+  const adminSubtotal = useMemo(() => {
+    return discountedAdminItems.reduce((total, item) => total + item.subtotal, 0);
+  }, [discountedAdminItems]);
 
   return (
     <div className="adminOrderPage">
@@ -66,12 +92,13 @@ export default function AdminOrderPage() {
         setSelectedShipToState={setSelectedShipToState}
         selectedShipToState={selectedShipToState}
         numberBottles={numberBottles}
+        adminSubtotal={adminSubtotal}
       />
 
       {/* List of Items */}
       <div className="orderItems adminSection">
         {discountedAdminItems.map((adminItem) => (
-          <AdminItem key={adminItem.id} adminItem={adminItem} adminDiscountPercentage={selectedDiscount} />
+          <AdminItem key={adminItem.id} adminItem={adminItem} adminDiscountPercentage={selectedDiscount} onQuantityChange={handleQuantityChange} />
         ))}
       </div>
 

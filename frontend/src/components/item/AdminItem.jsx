@@ -4,7 +4,7 @@ import PriceQtyGroup from "./PriceQtyGroup";
 import InlayInputBox from "../form/InlayInputBox";
 import { toDecimalPercent, toWholePercent } from "../../utils/normalize";
 
-export default function AdminItem({ adminItem, adminDiscountPercentage }) {
+export default function AdminItem({ adminItem, adminDiscountPercentage, onQuantityChange }) {
   // Set the input element ids for this item
   const wholesaleInputId = `wholesale_price_${adminItem.id}`;
   const retailInputId = `retail_price_${adminItem.id}`;
@@ -87,6 +87,9 @@ export default function AdminItem({ adminItem, adminDiscountPercentage }) {
             price={adminItem.wholesale}
             helpText={userItem.name}
             quantity={userItem.quantity}
+            onQuantityChange={(newQuantity) =>
+              onQuantityChange(adminItem.id, userItem.userId, newQuantity)
+            }
             discount={toWholePercent(adminItem.discountPercentage)}
           />
         ))}

@@ -7,13 +7,16 @@ import { fetchUserDropdownListOptions} from "../../services/userService";
 import DiscountSelector from '../selectors/DiscountSelector';
 import ShipToStateSelector from '../selectors/ShipToStateSelector';
 
-export default function AdminItemListHeader({ className, setIsVisible, discountOptions, selectedDiscount, setSelectedDiscount, selectedShipToState, setSelectedShipToState, numberBottles }) {
+export default function AdminItemListHeader({ className, setIsVisible, discountOptions, selectedDiscount, setSelectedDiscount, selectedShipToState, setSelectedShipToState, numberBottles, adminSubtotal }) {
   const [productsList, setProductsList] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [productError, setProductError] = useState(null);
   const [usersList, setUsersList] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [userError, setUserError] = useState(null);
+
+  const [taxAmount, setTaxAmount] = useState(0);
+  const [shippingAmount, setShippingAmount] = useState(0);
 
   useEffect(() => {
     // Fetch products for admin order page
@@ -155,6 +158,8 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
             name="shipping_total"
             id="shipping_total"
             placeholder="0.00"
+            value={shippingAmount}
+            onChange={(e) => setShippingAmount(parseFloat(e.target.value) || 0)}
           />
         </InlayInputBox>
 
@@ -165,6 +170,8 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
             name="tax_total "
             id="tax_total"
             placeholder="0.00"
+            value={taxAmount}
+            onChange={(e) => setTaxAmount(parseFloat(e.target.value) || 0)}
           />
         </InlayInputBox>
 
@@ -174,7 +181,7 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
           className="highlightButton"
           onClick={() => setIsVisible(true)}
         >
-          <span>$500.00</span>
+          <span><b>${(adminSubtotal + taxAmount + shippingAmount).toFixed(2)} Matches?</b></span>
           <span>Finalize Order</span>
         </button>
       </div>
