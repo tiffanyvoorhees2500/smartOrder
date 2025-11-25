@@ -6,7 +6,7 @@ import AdminItem from "./components/item/AdminItem";
 
 export default function AdminOrderPage() {
   // Feel Free to move to a context if needed
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
   const adminItems = [
     {

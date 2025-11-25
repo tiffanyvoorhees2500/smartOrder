@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import InlayInputBox from "../form/InlayInputBox";
 import "./AdminItemListHeader.css";
-import { fetchProductDropdownListOptions } from '../../services/productService';
+import { fetchProductDropdownListOptions } from "../../services/productService";
 
-
-import { fetchUserDropdownListOptions} from "../../services/userService";
+import { fetchUserDropdownListOptions } from "../../services/userService";
 
 export default function AdminItemListHeader({ className, setIsVisible }) {
   const [productsList, setProductsList] = useState([]);
@@ -17,7 +16,6 @@ export default function AdminItemListHeader({ className, setIsVisible }) {
       try {
         const productList = await fetchProductDropdownListOptions();
         setProductsList(productList);
-
       } catch (error) {
         console.error("Error fetching admin products:", error);
         setProductError("Failed to load products.");
@@ -39,7 +37,6 @@ export default function AdminItemListHeader({ className, setIsVisible }) {
       try {
         const usersList = await fetchUserDropdownListOptions();
         setUsersList(usersList);
-
       } catch (error) {
         console.error("Error fetching admin products:", error);
         setUserError("Failed to load products.");
@@ -75,8 +72,8 @@ export default function AdminItemListHeader({ className, setIsVisible }) {
               {loadingUsers
                 ? "Loading users..."
                 : userError
-                ? userError
-                : "Add a user..."}
+                  ? userError
+                  : "Add a user..."}
             </option>
             {!loadingUsers &&
               !userError &&
@@ -98,8 +95,8 @@ export default function AdminItemListHeader({ className, setIsVisible }) {
               {loadingProducts
                 ? "Loading products..."
                 : productError
-                ? productError
-                : "Add a product..."}
+                  ? productError
+                  : "Add a product..."}
             </option>
             {!loadingProducts &&
               !productError &&

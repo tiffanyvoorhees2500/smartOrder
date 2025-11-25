@@ -1,0 +1,53 @@
+.adminOrderModal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  font-family: sans-serif;
+}
+
+.adminOrderModal h2 {
+  margin: 0;
+  align-self: flex-start;
+  width: 100%;
+  font-size: large;
+  border-bottom: 1px solid black;
+  font-size: x-large;
+}
+
+.adminOrderModal .modalSection {
+  border-radius: 8px;
+  background-color: white;
+  color: black;
+  padding: 0.25em;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+
+.adminOrderModal .modalSectionTitle {
+  margin: 0;
+  font-size: large;
+}
+
+.adminOrderModal .userList {
+  /* background-color: var(--secondary-color); */
+  display: flex;
+  flex-direction: column;
+  /* padding: 2px; */
+  gap: 2px;
+  border-radius: 10px;
+}
+
+.adminOrderModal .highlightButton {
+  width: 100%;
+  max-width: 320px;
+  margin-top: 0.5em;
+  transition: all 100ms ease-in-out;
+}
+
+.adminOrderModal .highlightButton:hover {
+  width: 100%;
+  max-width: 320px;
+  background-color: rgb(221, 0, 0);
+}

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { useLocation } from "react-router-dom"; 
+import { useLocation } from "react-router-dom";
 import "./Header.css";
 import ProfileButton from "./ProfileButton";
 import { FaArrowRight, FaShoppingCart } from "react-icons/fa";

@@ -1,6 +1,12 @@
+import { IoClose } from "react-icons/io5";
 import "./Modal.css";
 
-export default function Modal({ children, isVisible, setIsVisible }) {
+export default function Modal({
+  children,
+  isVisible,
+  setIsVisible,
+  className = ""
+}) {
   return (
     isVisible && (
       <div className="modal">
@@ -11,14 +17,12 @@ export default function Modal({ children, isVisible, setIsVisible }) {
           }}
         ></div>
         <div className="modal-content">
-          <button
+          <IoClose
             className="modal-cancel"
             onClick={() => setIsVisible(false)}
             type="button"
-          >
-            Cancel
-          </button>
-          <div>{children}</div>
+          />
+          <div className={className}>{children}</div>
         </div>
       </div>
     )
