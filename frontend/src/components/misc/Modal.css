@@ -27,7 +27,7 @@
   margin: auto;
   margin-top: 10%;
   max-width: 82%;
-  background-color: hsl(0, 0%, 89%);
+  background-color: var(--primary-color);
   border-radius: 15px;
   border: 2px solid var(--secondary-color);
   padding: 0.5em;

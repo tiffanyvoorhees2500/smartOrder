@@ -3,6 +3,7 @@ import { getUserFromToken } from "../../utils/auth";
 import InlayInputBox from "../form/InlayInputBox";
 import Modal from "../misc/Modal";
 import { AdminModalItem } from "./AdminModalItem";
+import { useState } from "react";
 
 export default function AdminOrderModal({ isVisible, setIsVisible }) {
   const user = getUserFromToken();
@@ -15,7 +16,7 @@ export default function AdminOrderModal({ isVisible, setIsVisible }) {
     { name: "User 3", id: "3" }
   ];
 
-  const userOrders = [
+  const [userOrders, setUserOrders] = useState([
     {
       user: "User 1",
       subtotal: 1342.63,
@@ -52,7 +53,7 @@ export default function AdminOrderModal({ isVisible, setIsVisible }) {
       shipping: 1.67,
       taxes: 0.83
     }
-  ];
+  ]);
 
   const grandTotal = userOrders.reduce(
     (sum, { subtotal, shipping, taxes }) => sum + subtotal + shipping + taxes,
@@ -61,13 +62,17 @@ export default function AdminOrderModal({ isVisible, setIsVisible }) {
 
   return (
     <Modal {...{ isVisible, setIsVisible }} className="adminOrderModal">
+      {/* Modal Header */}
       <h2>Finalize Order</h2>
 
+      {/* Order Details Section */}
       <div className="modalSection">
+        {/* Section Title */}
         <div className="modalSectionTitle">
           <span>Order Details</span>
           <div className="divider-light"></div>
         </div>
+
         {/* Date of order */}
         <InlayInputBox htmlFor={"date"} title={"Date Order Placed"}>
           <input type="date" name="date" id="date" defaultValue={today} />
@@ -77,33 +82,37 @@ export default function AdminOrderModal({ isVisible, setIsVisible }) {
         <InlayInputBox htmlFor={"paid_by"} title={"Order Paid By"}>
           <select className="paid_by" defaultValue={user.id}>
             <option value={user.id}>{user.name}</option>
-            {userOptions.map((user) => (
-              <option key={user.id} value={user.id}>
-                {user.name}
+            {userOptions.map((userOption) => (
+              <option key={userOption.id} value={userOption.id}>
+                {userOption.name}
               </option>
             ))}
           </select>
         </InlayInputBox>
       </div>
 
+      {/* Payment Section */}
       <div className="modalSection">
+        {/* Section Title */}
         <div className="modalSectionTitle">
-          <span>Amount Paid to OHS: ${grandTotal} </span>
+          <span>Amount Paid to OHS: ${grandTotal.toFixed(2)} </span>
           <div className="divider-light"></div>
         </div>
+
+        {/* User Order List */}
         <div className="userList">
-          {userOptions.map((user, i) => (
+          {userOrders.map((userOrder, i) => (
             <AdminModalItem
               key={i}
-              user={user.name}
-              subtotal={1342.63}
-              shipping={1.67}
-              taxes={0.83}
+              user={userOrder.name}
+              {...userOrder}
+              setUserOrders={setUserOrders}
             />
           ))}
         </div>
       </div>
 
+      {/* Confirm Button */}
       <button type="button" className="highlightButton">
         Confirm
       </button>
