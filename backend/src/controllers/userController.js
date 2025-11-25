@@ -226,12 +226,7 @@ exports.getUserById = async (req, res) => {
 
 // Update a user's defaultShipToState
 exports.updateUserShipToState = async (req, res) => {
-  console.log("here");
   const requester = req.user;
-
-  console.log("Requester:", requester);
-  console.log("Body:", req.body);
-
   const { defaultShipToState } = req.body;
   const userId = req.params.id || requester.id; // use param if admin, else current user
 

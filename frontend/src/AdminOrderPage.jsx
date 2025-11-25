@@ -1,82 +1,81 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import "./AdminOrderPage.css";
 import AdminItemListHeader from "./components/admin/AdminItemListHeader";
 import AdminOrderModal from "./components/admin/AdminOrderModal";
 import AdminItem from "./components/item/AdminItem";
+import axios from 'axios';
+import { toDecimalPercent, toWholePercent } from "./utils/normalize";
 
 export default function AdminOrderPage() {
   // Feel Free to move to a context if needed
+  const base_url = process.env.REACT_APP_API_BASE_URL;
+  const token = typeof window !== "undefined" && localStorage.getItem("token");
+  
   const [isVisible, setIsVisible] = useState(false);
+  const [adminItems, setAdminItems] = useState([]);
+  const [selectedShipToState, setSelectedShipToState] = useState("UT");
+  const [discountOptions, setDiscountOptions] = useState([]);
+  const [selectedDiscount, setSelectedDiscount] = useState(0);
+  const [numberBottles, setNumberBottles] = useState(0);
 
-  const adminItems = [
-    {
-      id: 1,
-      name: "Sample Item",
-      wholesalePrice: 10,
-      retailPrice: 15,
-      discountPercentage: 0,
-      userItems: [
-        {
-          userId: 1,
-          quantity: 50,
-          name: "Example User"
-        },
-        {
-          userId: 2,
-          quantity: 50,
-          name: "Example User 2"
-        },
-        {
-          userId: 3,
-          quantity: 50,
-          name: "Example User 3"
-        },
-        {
-          userId: 4,
-          quantity: 50,
-          name: "Example User 4"
-        }
-      ]
-    },
-    {
-      id: 2,
-      name: "Sample Item 2",
-      wholesalePrice: 10,
-      retailPrice: 15,
-      discountPercentage: 15,
-      userItems: [
-        {
-          userId: 1,
-          quantity: 50,
-          name: "Example User 1"
-        }
-      ]
-    },
-    {
-      id: 3,
-      name: "Sample Item 3",
-      wholesalePrice: 10,
-      retailPrice: 15,
-      discountPercentage: 10,
-      userItems: [
-        {
-          userId: 4,
-          quantity: 60,
-          name: "Example User 4"
-        },
-        {
-          userId: 3,
-          quantity: 40,
-          name: "Example User 3"
-        },
-        {
-          userId: 1,
-          quantity: 70,
-          name: "Example User 1"
-        }
-      ]
+  useEffect(() => {
+    // Fetch admin items from backend API
+    async function fetchAdminItems() {
+      try {
+        const response = await axios.get(`${base_url}/products/admin-list?shipToState=${selectedShipToState}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        const data = response.data;
+
+        setAdminItems(data.adminLineItems);
+        setDiscountOptions(data.adminDiscountInfo.DISCOUNT_OPTIONS || []);
+        setSelectedShipToState(data.adminShipToState);
+        setSelectedDiscount(toWholePercent(data.adminDiscountInfo.selectedDiscountForCurrent));
+        setNumberBottles(data.adminDiscountInfo.totalBottlesForCurrentQuantities);
+      } catch (error) {
+        console.error("Error fetching admin items:", error);
+      }
     }
-  ];
+
+    fetchAdminItems();
+  }, [base_url, token, selectedShipToState]);
+
+  // Handle quantity change in PriceQtyGroup
+  const handleQuantityChange = async (productId, userId, newQuantity) => {
+    try {
+      const response = await axios.patch(
+        `${base_url}/user-line-items`,
+        { productId, userId, quantity: newQuantity },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      // Update admin items with returned updated data
+      setAdminItems(response.data.adminLineItems);
+    } catch (error) {
+      console.error("Failed to update quantity:", error);
+    }
+  };
+
+  // Memoized discounted admin items (to avoid unnecessary recalculations) with subtotal calculation
+  const discountedAdminItems = useMemo(() => {
+    return adminItems.map(item => {
+      const finalPrice = item.wholesale - item.wholesale * toDecimalPercent(selectedDiscount);
+      const subtotal = finalPrice * item.adminQuantity;
+
+      return {
+        ...item,
+        discountPercentage: selectedDiscount,
+        finalPrice,
+        subtotal
+      };
+    });
+  }, [adminItems, selectedDiscount]);
+
+  // Calculate grand total
+  const adminSubtotal = useMemo(() => {
+    return discountedAdminItems.reduce((total, item) => total + item.subtotal, 0);
+  }, [discountedAdminItems]);
 
   return (
     <div className="adminOrderPage">
@@ -87,12 +86,19 @@ export default function AdminOrderPage() {
       <AdminItemListHeader
         className="adminSection"
         setIsVisible={setIsVisible}
+        discountOptions={discountOptions}
+        setSelectedDiscount={setSelectedDiscount}
+        selectedDiscount={selectedDiscount}
+        setSelectedShipToState={setSelectedShipToState}
+        selectedShipToState={selectedShipToState}
+        numberBottles={numberBottles}
+        adminSubtotal={adminSubtotal}
       />
 
       {/* List of Items */}
       <div className="orderItems adminSection">
-        {adminItems.map((adminItem) => (
-          <AdminItem key={adminItem.id} adminItem={adminItem} />
+        {discountedAdminItems.map((adminItem) => (
+          <AdminItem key={adminItem.id} adminItem={adminItem} adminDiscountPercentage={selectedDiscount} onQuantityChange={handleQuantityChange} />
         ))}
       </div>
 
