@@ -1,0 +1,22 @@
+.adminModalItem {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 0.25em;
+  position: relative;
+  padding: 0.25em;
+  color: black;
+  background-color: white;
+}
+
+.adminModalItem:first-child {
+  border-radius: 8px 8px 0 0;
+}
+
+.adminModalItem:last-child {
+  border-radius: 0 0 8px 8px;
+}
+
+.adminModalItem span {
+  grid-column: 1 / span all;
+  text-align: left;
+}

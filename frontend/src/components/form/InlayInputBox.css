@@ -29,3 +29,10 @@
   outline: none;
   padding: 0;
 }
+
+.inlayInput > div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
