@@ -2,14 +2,21 @@ import { useEffect, useState } from "react";
 import InlayInputBox from "../form/InlayInputBox";
 import "./AdminItemListHeader.css";
 import { fetchProductDropdownListOptions } from '../../services/productService';
-
-
+import { states } from "../../components/form/states";
 import { fetchUserDropdownListOptions} from "../../services/userService";
+import DiscountSelector from '../selectors/DiscountSelector';
+import ShipToStateSelector from '../selectors/ShipToStateSelector';
 
-export default function AdminItemListHeader({ className, setIsVisible }) {
+export default function AdminItemListHeader({ className, setIsVisible, discountOptions, selectedDiscount, setSelectedDiscount, selectedShipToState, setSelectedShipToState, numberBottles, adminSubtotal }) {
   const [productsList, setProductsList] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [productError, setProductError] = useState(null);
+  const [usersList, setUsersList] = useState([]);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+  const [userError, setUserError] = useState(null);
+
+  const [taxAmount, setTaxAmount] = useState(0);
+  const [shippingAmount, setShippingAmount] = useState(0);
 
   useEffect(() => {
     // Fetch products for admin order page
@@ -28,10 +35,6 @@ export default function AdminItemListHeader({ className, setIsVisible }) {
 
     loadProductsList();
   }, []);
-
-  const [usersList, setUsersList] = useState([]);
-  const [loadingUsers, setLoadingUsers] = useState(true);
-  const [userError, setUserError] = useState(null);
 
   useEffect(() => {
     // Fetch products for admin order page
@@ -56,12 +59,25 @@ export default function AdminItemListHeader({ className, setIsVisible }) {
       {/* Discount */}
       <label htmlFor="discount">
         Discount:
-        <select name="discount" id="discount">
-          <option value="0">0%</option>
-          <option value="20">20%</option>
-          <option value="30">30%</option>
-        </select>
+        <DiscountSelector
+        value={selectedDiscount}
+        onChange={setSelectedDiscount}
+        options={discountOptions}
+        />
       </label>
+
+      <p>Number of Bottles in Bulk Order: {numberBottles}</p>
+
+      {/* State Selector */}
+      <ShipToStateSelector
+        label="State"
+        name="defaultShipToState"
+        value={selectedShipToState || ""}
+        options={states}
+        onChange={setSelectedShipToState}
+        required
+        placeholder="Select a state"
+      />
 
       <div className="divider-light" />
 
@@ -142,6 +158,8 @@ export default function AdminItemListHeader({ className, setIsVisible }) {
             name="shipping_total"
             id="shipping_total"
             placeholder="0.00"
+            value={shippingAmount}
+            onChange={(e) => setShippingAmount(parseFloat(e.target.value) || 0)}
           />
         </InlayInputBox>
 
@@ -152,6 +170,8 @@ export default function AdminItemListHeader({ className, setIsVisible }) {
             name="tax_total "
             id="tax_total"
             placeholder="0.00"
+            value={taxAmount}
+            onChange={(e) => setTaxAmount(parseFloat(e.target.value) || 0)}
           />
         </InlayInputBox>
 
@@ -161,7 +181,7 @@ export default function AdminItemListHeader({ className, setIsVisible }) {
           className="highlightButton"
           onClick={() => setIsVisible(true)}
         >
-          <span>$500.00</span>
+          <span><b>${(adminSubtotal + taxAmount + shippingAmount).toFixed(2)} Matches?</b></span>
           <span>Finalize Order</span>
         </button>
       </div>

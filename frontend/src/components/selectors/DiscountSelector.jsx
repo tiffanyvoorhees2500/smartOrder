@@ -1,4 +1,4 @@
-import { normalizePercent } from "../../utils/normalize";
+import { toWholePercent } from "../../utils/normalize";
 
 export default function DiscountSelector({ value, onChange, options }) {
   return (
@@ -10,7 +10,7 @@ export default function DiscountSelector({ value, onChange, options }) {
       }}
     >
       {options.map((opt) => {
-        const pct = normalizePercent(opt);
+        const pct = toWholePercent(opt);
         return (
           <option key={opt.title || pct} value={pct}>
             {opt.title}
