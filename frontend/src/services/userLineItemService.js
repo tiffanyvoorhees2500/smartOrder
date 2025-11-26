@@ -2,7 +2,12 @@ import axios from "axios";
 
 const API_BASE = process.env.REACT_APP_API_BASE_URL;
 
-export const addUserLineItemFromAdminPage = async ({ userId, productId, quantity, state }) => {
+export const addUserLineItemFromAdminPage = async ({
+  userId,
+  productId,
+  quantity,
+  state
+}) => {
   try {
     const token = localStorage.getItem("token");
     const res = await axios.post(
@@ -10,7 +15,7 @@ export const addUserLineItemFromAdminPage = async ({ userId, productId, quantity
       { userId, productId, quantity, state },
       {
         headers: {
-            Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`
         }
       }
     );

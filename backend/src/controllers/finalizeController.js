@@ -41,11 +41,9 @@ exports.finalizeOrder = async (req, res) => {
     // Rollback transaction in case of error
     await t.rollback();
 
-    res
-      .status(500)
-      .json({
-        message: "Failed to finalize admin order",
-        error: error.message
-      });
+    res.status(500).json({
+      message: "Failed to finalize admin order",
+      error: error.message
+    });
   }
 };

@@ -89,9 +89,7 @@ export default function AdminOrderPage() {
       const finalPrice =
         adminItem.wholesale -
         adminItem.wholesale *
-          toDecimalPercent(
-            toWholePercent(selectedDiscount)
-          );
+          toDecimalPercent(toWholePercent(selectedDiscount));
 
       adminItem.userItems.forEach((userItem) => {
         const userId = userItem.userId;

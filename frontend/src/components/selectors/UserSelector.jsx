@@ -21,11 +21,7 @@ export default function UserSelector({
         required={required}
       >
         <option value="">
-          {loading
-            ? "Loading users..."
-            : error
-              ? error
-              : "Select a user..."}
+          {loading ? "Loading users..." : error ? error : "Select a user..."}
         </option>
         {!loading &&
           !error &&

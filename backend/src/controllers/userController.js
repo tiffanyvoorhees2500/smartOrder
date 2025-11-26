@@ -108,7 +108,7 @@ exports.updateUser = async (req, res) => {
           isAdmin: user.isAdmin,
           name: user.name
         },
-        process.env.JWT_SECRET,
+        process.env.JWT_SECRET
       );
     }
 
@@ -165,7 +165,7 @@ exports.loginUser = async (req, res) => {
 
     const token = jwt.sign(
       { id: user.id, isAdmin: user.isAdmin, name: user.name },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET
     );
 
     res.json({ token });

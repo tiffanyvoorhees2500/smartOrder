@@ -18,7 +18,10 @@ export const fetchProductDropdownListOptions = async () => {
   }
 };
 
-export const updateProductWholesalePrice = async (productId, newWholesalePrice) => {
+export const updateProductWholesalePrice = async (
+  productId,
+  newWholesalePrice
+) => {
   try {
     const response = await axios.put(
       `${base_url}/products/${productId}/wholesale-price`,
