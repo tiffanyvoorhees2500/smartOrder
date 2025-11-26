@@ -6,7 +6,7 @@ const { User } = db;
 exports.getAlphabeticalUserListOptions = async () => {
   try {
     const usersList = await User.findAll({
-      attributes: ["id", "name"],
+      attributes: ["id", "name", "defaultShipToState"],
       order: [["name", "ASC"]],
       raw: true
     });

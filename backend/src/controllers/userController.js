@@ -251,7 +251,7 @@ exports.updateUserShipToState = async (req, res) => {
   }
 };
 
-// Return a list of [userId, name] for all users
+// Return a list of [userId, name, defaultShipToState] for all users
 exports.getUserDropdownListOptions = async (req, res) => {
   try {
     const usersList = await getAlphabeticalUserListOptions();
