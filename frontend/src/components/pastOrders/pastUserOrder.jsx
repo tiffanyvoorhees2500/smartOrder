@@ -1,8 +1,8 @@
 import "./pastUserOrder.css";
-import GroupByItem from "./groupByItem";
-import GroupByPerson from "./groupByPerson";
+import GroupByPerson from "./groupBy";
 import InlayInputBox from "../form/InlayInputBox";
 import { useState } from "react";
+import GroupBy from "./groupBy";
 
 export default function PastUserOrder() {
   // const [groupedBy, setGroupedBy] = useState("person")
@@ -16,30 +16,34 @@ export default function PastUserOrder() {
       orderId: 1,
       items: [
         {
-          itemId: 1,
-          itemName: "Item 1",
-          price: 10,
+          id: 1,
+          name: "Accute",
+          price: 20,
           users: [
             {
+              id: 1,
               name: "User 1",
               quantity: 2
             },
             {
+              id: 2,
               name: "User 2",
               quantity: 5
             }
           ]
         },
         {
-          itemId: 2,
-          itemName: "Item 2",
-          price: 34.32,
+          id: 2,
+          name: "Big C Nutrient Pak #1",
+          price: 45.2,
           users: [
             {
+              id: 2,
               name: "User 2",
               quantity: 6
             },
             {
+              id: 4,
               name: "User 4",
               quantity: 2
             }
@@ -49,20 +53,20 @@ export default function PastUserOrder() {
     }
   ];
 
-  const pastOrderComponentGroups = {
-    person: GroupByPerson,
-    item: GroupByItem
-  };
-  const groupByOptions = Object.keys(pastOrderComponentGroups);
+  const groupByOptions = ["person", "item"];
   const [groupBy, setGroupBy] = useState(groupByOptions[0]);
-
-  console.log(groupBy, groupByOptions);
 
   return (
     <div className="pastUserOrder">
+      {/* Page Title */}
       <h2>All OHS Past Orders</h2>
+
+      {/* Group Order By Section */}
       <div className="groupSection">
+        {/* Group By Title */}
         <span>Group Order By</span>
+
+        {/* Group By Select Box */}
         <InlayInputBox title={"Group By"} htmlFor={"groupby"}>
           <select
             name="groupby"
@@ -77,16 +81,30 @@ export default function PastUserOrder() {
           </select>
         </InlayInputBox>
       </div>
+
+      {/* Past Orders Container */}
       <div className="orderContainer">
+        {pastOrders.map((pastOrder) => (
+          <div key={pastOrder.orderId}>
+            {/* Past Order Header and Total */}
+            <div className="pastOrderHeader">
+              <span>{pastOrder.date}</span>
+              <span>${pastOrder.total}</span>
+            </div>
+
+            {/* Past Order Value Grouped */}
+            <GroupBy items={pastOrder.items} groupByType={groupBy} />
+          </div>
+        ))}
+
+        {/* Temp for testing */}
         {pastOrders.map((pastOrder) => (
           <div key={pastOrder.orderId}>
             <div className="pastOrderHeader">
               <span>{pastOrder.date}</span>
               <span>${pastOrder.total}</span>
             </div>
-            {pastOrderComponentGroups[groupBy]?.({
-              items: pastOrder.items
-            })}
+            <GroupBy items={pastOrder.items} groupByType={"item"} />
           </div>
         ))}
       </div>
