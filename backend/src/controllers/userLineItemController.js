@@ -1,6 +1,6 @@
 "use strict";
 
-const { UserLineItem } = require("../models");
+const { UserLineItem, User } = require("../models");
 
 exports.saveCurrentOrderUserLineItem = async (req, res) => {
   try {
@@ -149,11 +149,24 @@ exports.addUserLineItemFromAdminPage = async (req, res) => {
       return res.status(403).json({message: "Restricted to Admins only"});
     }
 
-    const { userId, productId, quantity } = req.body;
+    const { userId, productId, quantity, state } = req.body;
 
     // Validate data
-    if (!userId || !productId || typeof quantity !== "number" || quantity < 1) {
+    if (!userId || !productId || typeof quantity !== "number" || quantity < 1 || !state) {
       return res.status(400).json({ message: "Invalid data" });
+    }
+
+    
+    // Fetch the user to check their shipToState
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found. "});
+    }
+    // if the line item is for a shipToState that is different than the Admin page, don't add/update
+    if (user.defaultShipToState !== state) {
+      return res.status(400).json({
+        message: `Cannot save to cart: ${user.name}'s ship-to-state ${user.defaultShipToState} doesn't match ${state}`
+      })
     }
 
     let lineItem = await UserLineItem.findOne({
