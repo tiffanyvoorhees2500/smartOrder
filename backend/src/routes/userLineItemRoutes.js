@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const controller = require("../controllers/userLineItemController");
-const { authenticateToken } = require("../middleware/auth");
+const { authenticateToken, requireAdmin } = require("../middleware/auth");
 
 // Save or update a user line item for the current order
 router.post(
@@ -23,5 +23,13 @@ router.post(
   authenticateToken,
   controller.saveAll
 );
+
+// Add/update a line item from the admin page
+router.post(
+  "/admin-add-line",
+  authenticateToken,
+  requireAdmin,
+  controller.addUserLineItemFromAdminPage
+)
 
 module.exports = router;
