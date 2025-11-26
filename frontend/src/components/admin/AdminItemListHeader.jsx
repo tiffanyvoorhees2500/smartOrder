@@ -3,9 +3,9 @@ import InlayInputBox from "../form/InlayInputBox";
 import "./AdminItemListHeader.css";
 import { fetchProductDropdownListOptions } from "../../services/productService";
 import { states } from "../../components/form/states";
-import { fetchUserDropdownListOptions } from "../../services/userService";
 import DiscountSelector from "../selectors/DiscountSelector";
 import ShipToStateSelector from "../selectors/ShipToStateSelector";
+import UserSelector from "../selectors/UserSelector";
 
 export default function AdminItemListHeader({
   className,
@@ -16,14 +16,14 @@ export default function AdminItemListHeader({
   selectedShipToState,
   setSelectedShipToState,
   numberBottles,
-  adminSubtotal
+  adminSubtotal,
+  usersList,
+  loadingUsers,
+  userError
 }) {
   const [productsList, setProductsList] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [productError, setProductError] = useState(null);
-  const [usersList, setUsersList] = useState([]);
-  const [loadingUsers, setLoadingUsers] = useState(true);
-  const [userError, setUserError] = useState(null);
 
   const [taxAmount, setTaxAmount] = useState(0);
   const [shippingAmount, setShippingAmount] = useState(0);
@@ -43,23 +43,6 @@ export default function AdminItemListHeader({
     };
 
     loadProductsList();
-  }, []);
-
-  useEffect(() => {
-    // Fetch products for admin order page
-    const loadUsersList = async () => {
-      try {
-        const usersList = await fetchUserDropdownListOptions();
-        setUsersList(usersList);
-      } catch (error) {
-        console.error("Error fetching admin products:", error);
-        setUserError("Failed to load products.");
-      } finally {
-        setLoadingUsers(false);
-      }
-    };
-
-    loadUsersList();
   }, []);
 
   return (
@@ -92,27 +75,18 @@ export default function AdminItemListHeader({
       {/* Add To Order */}
       <div className="headerRow">
         {/* Person */}
-        <label htmlFor="person">
-          Person:
-          <select name="person" id="person">
-            <option value="">
-              {loadingUsers
-                ? "Loading users..."
-                : userError
-                  ? userError
-                  : "Add a user..."}
-            </option>
-            {!loadingUsers &&
-              !userError &&
-              usersList.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.name.length > 100
-                    ? user.name.slice(0, 100) + "..."
-                    : user.name}
-                </option>
-              ))}
-          </select>
-        </label>
+        <UserSelector 
+          label="Person"
+          name="person"
+          id="person"
+          value=""
+          options={usersList}
+          onChange={() => {}}
+          loading={loadingUsers}
+          error={userError}
+          required
+          placeholder="Select a user..."
+        />
 
         {/* Product */}
         <label htmlFor="product">

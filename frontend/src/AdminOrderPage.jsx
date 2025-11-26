@@ -5,6 +5,7 @@ import AdminOrderModal from "./components/admin/AdminOrderModal";
 import AdminItem from "./components/item/AdminItem";
 import axios from "axios";
 import { toDecimalPercent, toWholePercent } from "./utils/normalize";
+import { fetchUserDropdownListOptions } from "./services/userService";
 
 export default function AdminOrderPage() {
   // Feel Free to move to a context if needed
@@ -18,6 +19,30 @@ export default function AdminOrderPage() {
   const [selectedDiscount, setSelectedDiscount] = useState(0);
   const [numberBottles, setNumberBottles] = useState(0);
 
+  const [usersList, setUsersList] = useState([]);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+  const [userError, setUserError] = useState(null);
+
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [paidByUserId, setPaidByUserId] = useState(null);
+
+  // Fetch users once
+  useEffect(() => {
+    const loadUsersList = async () => {
+      try {
+        const usersList = await fetchUserDropdownListOptions();
+        setUsersList(usersList);
+      } catch (error) {
+        console.error("Error fetching admin users:", error);
+        setUserError("Failed to load users.");
+      } finally {
+        setLoadingUsers(false);
+      }
+    };
+
+    loadUsersList();
+  });
+
   useEffect(() => {
     // Fetch admin items from backend API
     async function fetchAdminItems() {
@@ -30,7 +55,8 @@ export default function AdminOrderPage() {
         );
 
         const data = response.data;
-
+        console.log("Fetched admin items:", data);
+        
         setAdminItems(data.adminLineItems);
         setDiscountOptions(data.adminDiscountInfo.DISCOUNT_OPTIONS || []);
         setSelectedShipToState(data.adminShipToState);
@@ -104,6 +130,9 @@ export default function AdminOrderPage() {
         selectedShipToState={selectedShipToState}
         numberBottles={numberBottles}
         adminSubtotal={adminSubtotal}
+        usersList={usersList}
+        loadingUsers={loadingUsers}
+        userError={userError}
       />
 
       {/* List of Items */}
