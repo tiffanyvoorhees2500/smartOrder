@@ -1,6 +1,6 @@
 "use strict";
 
-const { UserLineItem } = require("../models");
+const { UserLineItem, User } = require("../models");
 
 exports.saveCurrentOrderUserLineItem = async (req, res) => {
   try {
@@ -140,6 +140,60 @@ exports.saveAll = async (req, res) => {
     console.error("Error saving all user line items:", error);
     return res.status(500).json({ message: "Internal server error" });
   } 
+};
+
+exports.addUserLineItemFromAdminPage = async (req, res) => {
+  try {
+    // Confirm that logged in user is an admin
+    if (!req.user.isAdmin) {
+      return res.status(403).json({message: "Restricted to Admins only"});
+    }
+
+    const { userId, productId, quantity, state } = req.body;
+
+    // Validate data
+    if (!userId || !productId || typeof quantity !== "number" || quantity < 1 || !state) {
+      return res.status(400).json({ message: "Invalid data" });
+    }
+
+    
+    // Fetch the user to check their shipToState
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found. "});
+    }
+    // if the line item is for a shipToState that is different than the Admin page, don't add/update
+    if (user.defaultShipToState !== state) {
+      return res.status(400).json({
+        message: `Cannot save to cart: ${user.name}'s ship-to-state ${user.defaultShipToState} doesn't match ${state}`
+      })
+    }
+
+    let lineItem = await UserLineItem.findOne({
+      where: { userId, productId, adminOrderId: null },
+    }); 
+
+    // if there no line item for this product & user, create it, otherwise update the current line
+    if (!lineItem) {
+      lineItem = await UserLineItem.create({
+        userId,
+        productId,
+        quantity,
+        pendingQuantity: null,
+        adminOrderId: null
+      });
+    } else {
+      await lineItem.update({
+        quantity,
+        pendingQuantity: null
+      });
+    }
+
+    res.status(200).json({ message: "Order updated." });
+  } catch (err) {
+    console.error("Admin create line error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
 
