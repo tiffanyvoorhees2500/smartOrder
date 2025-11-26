@@ -19,7 +19,7 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
 
   const [selectedUserId, setSelectedUserId] = useState("");
   const [selectedProductId, setSelectedProductId] = useState("");
-  const [selectedQty, setSelectedQty] = useState(0);
+  const [selectedQty, setSelectedQty] = useState(1);
 
 
   const [taxAmount, setTaxAmount] = useState(0);
@@ -77,7 +77,7 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
 
       setSelectedUserId("");
       setSelectedProductId("");
-      setSelectedQty(0);
+      setSelectedQty(1);
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to add to order. See console for details");
     }
@@ -163,8 +163,8 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
           Quantity:
           <select name="quantity" id="quantity" value={selectedQty} onChange={(e) => setSelectedQty(Number(e.target.value))}>
             {Array.from({ length: 100 }, (_, index) => (
-              <option key={index} value={index}>
-                {index}
+              <option key={index + 1} value={index + 1}>
+                {index + 1}
               </option>
             ))}
           </select>
