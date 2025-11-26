@@ -1,64 +1,43 @@
 import "./AdminOrderModal.css";
-import { getUserFromToken } from "../../utils/auth";
 import InlayInputBox from "../form/InlayInputBox";
 import Modal from "../misc/Modal";
 import { AdminModalItem } from "./AdminModalItem";
-import { useState } from "react";
 
-export default function AdminOrderModal({ isVisible, setIsVisible }) {
-  const user = getUserFromToken();
+export default function AdminOrderModal({
+  isVisible,
+  setIsVisible,
+  userOptions,
+  paidByUserId,
+  setPaidByUserId,
+  userOrders,
+  setUserOrders,
+  adminSubtotal,
+  adminTaxAmount,
+  adminShippingAmount
+}) {
   // Get today's date and remove the time
   const today = new Date().toISOString().split("T")[0];
 
-  const userOptions = [
-    { name: "User 1", id: "1" },
-    { name: "User 2", id: "2" },
-    { name: "User 3", id: "3" }
-  ];
+  // Calculate grand totals
+  const bulkTotal = adminSubtotal + adminTaxAmount + adminShippingAmount;
 
-  const [userOrders, setUserOrders] = useState([
-    {
-      user: "User 1",
-      subtotal: 1342.63,
-      shipping: 1.67,
-      taxes: 0.83
-    },
-    {
-      user: "User 2",
-      subtotal: 18.04,
-      shipping: 1.67,
-      taxes: 0.83
-    },
-    {
-      user: "User 3",
-      subtotal: 175.89,
-      shipping: 1.67,
-      taxes: 0.83
-    },
-    {
-      user: "User 4",
-      subtotal: 62.24,
-      shipping: 1.67,
-      taxes: 0.83
-    },
-    {
-      user: "User 5",
-      subtotal: 766.29,
-      shipping: 1.67,
-      taxes: 0.83
-    },
-    {
-      user: "User 6",
-      subtotal: 685.93,
-      shipping: 1.67,
-      taxes: 0.83
-    }
-  ]);
-
-  const grandTotal = userOrders.reduce(
+  const usersTaxTotal = userOrders.reduce((sum, { taxes }) => sum + taxes, 0);
+  const usersShippingTotal = userOrders.reduce(
+    (sum, { shipping }) => sum + shipping,
+    0
+  );
+  const userGrandTotal = userOrders.reduce(
     (sum, { subtotal, shipping, taxes }) => sum + subtotal + shipping + taxes,
     0
   );
+
+  // Calculate totals to verify against bulk total
+  const shippingDiff = Math.abs(usersShippingTotal - adminShippingAmount);
+  const taxDiff = Math.abs(usersTaxTotal - adminTaxAmount);
+  const grandTotalDiff = Math.abs(userGrandTotal - bulkTotal);
+
+  // Find the user object that matches the selected paidByUserId
+  const paidByUser = userOptions.find((u) => u.id === paidByUserId);
 
   return (
     <Modal {...{ isVisible, setIsVisible }} className="adminOrderModal">
@@ -80,8 +59,11 @@ export default function AdminOrderModal({ isVisible, setIsVisible }) {
 
         {/* Order Paid By */}
         <InlayInputBox htmlFor={"paid_by"} title={"Order Paid By"}>
-          <select className="paid_by" defaultValue={user.id}>
-            <option value={user.id}>{user.name}</option>
+          <select
+            className="paid_by"
+            value={paidByUserId}
+            onChange={setPaidByUserId}
+          >
             {userOptions.map((userOption) => (
               <option key={userOption.id} value={userOption.id}>
                 {userOption.name}
@@ -95,7 +77,13 @@ export default function AdminOrderModal({ isVisible, setIsVisible }) {
       <div className="modalSection">
         {/* Section Title */}
         <div className="modalSectionTitle">
-          <span>Amount Paid to OHS: ${grandTotal.toFixed(2)} </span>
+          <span>Amount Paid to OHS: ${bulkTotal.toFixed(2)} </span>
+          <br />
+          <span>
+            Amount to be collected by:{" "}
+            {paidByUser ? paidByUser.name : "Unknown"} -- ${" "}
+            {userGrandTotal.toFixed(2)}
+          </span>
           <div className="divider-light"></div>
         </div>
 

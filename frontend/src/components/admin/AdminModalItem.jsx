@@ -54,7 +54,7 @@ export function AdminModalItem({
             type="number"
             id={subtotalId}
             name={subtotalId}
-            defaultValue={subtotal}
+            defaultValue={subtotal.toFixed(2)}
             disabled
           />
         </div>

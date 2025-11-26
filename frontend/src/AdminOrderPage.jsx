@@ -6,6 +6,7 @@ import AdminItem from "./components/item/AdminItem";
 import axios from "axios";
 import { toDecimalPercent, toWholePercent } from "./utils/normalize";
 import { fetchUserDropdownListOptions } from "./services/userService";
+import { getUserFromToken } from "./utils/auth";
 
 export default function AdminOrderPage() {
   // Feel Free to move to a context if needed
@@ -23,8 +24,10 @@ export default function AdminOrderPage() {
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [userError, setUserError] = useState(null);
 
-  const [selectedUserId, setSelectedUserId] = useState(null);
-  const [paidByUserId, setPaidByUserId] = useState(null);
+  const [adminTaxAmount, setAdminTaxAmount] = useState(0);
+  const [adminShippingAmount, setAdminShippingAmount] = useState(0);
+  const [paidByUserId, setPaidByUserId] = useState(getUserFromToken().id);
+  const [userOrders, setUserOrders] = useState([]);
 
   // Fetch users once
   useEffect(() => {
@@ -56,8 +59,61 @@ export default function AdminOrderPage() {
 
         const data = response.data;
         console.log("Fetched admin items:", data);
-        
+
         setAdminItems(data.adminLineItems);
+
+        // group items by user for userOrders
+        const grouped = {};
+
+        data.adminLineItems.forEach((adminItem) => {
+          const finalPrice =
+            adminItem.wholesale -
+            adminItem.wholesale *
+              toDecimalPercent(
+                toWholePercent(
+                  data.adminDiscountInfo.selectedDiscountForCurrent
+                )
+              );
+
+          adminItem.userItems.forEach((userItem) => {
+            const userId = userItem.userId;
+            const userName = userItem.name;
+            const userQuantity = userItem.quantity;
+
+            if (!grouped[userId]) {
+              grouped[userId] = {
+                userId,
+                user: userName,
+                subtotal: 0,
+                shipping: 0, // will split later
+                taxes: 0 // will split later
+              };
+            }
+
+            grouped[userId].subtotal += finalPrice * userQuantity;
+          });
+        });
+
+        // Convert object to array
+        const computedUserOrders = Object.values(grouped);
+
+        // Set shipping/Tax amounts
+        const numUsers = computedUserOrders.length;
+        const shippingPerUser = data.adminShippingAmount
+          ? data.adminShippingAmount / numUsers
+          : 0;
+        const taxPerUser = data.adminTaxAmount
+          ? data.adminTaxAmount / numUsers
+          : 0;
+
+        computedUserOrders.forEach((u) => {
+          u.shipping = shippingPerUser;
+          u.taxes = taxPerUser;
+        });
+
+        setUserOrders(computedUserOrders);
+        console.log("Computed user orders:", computedUserOrders);
+
         setDiscountOptions(data.adminDiscountInfo.DISCOUNT_OPTIONS || []);
         setSelectedShipToState(data.adminShipToState);
         setSelectedDiscount(
@@ -133,6 +189,10 @@ export default function AdminOrderPage() {
         usersList={usersList}
         loadingUsers={loadingUsers}
         userError={userError}
+        adminTaxAmount={adminTaxAmount}
+        setAdminTaxAmount={setAdminTaxAmount}
+        adminShippingAmount={adminShippingAmount}
+        setAdminShippingAmount={setAdminShippingAmount}
       />
 
       {/* List of Items */}
@@ -148,7 +208,18 @@ export default function AdminOrderPage() {
       </div>
 
       {/* Modal */}
-      <AdminOrderModal isVisible={isVisible} setIsVisible={setIsVisible} />
+      <AdminOrderModal
+        isVisible={isVisible}
+        setIsVisible={setIsVisible}
+        userOptions={usersList}
+        paidByUserId={paidByUserId}
+        setPaidByUserId={setPaidByUserId}
+        userOrders={userOrders}
+        setUserOrders={setUserOrders}
+        adminSubtotal={adminSubtotal}
+        adminTaxAmount={adminTaxAmount}
+        adminShippingAmount={adminShippingAmount}
+      />
     </div>
   );
 }

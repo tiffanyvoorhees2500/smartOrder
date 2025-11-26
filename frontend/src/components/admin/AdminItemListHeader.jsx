@@ -19,14 +19,15 @@ export default function AdminItemListHeader({
   adminSubtotal,
   usersList,
   loadingUsers,
-  userError
+  userError,
+  adminTaxAmount,
+  setAdminTaxAmount,
+  adminShippingAmount,
+  setAdminShippingAmount
 }) {
   const [productsList, setProductsList] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [productError, setProductError] = useState(null);
-
-  const [taxAmount, setTaxAmount] = useState(0);
-  const [shippingAmount, setShippingAmount] = useState(0);
 
   useEffect(() => {
     // Fetch products for admin order page
@@ -75,7 +76,7 @@ export default function AdminItemListHeader({
       {/* Add To Order */}
       <div className="headerRow">
         {/* Person */}
-        <UserSelector 
+        <UserSelector
           label="Person"
           name="person"
           id="person"
@@ -140,8 +141,8 @@ export default function AdminItemListHeader({
             name="shipping_total"
             id="shipping_total"
             placeholder="0.00"
-            value={shippingAmount}
-            onChange={(e) => setShippingAmount(parseFloat(e.target.value) || 0)}
+            value={adminShippingAmount}
+            onChange={(e) => setAdminShippingAmount(parseFloat(e.target.value) || 0)}
           />
         </InlayInputBox>
 
@@ -152,8 +153,8 @@ export default function AdminItemListHeader({
             name="tax_total "
             id="tax_total"
             placeholder="0.00"
-            value={taxAmount}
-            onChange={(e) => setTaxAmount(parseFloat(e.target.value) || 0)}
+            value={adminTaxAmount}
+            onChange={(e) => setAdminTaxAmount(parseFloat(e.target.value) || 0)}
           />
         </InlayInputBox>
 
@@ -165,7 +166,7 @@ export default function AdminItemListHeader({
         >
           <span>
             <b>
-              ${(adminSubtotal + taxAmount + shippingAmount).toFixed(2)}{" "}
+              ${(adminSubtotal + adminTaxAmount + adminShippingAmount).toFixed(2)}{" "}
               Matches?
             </b>
           </span>
