@@ -1,4 +1,4 @@
-export default function SelectField({
+export default function UserSelector({
   label,
   name,
   id,

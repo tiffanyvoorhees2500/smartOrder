@@ -1,39 +1,17 @@
 import "./AdminModalItem.css";
 import InlayInputBox from "../form/InlayInputBox";
-import { useEffect, useState } from "react";
 
 export function AdminModalItem({
   user,
+  userId,
   subtotal,
   shipping,
   taxes,
-  setUserOrders
+  isPaidByUser,
+  handleUserAmountChange
 }) {
-  function updateUserOrders() {
-    // Update User Orders with new shipping and taxes where the user matches
-    setUserOrders((prevUserOrders) => {
-      return prevUserOrders.map((userOrder) => {
-        if (userOrder.user === user) {
-          return {
-            ...userOrder,
-            shipping: shippingValue,
-            taxes: taxesValue
-          };
-        } else {
-          return userOrder;
-        }
-      });
-    });
-  }
-
-  const [shippingValue, setShippingValue] = useState(shipping);
-  const [taxesValue, setTaxesValue] = useState(taxes);
-
-  // Update User Orders anytime shipping or taxes changes
-  useEffect(updateUserOrders, [shippingValue, taxesValue, setUserOrders, user]);
-
   // Calculate Total
-  const total = (shippingValue + taxesValue + subtotal).toFixed(2);
+  const total = (shipping + taxes + subtotal).toFixed(2);
 
   // Input Element Ids
   const subtotalId = `subtotal_${user}`;
@@ -54,7 +32,7 @@ export function AdminModalItem({
             type="number"
             id={subtotalId}
             name={subtotalId}
-            defaultValue={subtotal.toFixed(2)}
+            value={subtotal.toFixed(2)}
             disabled
           />
         </div>
@@ -68,9 +46,12 @@ export function AdminModalItem({
             type="number"
             id={shippingId}
             name={shippingId}
-            defaultValue={shippingValue}
+            value={shipping}
             step={0.01}
-            onInput={(e) => setShippingValue(+e.target.value)}
+            onChange={(e) =>
+              handleUserAmountChange(userId, "shipping", e.target.value)
+            }
+            disabled={isPaidByUser} // Paying user's shipping is not editable
           />
         </div>
       </InlayInputBox>
@@ -83,9 +64,12 @@ export function AdminModalItem({
             type="number"
             id={taxesId}
             name={taxesId}
-            defaultValue={taxesValue}
+            value={taxes}
             step={0.01}
-            onInput={(e) => setTaxesValue(+e.target.value)}
+            onChange={(e) =>
+              handleUserAmountChange(userId, "taxes", e.target.value)
+            }
+            disabled={isPaidByUser} // Paying user's taxes is not editable
           />
         </div>
       </InlayInputBox>

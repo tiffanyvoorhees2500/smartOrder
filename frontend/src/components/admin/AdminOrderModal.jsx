@@ -20,24 +20,39 @@ export default function AdminOrderModal({
 
   // Calculate grand totals
   const bulkTotal = adminSubtotal + adminTaxAmount + adminShippingAmount;
-
-  const usersTaxTotal = userOrders.reduce((sum, { taxes }) => sum + taxes, 0);
-  const usersShippingTotal = userOrders.reduce(
-    (sum, { shipping }) => sum + shipping,
-    0
-  );
   const userGrandTotal = userOrders.reduce(
     (sum, { subtotal, shipping, taxes }) => sum + subtotal + shipping + taxes,
     0
   );
 
-  // Calculate totals to verify against bulk total
-  const shippingDiff = Math.abs(usersShippingTotal - adminShippingAmount);
-  const taxDiff = Math.abs(usersTaxTotal - adminTaxAmount);
-  const grandTotalDiff = Math.abs(userGrandTotal - bulkTotal);
-
-  // Find the user object that matches the selected paidByUserId
   const paidByUser = userOptions.find((u) => u.id === paidByUserId);
+
+  // Handles changes to user shipping or taxes.. Makes sure totals always match admin amounts by assigning diffs to paidByUser
+  const handleUserAmountChange = (userId, field, value) => {
+    setUserOrders((prev) => {
+      const updated = prev.map((u) =>
+        u.userId === userId ? { ...u, [field]: parseFloat(value) || 0 } : u
+      );
+
+      // Recalculate totals
+      const totalShipping = updated.reduce((sum, u) => sum + u.shipping, 0);
+      const totalTaxes = updated.reduce((sum, u) => sum + u.taxes, 0);
+
+      const shippingDiff = adminShippingAmount - totalShipping;
+      const taxDiff = adminTaxAmount - totalTaxes;
+
+      return updated.map((u) => {
+        if (u.userId === paidByUserId) {
+          return {
+            ...u,
+            shipping: u.shipping + shippingDiff,
+            taxes: u.taxes + taxDiff
+          };
+        }
+        return u;
+      });
+    });
+  };
 
   return (
     <Modal {...{ isVisible, setIsVisible }} className="adminOrderModal">
@@ -91,10 +106,14 @@ export default function AdminOrderModal({
         <div className="userList">
           {userOrders.map((userOrder, i) => (
             <AdminModalItem
-              key={i}
-              user={userOrder.name}
-              {...userOrder}
-              setUserOrders={setUserOrders}
+              key={userOrder.userId}
+              user={userOrder.user}
+              userId={userOrder.userId}
+              subtotal={userOrder.subtotal}
+              shipping={userOrder.shipping}
+              taxes={userOrder.taxes}
+              isPaidByUser={userOrder.userId === paidByUserId}
+              handleUserAmountChange={handleUserAmountChange}
             />
           ))}
         </div>

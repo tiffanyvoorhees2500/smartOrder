@@ -4,10 +4,10 @@ import { toast } from "react-toastify";
 import "./AdminItemListHeader.css";
 import { fetchProductDropdownListOptions } from "../../services/productService";
 import { states } from "../../components/form/states";
-import { fetchUserDropdownListOptions} from "../../services/userService";
+import UserSelector from "../selectors/UserSelector";
 import { addUserLineItemFromAdminPage } from "../../services/userLineItemService";
-import DiscountSelector from '../selectors/DiscountSelector';
-import ShipToStateSelector from '../selectors/ShipToStateSelector';
+import DiscountSelector from "../selectors/DiscountSelector";
+import ShipToStateSelector from "../selectors/ShipToStateSelector";
 
 export default function AdminItemListHeader({
   className,
@@ -30,17 +30,10 @@ export default function AdminItemListHeader({
   const [productsList, setProductsList] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [productError, setProductError] = useState(null);
-  const [usersList, setUsersList] = useState([]);
-  const [loadingUsers, setLoadingUsers] = useState(true);
-  const [userError, setUserError] = useState(null);
 
   const [selectedUserId, setSelectedUserId] = useState("");
   const [selectedProductId, setSelectedProductId] = useState("");
   const [selectedQty, setSelectedQty] = useState(1);
-
-
-  const [taxAmount, setTaxAmount] = useState(0);
-  const [shippingAmount, setShippingAmount] = useState(0);
 
   useEffect(() => {
     // Fetch products for admin order page
@@ -61,12 +54,14 @@ export default function AdminItemListHeader({
 
   const handleAddToOrder = async () => {
     if (!selectedUserId || !selectedProductId || selectedQty <= 0) {
-      toast.error("Error: Please select a user, product, and quantity greater than zero.");
+      toast.error(
+        "Error: Please select a user, product, and quantity greater than zero."
+      );
       return;
     }
 
     try {
-      const data =  await addUserLineItemFromAdminPage({
+      const data = await addUserLineItemFromAdminPage({
         userId: selectedUserId,
         productId: selectedProductId,
         quantity: selectedQty,
@@ -79,9 +74,12 @@ export default function AdminItemListHeader({
       setSelectedProductId("");
       setSelectedQty(1);
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to add to order. See console for details");
+      toast.error(
+        err.response?.data?.message ||
+          "Failed to add to order. See console for details"
+      );
     }
-  }
+  };
 
   return (
     <div className={"adminListHeader " + className}>
@@ -119,7 +117,7 @@ export default function AdminItemListHeader({
           id="person"
           value={selectedUserId}
           options={usersList}
-          onChange={(e) => setSelectedUserId(e.target.value)}
+          onChange={setSelectedUserId}
           loading={loadingUsers}
           error={userError}
           required
@@ -129,7 +127,12 @@ export default function AdminItemListHeader({
         {/* Product */}
         <label htmlFor="product">
           Product:
-          <select name="product" id="product" value={selectedProductId} onChange={(e) => setSelectedProductId(e.target.value)}>
+          <select
+            name="product"
+            id="product"
+            value={selectedProductId}
+            onChange={(e) => setSelectedProductId(e.target.value)}
+          >
             <option value="">
               {loadingProducts
                 ? "Loading products..."
@@ -152,7 +155,12 @@ export default function AdminItemListHeader({
         {/* Quantity */}
         <label htmlFor="quantity">
           Quantity:
-          <select name="quantity" id="quantity" value={selectedQty} onChange={(e) => setSelectedQty(Number(e.target.value))}>
+          <select
+            name="quantity"
+            id="quantity"
+            value={selectedQty}
+            onChange={(e) => setSelectedQty(Number(e.target.value))}
+          >
             {Array.from({ length: 100 }, (_, index) => (
               <option key={index + 1} value={index + 1}>
                 {index + 1}
@@ -162,12 +170,12 @@ export default function AdminItemListHeader({
         </label>
 
         {/* Confirm Add Button */}
-        <button 
-          type="button" 
+        <button
+          type="button"
           className="highlightButton"
           onClick={handleAddToOrder}
-          >
-            Add To Order
+        >
+          Add To Order
         </button>
       </div>
 
@@ -183,7 +191,9 @@ export default function AdminItemListHeader({
             id="shipping_total"
             placeholder="0.00"
             value={adminShippingAmount}
-            onChange={(e) => setAdminShippingAmount(parseFloat(e.target.value) || 0)}
+            onChange={(e) =>
+              setAdminShippingAmount(parseFloat(e.target.value) || 0)
+            }
           />
         </InlayInputBox>
 
@@ -207,7 +217,10 @@ export default function AdminItemListHeader({
         >
           <span>
             <b>
-              ${(adminSubtotal + adminTaxAmount + adminShippingAmount).toFixed(2)}{" "}
+              $
+              {(adminSubtotal + adminTaxAmount + adminShippingAmount).toFixed(
+                2
+              )}{" "}
               Matches?
             </b>
           </span>

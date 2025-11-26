@@ -62,58 +62,6 @@ export default function AdminOrderPage() {
 
         setAdminItems(data.adminLineItems);
 
-        // group items by user for userOrders
-        const grouped = {};
-
-        data.adminLineItems.forEach((adminItem) => {
-          const finalPrice =
-            adminItem.wholesale -
-            adminItem.wholesale *
-              toDecimalPercent(
-                toWholePercent(
-                  data.adminDiscountInfo.selectedDiscountForCurrent
-                )
-              );
-
-          adminItem.userItems.forEach((userItem) => {
-            const userId = userItem.userId;
-            const userName = userItem.name;
-            const userQuantity = userItem.quantity;
-
-            if (!grouped[userId]) {
-              grouped[userId] = {
-                userId,
-                user: userName,
-                subtotal: 0,
-                shipping: 0, // will split later
-                taxes: 0 // will split later
-              };
-            }
-
-            grouped[userId].subtotal += finalPrice * userQuantity;
-          });
-        });
-
-        // Convert object to array
-        const computedUserOrders = Object.values(grouped);
-
-        // Set shipping/Tax amounts
-        const numUsers = computedUserOrders.length;
-        const shippingPerUser = data.adminShippingAmount
-          ? data.adminShippingAmount / numUsers
-          : 0;
-        const taxPerUser = data.adminTaxAmount
-          ? data.adminTaxAmount / numUsers
-          : 0;
-
-        computedUserOrders.forEach((u) => {
-          u.shipping = shippingPerUser;
-          u.taxes = taxPerUser;
-        });
-
-        setUserOrders(computedUserOrders);
-        console.log("Computed user orders:", computedUserOrders);
-
         setDiscountOptions(data.adminDiscountInfo.DISCOUNT_OPTIONS || []);
         setSelectedShipToState(data.adminShipToState);
         setSelectedDiscount(
@@ -129,6 +77,61 @@ export default function AdminOrderPage() {
 
     fetchAdminItems();
   }, [base_url, token, selectedShipToState]);
+
+  // Recompute userOrders when adminItems, selectedDiscount, adminShippingAmount, or adminTaxAmount change
+  useEffect(() => {
+    if (!adminItems.length) return;
+
+    // group items by user for userOrders
+    const grouped = {};
+
+    adminItems.forEach((adminItem) => {
+      const finalPrice =
+        adminItem.wholesale -
+        adminItem.wholesale *
+          toDecimalPercent(
+            toWholePercent(selectedDiscount)
+          );
+
+      adminItem.userItems.forEach((userItem) => {
+        const userId = userItem.userId;
+        const userName = userItem.name;
+        const userQuantity = userItem.quantity;
+
+        if (!grouped[userId]) {
+          grouped[userId] = {
+            userId,
+            user: userName,
+            subtotal: 0,
+            shipping: 0, // will split later
+            taxes: 0 // will split later
+          };
+        }
+
+        grouped[userId].subtotal += finalPrice * userQuantity;
+      });
+    });
+
+    // Convert object to array
+    const computedUserOrders = Object.values(grouped);
+
+    // Set shipping/Tax amounts
+    const numUsers = computedUserOrders.length;
+    console.log("Number of users in order:", numUsers);
+    const shippingPerUser = adminShippingAmount
+      ? adminShippingAmount / numUsers
+      : 0;
+    const taxPerUser = adminTaxAmount ? adminTaxAmount / numUsers : 0;
+    console.log(shippingPerUser, taxPerUser);
+
+    computedUserOrders.forEach((u) => {
+      u.shipping = shippingPerUser;
+      u.taxes = taxPerUser;
+    });
+
+    setUserOrders(computedUserOrders);
+    console.log("Computed user orders:", computedUserOrders);
+  }, [adminItems, selectedDiscount, adminShippingAmount, adminTaxAmount]);
 
   // Handle quantity change in PriceQtyGroup
   const handleQuantityChange = async (productId, userId, newQuantity) => {
