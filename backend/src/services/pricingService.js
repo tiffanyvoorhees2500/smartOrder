@@ -67,7 +67,6 @@ async function calculateUserDiscount(user) {
 }
 
 async function calculateAdminDiscount(shipToState) {
-
   // We need to get all userLineItems where adminOrderId is null and that are in the same location as admin order shipToState
   const lineItems = await UserLineItem.findAll({
     where: { adminOrderId: null, saveForLater: false },
@@ -91,7 +90,7 @@ async function calculateAdminDiscount(shipToState) {
   return {
     DISCOUNT_OPTIONS,
     totalBottlesForCurrentQuantities,
-    selectedDiscountForCurrent,
+    selectedDiscountForCurrent
   };
 }
 

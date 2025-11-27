@@ -17,3 +17,42 @@ export const fetchProductDropdownListOptions = async () => {
     throw error;
   }
 };
+
+export const updateProductWholesalePrice = async (
+  productId,
+  newWholesalePrice
+) => {
+  try {
+    const response = await axios.put(
+      `${base_url}/products/${productId}/wholesale-price`,
+      { wholesalePrice: newWholesalePrice },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating product wholesale price:", error);
+    throw error;
+  }
+};
+
+export const updateProductRetailPrice = async (productId, newRetailPrice) => {
+  try {
+    const response = await axios.put(
+      `${base_url}/products/${productId}/retail-price`,
+      { retailPrice: newRetailPrice },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating product retail price:", error);
+    throw error;
+  }
+};

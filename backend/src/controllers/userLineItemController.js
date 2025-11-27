@@ -95,18 +95,18 @@ exports.saveAll = async (req, res) => {
     const userId = req.user.id;
 
     if (!Array.isArray(items)) {
-      return res.status(400).json({ message: "Invalid items data" }); 
+      return res.status(400).json({ message: "Invalid items data" });
     }
 
     const promises = items.map(async (item) => {
       const { id: productId, dbPendingQuantity: pendingQuantity } = item;
 
       if (!productId) return; // Skip items without a valid product ID
-      
+
       let lineItem = await UserLineItem.findOne({
         where: { userId, productId, adminOrderId: null }
       });
-      
+
       if (!lineItem) {
         // if no line item exists, create one if pendingQuantity > 0
         if (pendingQuantity > 0) {
@@ -117,15 +117,15 @@ exports.saveAll = async (req, res) => {
             pendingQuantity: null,
             adminOrderId: null
           });
-        } 
+        }
         return; // skip if pendingQuantity is 0 and no existing line item
       }
 
       if (pendingQuantity === 0) {
         // If pendingQuantity is zero, delete the line item
-      await lineItem.destroy();
+        await lineItem.destroy();
       } else {
-      // Update the line item's quantity and set pendingQuantity = null
+        // Update the line item's quantity and set pendingQuantity = null
         await lineItem.update({
           quantity: pendingQuantity,
           pendingQuantity: null
@@ -134,44 +134,49 @@ exports.saveAll = async (req, res) => {
     });
 
     await Promise.all(promises);
-    
+
     return res.status(200).json({ message: "All items saved successfully" });
   } catch (error) {
     console.error("Error saving all user line items:", error);
     return res.status(500).json({ message: "Internal server error" });
-  } 
+  }
 };
 
 exports.addUserLineItemFromAdminPage = async (req, res) => {
   try {
     // Confirm that logged in user is an admin
     if (!req.user.isAdmin) {
-      return res.status(403).json({message: "Restricted to Admins only"});
+      return res.status(403).json({ message: "Restricted to Admins only" });
     }
 
     const { userId, productId, quantity, state } = req.body;
 
     // Validate data
-    if (!userId || !productId || typeof quantity !== "number" || quantity < 1 || !state) {
+    if (
+      !userId ||
+      !productId ||
+      typeof quantity !== "number" ||
+      quantity < 1 ||
+      !state
+    ) {
       return res.status(400).json({ message: "Invalid data" });
     }
 
-    
     // Fetch the user to check their shipToState
     const user = await User.findByPk(userId);
     if (!user) {
-      return res.status(404).json({ message: "User not found. "});
+      return res.status(404).json({ message: "User not found. " });
     }
     // if the line item is for a shipToState that is different than the Admin page, don't add/update
     if (user.defaultShipToState !== state) {
       return res.status(400).json({
         message: `Cannot save to cart: ${user.name}'s ship-to-state ${user.defaultShipToState} doesn't match ${state}`
-      })
+      });
     }
 
     let lineItem = await UserLineItem.findOne({
-      where: { userId, productId, adminOrderId: null },
-    }); 
+      where: { userId, productId, adminOrderId: null }
+    });
 
     // if there no line item for this product & user, create it, otherwise update the current line
     if (!lineItem) {
@@ -195,5 +200,3 @@ exports.addUserLineItemFromAdminPage = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
-
