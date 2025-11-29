@@ -81,6 +81,11 @@ export default function AdminItemListHeader({
     }
   };
 
+  // Filter users by selected ship-to state
+  const filteredUsers = selectedShipToState
+    ? usersList.filter(user => user.defaultShipToState === selectedShipToState)
+    : usersList;
+
   return (
     <div className={"adminListHeader " + className}>
       {/* Discount */}
@@ -116,7 +121,7 @@ export default function AdminItemListHeader({
           name="person"
           id="person"
           value={selectedUserId}
-          options={usersList}
+          options={filteredUsers}
           onChange={setSelectedUserId}
           loading={loadingUsers}
           error={userError}
