@@ -106,7 +106,8 @@ exports.updateUser = async (req, res) => {
         {
           id: user.id,
           isAdmin: user.isAdmin,
-          name: user.name
+          name: user.name,
+          defaultShipToState: user.defaultShipToState
         },
         process.env.JWT_SECRET
       );
@@ -164,7 +165,7 @@ exports.loginUser = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, isAdmin: user.isAdmin, name: user.name },
+      { id: user.id, isAdmin: user.isAdmin, name: user.name, defaultShipToState: user.defaultShipToState },
       process.env.JWT_SECRET
     );
 
@@ -243,8 +244,22 @@ exports.updateUserShipToState = async (req, res) => {
 
     await user.update({ defaultShipToState });
 
+    let newToken = null;
+    if (String(requester.id) === String(user.id)) {
+      newToken = jwt.sign(
+        {
+          id: user.id,
+          isAdmin: user.isAdmin,
+          name: user.name,
+          defaultShipToState: user.defaultShipToState
+        },
+        process.env.JWT_SECRET
+      );
+    }
+
     res.json({
-      user
+      user,
+      token: newToken
     });
   } catch (error) {
     res.status(500).json({ error: error.message });

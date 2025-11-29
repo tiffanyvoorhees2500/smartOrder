@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { toWholePercent } from "./utils/normalize";
+import { setToken } from "./utils/auth";
 
 const base_url = process.env.REACT_APP_API_BASE_URL;
 export const HeaderContext = createContext();
@@ -208,12 +209,17 @@ export default function HeaderContextProvider({ children }) {
       try {
         setUser((prev) => ({ ...prev, defaultShipToState: newState }));
 
-        await axios.put(
+        const response = await axios.put(
           `${base_url}/users/update-ship-to-state`,
           { defaultShipToState: newState },
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
+        // save the new defaultShipToState to the token
+        if (response.data?.token) {
+          localStorage.setItem("token", response.data.token);
+          setToken(response.data.token);
+        }
         await loadPricing();
       } catch (err) {
         console.error("updateUserShipToState error:", err);

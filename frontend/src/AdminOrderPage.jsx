@@ -15,7 +15,7 @@ export default function AdminOrderPage() {
 
   const [isVisible, setIsVisible] = useState(false);
   const [adminItems, setAdminItems] = useState([]);
-  const [selectedShipToState, setSelectedShipToState] = useState("UT");
+  const [selectedShipToState, setSelectedShipToState] = useState(getUserFromToken()?.defaultShipToState || "UT");
   const [discountOptions, setDiscountOptions] = useState([]);
   const [selectedDiscount, setSelectedDiscount] = useState(0);
   const [numberBottles, setNumberBottles] = useState(0);
