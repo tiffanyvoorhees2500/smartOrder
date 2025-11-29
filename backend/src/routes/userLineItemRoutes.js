@@ -18,11 +18,7 @@ router.post(
 );
 
 // Save all user line items for the current order
-router.post(
-  "/save-all",
-  authenticateToken,
-  controller.saveAll
-);
+router.post("/save-all", authenticateToken, controller.saveAll);
 
 // Add/update a line item from the admin page
 router.post(
@@ -30,6 +26,6 @@ router.post(
   authenticateToken,
   requireAdmin,
   controller.addUserLineItemFromAdminPage
-)
+);
 
 module.exports = router;

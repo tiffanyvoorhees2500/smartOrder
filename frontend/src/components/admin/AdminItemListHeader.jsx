@@ -2,28 +2,38 @@ import { useEffect, useState } from "react";
 import InlayInputBox from "../form/InlayInputBox";
 import { toast } from "react-toastify";
 import "./AdminItemListHeader.css";
-import { fetchProductDropdownListOptions } from '../../services/productService';
+import { fetchProductDropdownListOptions } from "../../services/productService";
 import { states } from "../../components/form/states";
-import { fetchUserDropdownListOptions} from "../../services/userService";
+import UserSelector from "../selectors/UserSelector";
 import { addUserLineItemFromAdminPage } from "../../services/userLineItemService";
-import DiscountSelector from '../selectors/DiscountSelector';
-import ShipToStateSelector from '../selectors/ShipToStateSelector';
+import DiscountSelector from "../selectors/DiscountSelector";
+import ShipToStateSelector from "../selectors/ShipToStateSelector";
 
-export default function AdminItemListHeader({ className, setIsVisible, discountOptions, selectedDiscount, setSelectedDiscount, selectedShipToState, setSelectedShipToState, numberBottles, adminSubtotal }) {
+export default function AdminItemListHeader({
+  className,
+  setIsVisible,
+  discountOptions,
+  selectedDiscount,
+  setSelectedDiscount,
+  selectedShipToState,
+  setSelectedShipToState,
+  numberBottles,
+  adminSubtotal,
+  usersList,
+  loadingUsers,
+  userError,
+  adminTaxAmount,
+  setAdminTaxAmount,
+  adminShippingAmount,
+  setAdminShippingAmount
+}) {
   const [productsList, setProductsList] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [productError, setProductError] = useState(null);
-  const [usersList, setUsersList] = useState([]);
-  const [loadingUsers, setLoadingUsers] = useState(true);
-  const [userError, setUserError] = useState(null);
 
   const [selectedUserId, setSelectedUserId] = useState("");
   const [selectedProductId, setSelectedProductId] = useState("");
   const [selectedQty, setSelectedQty] = useState(1);
-
-
-  const [taxAmount, setTaxAmount] = useState(0);
-  const [shippingAmount, setShippingAmount] = useState(0);
 
   useEffect(() => {
     // Fetch products for admin order page
@@ -42,31 +52,16 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
     loadProductsList();
   }, []);
 
-  useEffect(() => {
-    // Fetch products for admin order page
-    const loadUsersList = async () => {
-      try {
-        const usersList = await fetchUserDropdownListOptions();
-        setUsersList(usersList);
-      } catch (error) {
-        console.error("Error fetching admin products:", error);
-        setUserError("Failed to load products.");
-      } finally {
-        setLoadingUsers(false);
-      }
-    };
-
-    loadUsersList();
-  }, []);
-
   const handleAddToOrder = async () => {
     if (!selectedUserId || !selectedProductId || selectedQty <= 0) {
-      toast.error("Error: Please select a user, product, and quantity greater than zero.");
+      toast.error(
+        "Error: Please select a user, product, and quantity greater than zero."
+      );
       return;
     }
 
     try {
-      const data =  await addUserLineItemFromAdminPage({
+      const data = await addUserLineItemFromAdminPage({
         userId: selectedUserId,
         productId: selectedProductId,
         quantity: selectedQty,
@@ -79,9 +74,12 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
       setSelectedProductId("");
       setSelectedQty(1);
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to add to order. See console for details");
+      toast.error(
+        err.response?.data?.message ||
+          "Failed to add to order. See console for details"
+      );
     }
-  }
+  };
 
   return (
     <div className={"adminListHeader " + className}>
@@ -89,9 +87,9 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
       <label htmlFor="discount">
         Discount:
         <DiscountSelector
-        value={selectedDiscount}
-        onChange={setSelectedDiscount}
-        options={discountOptions}
+          value={selectedDiscount}
+          onChange={setSelectedDiscount}
+          options={discountOptions}
         />
       </label>
 
@@ -113,32 +111,28 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
       {/* Add To Order */}
       <div className="headerRow">
         {/* Person */}
-        <label htmlFor="person">
-          Person:
-          <select name="person" id="person" value={selectedUserId} onChange={(e) => setSelectedUserId(e.target.value)}>
-            <option value="">
-              {loadingUsers
-                ? "Loading users..."
-                : userError
-                  ? userError
-                  : "Add a user..."}
-            </option>
-            {!loadingUsers &&
-              !userError &&
-              usersList.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.name.length > 100
-                    ? user.name.slice(0, 100) + "..."
-                    : user.name}
-                </option>
-              ))}
-          </select>
-        </label>
+        <UserSelector
+          label="Person"
+          name="person"
+          id="person"
+          value={selectedUserId}
+          options={usersList}
+          onChange={setSelectedUserId}
+          loading={loadingUsers}
+          error={userError}
+          required
+          placeholder="Select a user..."
+        />
 
         {/* Product */}
         <label htmlFor="product">
           Product:
-          <select name="product" id="product" value={selectedProductId} onChange={(e) => setSelectedProductId(e.target.value)}>
+          <select
+            name="product"
+            id="product"
+            value={selectedProductId}
+            onChange={(e) => setSelectedProductId(e.target.value)}
+          >
             <option value="">
               {loadingProducts
                 ? "Loading products..."
@@ -161,7 +155,12 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
         {/* Quantity */}
         <label htmlFor="quantity">
           Quantity:
-          <select name="quantity" id="quantity" value={selectedQty} onChange={(e) => setSelectedQty(Number(e.target.value))}>
+          <select
+            name="quantity"
+            id="quantity"
+            value={selectedQty}
+            onChange={(e) => setSelectedQty(Number(e.target.value))}
+          >
             {Array.from({ length: 100 }, (_, index) => (
               <option key={index + 1} value={index + 1}>
                 {index + 1}
@@ -171,12 +170,12 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
         </label>
 
         {/* Confirm Add Button */}
-        <button 
-          type="button" 
+        <button
+          type="button"
           className="highlightButton"
           onClick={handleAddToOrder}
-          >
-            Add To Order
+        >
+          Add To Order
         </button>
       </div>
 
@@ -191,8 +190,10 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
             name="shipping_total"
             id="shipping_total"
             placeholder="0.00"
-            value={shippingAmount}
-            onChange={(e) => setShippingAmount(parseFloat(e.target.value) || 0)}
+            value={adminShippingAmount}
+            onChange={(e) =>
+              setAdminShippingAmount(parseFloat(e.target.value) || 0)
+            }
           />
         </InlayInputBox>
 
@@ -203,8 +204,8 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
             name="tax_total "
             id="tax_total"
             placeholder="0.00"
-            value={taxAmount}
-            onChange={(e) => setTaxAmount(parseFloat(e.target.value) || 0)}
+            value={adminTaxAmount}
+            onChange={(e) => setAdminTaxAmount(parseFloat(e.target.value) || 0)}
           />
         </InlayInputBox>
 
@@ -214,7 +215,15 @@ export default function AdminItemListHeader({ className, setIsVisible, discountO
           className="highlightButton"
           onClick={() => setIsVisible(true)}
         >
-          <span><b>${(adminSubtotal + taxAmount + shippingAmount).toFixed(2)} Matches?</b></span>
+          <span>
+            <b>
+              $
+              {(adminSubtotal + adminTaxAmount + adminShippingAmount).toFixed(
+                2
+              )}{" "}
+              Matches?
+            </b>
+          </span>
           <span>Finalize Order</span>
         </button>
       </div>

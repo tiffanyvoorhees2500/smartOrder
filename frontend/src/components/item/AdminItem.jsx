@@ -4,7 +4,11 @@ import PriceQtyGroup from "./PriceQtyGroup";
 import InlayInputBox from "../form/InlayInputBox";
 import { toDecimalPercent, toWholePercent } from "../../utils/normalize";
 
-export default function AdminItem({ adminItem, adminDiscountPercentage, onQuantityChange }) {
+export default function AdminItem({
+  adminItem,
+  adminDiscountPercentage,
+  onQuantityChange
+}) {
   // Set the input element ids for this item
   const wholesaleInputId = `wholesale_price_${adminItem.id}`;
   const retailInputId = `retail_price_${adminItem.id}`;
@@ -16,7 +20,10 @@ export default function AdminItem({ adminItem, adminDiscountPercentage, onQuanti
     .reduce((a, b) => a + b, 0);
 
   const finalPrice = useMemo(() => {
-    return (adminItem.wholesale - (adminItem.wholesale * toDecimalPercent(adminDiscountPercentage)))
+    return (
+      adminItem.wholesale -
+      adminItem.wholesale * toDecimalPercent(adminDiscountPercentage)
+    );
   }, [adminItem.wholesale, adminDiscountPercentage]);
 
   const subtotal = finalPrice * totalQuantity;
