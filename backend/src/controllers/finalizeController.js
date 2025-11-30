@@ -10,31 +10,62 @@ exports.finalizeOrder = async (req, res) => {
   const t = await sequelize.transaction();
 
   try {
+    const {
+      paidForById,
+      shipToState,
+      shippingAmount,
+      taxAmount,
+      adminLineItems,
+      userAmounts
+    } = req.body;
+
     // Create the admin order
-    const adminOrder = await adminOrderService.createAdminOrder(req.body, {
-      transaction: t
-    });
+    const adminOrder = await adminOrderService.createAdminOrder(
+      { paidForById, shipToState, shippingAmount, taxAmount },
+      t
+    );
 
     // Create admin line items
-    await adminLineItemService.createAdminLineItems(
-      adminOrder.id,
-      req.body.lineItems,
-      { transaction: t }
+    await adminLineItemService.createBulkAdminLineItems(
+      {
+        adminOrderId: adminOrder.id,
+        adminLineItems: adminLineItems
+      },
+      t
     );
 
     // Create the user order
-    const userOrder = await userOrderService.createUserOrder(req.body, {
-      transaction: t
-    });
+    await userOrderService.createBulkUserOrders(
+      {
+        adminOrderId: adminOrder.id,
+        userAmounts: userAmounts,
+        shipToState: shipToState,
+        adminShippingAmount: shippingAmount,
+        adminTaxAmount: taxAmount
+      },
+      t
+    );
 
-    // Update adminOrderId in user line items
-    await userLineItemService.updateUserLineItemsWithAdminOrderId(
-      req.body.userId,
-      adminOrder.id,
-      { transaction: t }
+    // Extract user line items from admin line items
+    const extractedUserLineItems =
+      userLineItemService.extractUserLineItemsFromAdminLineItems(
+        adminLineItems
+      );
+
+    // Add Pricing to userLineItems
+    const userLineItemsWithPricing =
+      await userLineItemService.attachPricingToUserLineItems(
+        extractedUserLineItems
+      );
+
+    // Update userLineItem adminOrderId and pricing details in bulk
+    await userLineItemService.bulkFinalizeCurrentOrders(
+      { userLineItemsWithPricing, adminOrderId: adminOrder.id },
+      t
     );
 
     await t.commit();
+    res.status(200).json({ message: "Admin order finalized successfully" });
   } catch (error) {
     console.error("Error finalizing order:", error);
 

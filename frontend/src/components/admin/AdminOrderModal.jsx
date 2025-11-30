@@ -2,6 +2,7 @@ import "./AdminOrderModal.css";
 import InlayInputBox from "../form/InlayInputBox";
 import Modal from "../misc/Modal";
 import { AdminModalItem } from "./AdminModalItem";
+import { finalizeOrder } from "../../services/finalizeOrderService";
 
 export default function AdminOrderModal({
   isVisible,
@@ -13,7 +14,9 @@ export default function AdminOrderModal({
   setUserOrders,
   adminSubtotal,
   adminTaxAmount,
-  adminShippingAmount
+  adminShippingAmount,
+  selectedShipToState,
+  adminLineItems
 }) {
   // Get today's date and remove the time
   const today = new Date().toISOString().split("T")[0];
@@ -52,6 +55,31 @@ export default function AdminOrderModal({
         return u;
       });
     });
+  };
+
+  const handleConfirm = async () => {
+    // Create payload for finalizing order
+    const orderData = {
+      paidForById: paidByUserId,
+      shipToState: selectedShipToState,
+      shippingAmount: adminShippingAmount,
+      taxAmount: adminTaxAmount,
+      adminLineItems: adminLineItems,
+      userAmounts: userOrders.map((u) => ({
+        userId: u.userId,
+        shippingAmount: u.shipping,
+        taxAmount: u.taxes
+      }))
+    };
+    // console.log("Payload:", orderData);
+    try {
+      await finalizeOrder(orderData);
+      alert("Order finalized successfully!");
+      setIsVisible(false);
+    } catch (error) {
+      console.error("Failed to finalize order:", error);
+      alert("Failed to finalize order. Please try again.");
+    }
   };
 
   return (
@@ -120,7 +148,7 @@ export default function AdminOrderModal({
       </div>
 
       {/* Confirm Button */}
-      <button type="button" className="highlightButton">
+      <button type="button" className="highlightButton" onClick={handleConfirm}>
         Confirm
       </button>
     </Modal>
