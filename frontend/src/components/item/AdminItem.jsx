@@ -28,6 +28,16 @@ export default function AdminItem({
 
   const subtotal = finalPrice * totalQuantity;
 
+  const handleWholesaleBlur = (e) => {
+    const value = parseFloat(e.target.value);
+    e.target.value = isNaN(value) ? adminItem.wholesale.toFixed(2) : value.toFixed(2);
+  }
+
+  const handleRetailBlur = (e) => {
+    const value = parseFloat(e.target.value);
+    e.target.value = isNaN(value) ? adminItem.retail.toFixed(2) : value.toFixed(2);
+  }
+
   return (
     <div className="itemContainer adminItemContainer">
       <div className="adminItemsLeft">
@@ -43,7 +53,9 @@ export default function AdminItem({
             type="number"
             name={wholesaleInputId}
             id={wholesaleInputId}
-            defaultValue={adminItem.wholesale}
+            defaultValue={adminItem.wholesale.toFixed(2)}
+            onFocus={(e) => e.target.select()}
+            onBlur={handleWholesaleBlur}
           />
         </InlayInputBox>
 
@@ -53,7 +65,9 @@ export default function AdminItem({
             type="number"
             name={retailInputId}
             id={retailInputId}
-            defaultValue={adminItem.retail}
+            defaultValue={adminItem.retail.toFixed(2)}
+            onFocus={(e) => e.target.select()}
+            onBlur={handleRetailBlur}
           />
         </InlayInputBox>
 
@@ -74,7 +88,7 @@ export default function AdminItem({
             type="number"
             name={finalInputId}
             id={finalInputId}
-            value={finalPrice}
+            value={finalPrice.toFixed(2)}
             disabled
           />
         </InlayInputBox>
@@ -94,7 +108,7 @@ export default function AdminItem({
             price={adminItem.wholesale}
             helpText={userItem.name}
             quantity={userItem.quantity}
-            onQuantityChange={(newQuantity) =>
+            setQuantity={(newQuantity) =>
               onQuantityChange(adminItem.id, userItem.userId, newQuantity)
             }
             discount={toWholePercent(adminItem.discountPercentage)}

@@ -25,7 +25,8 @@ export default function AdminItemListHeader({
   adminTaxAmount,
   setAdminTaxAmount,
   adminShippingAmount,
-  setAdminShippingAmount
+  setAdminShippingAmount,
+  refreshAdminItems
 }) {
   const [productsList, setProductsList] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
@@ -34,6 +35,9 @@ export default function AdminItemListHeader({
   const [selectedUserId, setSelectedUserId] = useState("");
   const [selectedProductId, setSelectedProductId] = useState("");
   const [selectedQty, setSelectedQty] = useState(1);
+
+  const [shippingInput, setShippingInput] = useState(adminShippingAmount.toFixed(2));
+  const [taxInput, setTaxInput] = useState(adminTaxAmount.toFixed(2))
 
   useEffect(() => {
     // Fetch products for admin order page
@@ -61,24 +65,55 @@ export default function AdminItemListHeader({
     }
 
     try {
-      const data = await addUserLineItemFromAdminPage({
+      await addUserLineItemFromAdminPage({
         userId: selectedUserId,
         productId: selectedProductId,
         quantity: selectedQty,
         state: selectedShipToState
       });
 
-      toast.success(data.message || "Order updated successfully!");
+      if (refreshAdminItems) await refreshAdminItems();
 
       setSelectedUserId("");
       setSelectedProductId("");
       setSelectedQty(1);
+
+      toast.success("Order updated successfully!");
     } catch (err) {
       toast.error(
         err.response?.data?.message ||
-          "Failed to add to order. See console for details"
+          "Failed to add to order. Internal Error."
       );
     }
+  };
+
+  // Filter users by selected ship-to state
+  const filteredUsers = selectedShipToState
+    ? usersList.filter(user => user.defaultShipToState === selectedShipToState)
+    : usersList;
+
+  useEffect(() => {
+    setShippingInput(adminShippingAmount.toFixed(2));
+  }, [adminShippingAmount]);
+
+  useEffect(() => {
+    setTaxInput(adminTaxAmount.toFixed(2));
+  }, [adminTaxAmount]);
+
+  // when shipping input loses focus run validation
+  const handleShippingBlur = () => {
+    let value = parseFloat(shippingInput);
+    if (isNaN(value) || value < 0) value = 0; // don't allow negative shipping amount
+    setShippingInput(value.toFixed(2));
+    setAdminShippingAmount(value);
+  };
+
+  // when tax input loses focus run validation
+  const handleTaxBlur = () => {
+    let value = parseFloat(taxInput);
+    if (isNaN(value) || value < 0) value = 0; // don't allow negative tax amount
+    setTaxInput(value.toFixed(2));
+    setAdminTaxAmount(value);
   };
 
   return (
@@ -116,7 +151,7 @@ export default function AdminItemListHeader({
           name="person"
           id="person"
           value={selectedUserId}
-          options={usersList}
+          options={filteredUsers}
           onChange={setSelectedUserId}
           loading={loadingUsers}
           error={userError}
@@ -190,10 +225,10 @@ export default function AdminItemListHeader({
             name="shipping_total"
             id="shipping_total"
             placeholder="0.00"
-            value={adminShippingAmount}
-            onChange={(e) =>
-              setAdminShippingAmount(parseFloat(e.target.value) || 0)
-            }
+            value={shippingInput}
+            onChange={(e) => setShippingInput(e.target.value)}
+            onBlur={handleShippingBlur}
+            onFocus={(e) => e.target.select()}
           />
         </InlayInputBox>
 
@@ -204,8 +239,10 @@ export default function AdminItemListHeader({
             name="tax_total "
             id="tax_total"
             placeholder="0.00"
-            value={adminTaxAmount}
-            onChange={(e) => setAdminTaxAmount(parseFloat(e.target.value) || 0)}
+            value={taxInput}
+            onChange={(e) => setTaxInput(e.target.value)}
+            onBlur={handleTaxBlur}
+            onFocus={(e) => e.target.select()}
           />
         </InlayInputBox>
 
