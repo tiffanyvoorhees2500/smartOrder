@@ -19,14 +19,14 @@
 
 const { AdminOrder } = require("../models");
 
-async function createAdminOrderService(
-  { paidForById, shipToState, shippingAmount, taxAmount },
+async function createAdminOrder(
+  { orderDate,paidForById, shipToState, shippingAmount, taxAmount },
   transaction
 ) {
   return await AdminOrder.create(
-    { paidForById, shipToState, shippingAmount, taxAmount },
+    { orderDate, paidForById, shipToState, shippingAmount, taxAmount },
     { transaction }
   );
 }
 
-module.exports = { createAdminOrderService };
+module.exports = { createAdminOrder };

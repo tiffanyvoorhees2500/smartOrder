@@ -18,10 +18,8 @@
  */
 
 const {
-  AdminOrderLineItem,
+  AdminLineItem,
   Product,
-  UserLineItem,
-  User
 } = require("../models");
 
 /**
@@ -57,52 +55,25 @@ async function createSingleAdminLineItem(
  * - transaction: optional Sequelize transaction
  */
 async function createBulkAdminLineItems(
-  adminOrderId,
-  selectedShipToState,
-  selectedDiscounts = {},
+  { adminOrderId, adminLineItems },
   transaction
 ) {
-  // Step 1: Get all relevant userLineItems
-  const userLineItems = await UserLineItem.findAll({
-    where: { adminOrderId: null, saveForLater: false },
-    include: {
-      model: User,
-      as: "user",
-      where: { defaultShipToState: selectedShipToState }
-    },
-    transaction
+
+  const adminLineItemsData = adminLineItems.map(item => {
+    // Don't trust the frontend for finalPrice calculation
+    const finalPrice = item.wholesale * (1 - (item.discountPercentage) / 100);
+
+    return {
+      adminOrderId,
+      productId: item.id,
+      quantity: item.adminQuantity,
+      basePrice: item.wholesale,
+      percentOff: item.discountPercentage / 100,
+      finalPrice
+    };
   });
 
-  // Step 2: Group by product and sum quantities
-  const grouped = {};
-  userLineItems.forEach((item) => {
-    if (!grouped[item.productId]) grouped[item.productId] = 0;
-    grouped[item.productId] += item.quantity;
-  });
-
-  // Step 3: Build AdminOrderLineItem objects
-  const adminLineItemsData = await Promise.all(
-    Object.entries(grouped).map(async ([productId, quantity]) => {
-      const numericProductId = Number(productId); // <-- convert to number
-      const product = await Product.findByPk(numericProductId, { transaction });
-      const percentOff = selectedDiscounts[numericProductId] ?? 0; // use numeric key
-      const finalPrice = product.wholesale * (1 - percentOff);
-
-      return {
-        adminOrderId,
-        productId: numericProductId, // <-- numeric
-        quantity,
-        basePrice: product.wholesale,
-        percentOff,
-        finalPrice
-      };
-    })
-  );
-
-  // Step 4: Bulk create
-  return await AdminOrderLineItem.bulkCreate(adminLineItemsData, {
-    transaction
-  });
+  return await AdminLineItem.bulkCreate(adminLineItemsData, { transaction });
 }
 
 module.exports = {

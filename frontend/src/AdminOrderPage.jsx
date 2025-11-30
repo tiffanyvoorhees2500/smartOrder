@@ -31,6 +31,7 @@ export default function AdminOrderPage() {
   const [adminShippingAmount, setAdminShippingAmount] = useState(0);
   const [paidByUserId, setPaidByUserId] = useState(getUserFromToken().id);
   const [userOrders, setUserOrders] = useState([]);
+  const [adminOrderDate, setAdminOrderDate] = useState(new Date().toISOString().split("T")[0]);
 
   // Fetch users once
   useEffect(() => {
@@ -117,12 +118,10 @@ export default function AdminOrderPage() {
 
     // Set shipping/Tax amounts
     const numUsers = computedUserOrders.length;
-    // console.log("Number of users in order:", numUsers);
     const shippingPerUser = adminShippingAmount
       ? adminShippingAmount / numUsers
       : 0;
     const taxPerUser = adminTaxAmount ? adminTaxAmount / numUsers : 0;
-    // console.log(shippingPerUser, taxPerUser);
 
     computedUserOrders.forEach((u) => {
       u.shipping = shippingPerUser;
@@ -130,7 +129,6 @@ export default function AdminOrderPage() {
     });
 
     setUserOrders(computedUserOrders);
-    // console.log("Computed user orders:", computedUserOrders);
   }, [adminItems, selectedDiscount, adminShippingAmount, adminTaxAmount]);
 
   // Handle quantity change in PriceQtyGroup
@@ -223,6 +221,10 @@ export default function AdminOrderPage() {
         adminSubtotal={adminSubtotal}
         adminTaxAmount={adminTaxAmount}
         adminShippingAmount={adminShippingAmount}
+        selectedShipToState={selectedShipToState}
+        adminLineItems={discountedAdminItems}
+        adminOrderDate={adminOrderDate}
+        setAdminOrderDate={setAdminOrderDate}
       />
     </div>
   );

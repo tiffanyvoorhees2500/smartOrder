@@ -2,11 +2,13 @@ const { UserOrder } = require("../models");
 
 // A User Order will never be created without an Admin Order, and will always be processed as a bulk order.
 async function createBulkUserOrders(
-  adminOrderId,
-  userAmounts,
-  adminShippingAmount,
-  adminTaxAmount,
-  shipToState,
+  {
+    adminOrderId,
+    userAmounts,
+    shipToState,
+    adminShippingAmount,
+    adminTaxAmount
+  },
   transaction
 ) {
   // Make sure the sum of user shipping and tax amounts matches the admin amounts
