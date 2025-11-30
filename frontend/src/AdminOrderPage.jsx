@@ -8,6 +8,8 @@ import { toDecimalPercent, toWholePercent } from "./utils/normalize";
 import { fetchUserDropdownListOptions } from "./services/userService";
 import { getUserFromToken } from "./utils/auth";
 import { useCallback } from "react";
+import { toast } from "react-toastify";
+import { addUserLineItemFromAdminPage } from "./services/userLineItemService";
 
 export default function AdminOrderPage() {
   // Feel Free to move to a context if needed
@@ -134,16 +136,16 @@ export default function AdminOrderPage() {
   // Handle quantity change in PriceQtyGroup
   const handleQuantityChange = async (productId, userId, newQuantity) => {
     try {
-      const response = await axios.patch(
-        `${base_url}/user-line-items`,
-        { productId, userId, quantity: newQuantity },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await addUserLineItemFromAdminPage({
+        userId,
+        productId,
+        quantity: newQuantity,
+        state: selectedShipToState
+      });
 
-      // Update admin items with returned updated data
-      setAdminItems(response.data.adminLineItems);
+      fetchAdminItems();
     } catch (error) {
-      console.error("Failed to update quantity:", error);
+      toast.error("Failed to update quantity ");
     }
   };
 

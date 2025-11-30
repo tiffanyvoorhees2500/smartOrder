@@ -108,7 +108,7 @@ export default function AdminItem({
             price={adminItem.wholesale}
             helpText={userItem.name}
             quantity={userItem.quantity}
-            onQuantityChange={(newQuantity) =>
+            setQuantity={(newQuantity) =>
               onQuantityChange(adminItem.id, userItem.userId, newQuantity)
             }
             discount={toWholePercent(adminItem.discountPercentage)}
