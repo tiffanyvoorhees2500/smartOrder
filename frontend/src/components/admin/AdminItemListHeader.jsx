@@ -25,7 +25,8 @@ export default function AdminItemListHeader({
   adminTaxAmount,
   setAdminTaxAmount,
   adminShippingAmount,
-  setAdminShippingAmount
+  setAdminShippingAmount,
+  refreshAdminItems
 }) {
   const [productsList, setProductsList] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
@@ -64,22 +65,24 @@ export default function AdminItemListHeader({
     }
 
     try {
-      const data = await addUserLineItemFromAdminPage({
+      await addUserLineItemFromAdminPage({
         userId: selectedUserId,
         productId: selectedProductId,
         quantity: selectedQty,
         state: selectedShipToState
       });
 
-      toast.success(data.message || "Order updated successfully!");
+      if (refreshAdminItems) await refreshAdminItems();
 
       setSelectedUserId("");
       setSelectedProductId("");
       setSelectedQty(1);
+
+      toast.success("Order updated successfully!");
     } catch (err) {
       toast.error(
         err.response?.data?.message ||
-          "Failed to add to order. See console for details"
+          "Failed to add to order. Internal Error."
       );
     }
   };

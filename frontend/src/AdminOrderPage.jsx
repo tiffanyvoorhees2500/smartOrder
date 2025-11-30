@@ -7,6 +7,7 @@ import axios from "axios";
 import { toDecimalPercent, toWholePercent } from "./utils/normalize";
 import { fetchUserDropdownListOptions } from "./services/userService";
 import { getUserFromToken } from "./utils/auth";
+import { useCallback } from "react";
 
 export default function AdminOrderPage() {
   // Feel Free to move to a context if needed
@@ -44,39 +45,38 @@ export default function AdminOrderPage() {
     };
 
     loadUsersList();
-  });
+  }, []);
 
-  useEffect(() => {
-    // Fetch admin items from backend API
-    async function fetchAdminItems() {
-      try {
-        const response = await axios.get(
-          `${base_url}/products/admin-list?shipToState=${selectedShipToState}`,
-          {
-            headers: { Authorization: `Bearer ${token}` }
-          }
-        );
+  // Fetch admin items from backend API
+  const fetchAdminItems = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `${base_url}/products/admin-list?shipToState=${selectedShipToState}`,
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
 
-        const data = response.data;
-        console.log("Fetched admin items:", data);
+      const data = response.data;
 
-        setAdminItems(data.adminLineItems);
+      setAdminItems(data.adminLineItems);
 
-        setDiscountOptions(data.adminDiscountInfo.DISCOUNT_OPTIONS || []);
-        setSelectedShipToState(data.adminShipToState);
-        setSelectedDiscount(
-          toWholePercent(data.adminDiscountInfo.selectedDiscountForCurrent)
-        );
-        setNumberBottles(
-          data.adminDiscountInfo.totalBottlesForCurrentQuantities
-        );
-      } catch (error) {
-        console.error("Error fetching admin items:", error);
-      }
+      setDiscountOptions(data.adminDiscountInfo.DISCOUNT_OPTIONS || []);
+      setSelectedShipToState(data.adminShipToState);
+      setSelectedDiscount(
+        toWholePercent(data.adminDiscountInfo.selectedDiscountForCurrent)
+      );
+      setNumberBottles(
+        data.adminDiscountInfo.totalBottlesForCurrentQuantities
+      );
+    } catch (error) {
+      console.error("Error fetching admin items:", error);
     }
-
-    fetchAdminItems();
   }, [base_url, token, selectedShipToState]);
+  
+  useEffect(() => {
+    fetchAdminItems();
+  }, [fetchAdminItems] );
 
   // Recompute userOrders when adminItems, selectedDiscount, adminShippingAmount, or adminTaxAmount change
   useEffect(() => {
@@ -115,12 +115,12 @@ export default function AdminOrderPage() {
 
     // Set shipping/Tax amounts
     const numUsers = computedUserOrders.length;
-    console.log("Number of users in order:", numUsers);
+    // console.log("Number of users in order:", numUsers);
     const shippingPerUser = adminShippingAmount
       ? adminShippingAmount / numUsers
       : 0;
     const taxPerUser = adminTaxAmount ? adminTaxAmount / numUsers : 0;
-    console.log(shippingPerUser, taxPerUser);
+    // console.log(shippingPerUser, taxPerUser);
 
     computedUserOrders.forEach((u) => {
       u.shipping = shippingPerUser;
@@ -128,7 +128,7 @@ export default function AdminOrderPage() {
     });
 
     setUserOrders(computedUserOrders);
-    console.log("Computed user orders:", computedUserOrders);
+    // console.log("Computed user orders:", computedUserOrders);
   }, [adminItems, selectedDiscount, adminShippingAmount, adminTaxAmount]);
 
   // Handle quantity change in PriceQtyGroup
@@ -194,6 +194,7 @@ export default function AdminOrderPage() {
         setAdminTaxAmount={setAdminTaxAmount}
         adminShippingAmount={adminShippingAmount}
         setAdminShippingAmount={setAdminShippingAmount}
+        refreshAdminItems={fetchAdminItems}
       />
 
       {/* List of Items */}
