@@ -11,6 +11,7 @@ exports.finalizeOrder = async (req, res) => {
 
   try {
     const {
+      orderDate,
       paidForById,
       shipToState,
       shippingAmount,
@@ -21,7 +22,7 @@ exports.finalizeOrder = async (req, res) => {
 
     // Create the admin order
     const adminOrder = await adminOrderService.createAdminOrder(
-      { paidForById, shipToState, shippingAmount, taxAmount },
+      { orderDate,paidForById, shipToState, shippingAmount, taxAmount },
       t
     );
 

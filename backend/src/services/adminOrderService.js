@@ -20,11 +20,11 @@
 const { AdminOrder } = require("../models");
 
 async function createAdminOrder(
-  { paidForById, shipToState, shippingAmount, taxAmount },
+  { orderDate,paidForById, shipToState, shippingAmount, taxAmount },
   transaction
 ) {
   return await AdminOrder.create(
-    { paidForById, shipToState, shippingAmount, taxAmount },
+    { orderDate, paidForById, shipToState, shippingAmount, taxAmount },
     { transaction }
   );
 }

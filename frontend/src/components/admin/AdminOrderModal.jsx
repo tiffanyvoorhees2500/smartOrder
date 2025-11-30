@@ -3,6 +3,8 @@ import InlayInputBox from "../form/InlayInputBox";
 import Modal from "../misc/Modal";
 import { AdminModalItem } from "./AdminModalItem";
 import { finalizeOrder } from "../../services/finalizeOrderService";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function AdminOrderModal({
   isVisible,
@@ -16,10 +18,14 @@ export default function AdminOrderModal({
   adminTaxAmount,
   adminShippingAmount,
   selectedShipToState,
-  adminLineItems
+  adminLineItems,
+  adminOrderDate,
+  setAdminOrderDate
 }) {
+  const navigate = useNavigate();
+
   // Get today's date and remove the time
-  const today = new Date().toISOString().split("T")[0];
+  const today = adminOrderDate || new Date().toISOString().split("T")[0];
 
   // Calculate grand totals
   const bulkTotal = adminSubtotal + adminTaxAmount + adminShippingAmount;
@@ -60,6 +66,7 @@ export default function AdminOrderModal({
   const handleConfirm = async () => {
     // Create payload for finalizing order
     const orderData = {
+      orderDate: adminOrderDate,
       paidForById: paidByUserId,
       shipToState: selectedShipToState,
       shippingAmount: adminShippingAmount,
@@ -71,14 +78,15 @@ export default function AdminOrderModal({
         taxAmount: u.taxes
       }))
     };
-    // console.log("Payload:", orderData);
+
     try {
       await finalizeOrder(orderData);
-      alert("Order finalized successfully!");
+      toast.success("Order finalized successfully!");
       setIsVisible(false);
+      navigate("/admin-past-orders");
     } catch (error) {
       console.error("Failed to finalize order:", error);
-      alert("Failed to finalize order. Please try again.");
+      toast.error("Failed to finalize order. Please try again.");
     }
   };
 
@@ -97,7 +105,7 @@ export default function AdminOrderModal({
 
         {/* Date of order */}
         <InlayInputBox htmlFor={"date"} title={"Date Order Placed"}>
-          <input type="date" name="date" id="date" defaultValue={today} />
+          <input type="date" name="date" id="date" defaultValue={today} onChange={(e) => setAdminOrderDate(e.target.value)} />
         </InlayInputBox>
 
         {/* Order Paid By */}

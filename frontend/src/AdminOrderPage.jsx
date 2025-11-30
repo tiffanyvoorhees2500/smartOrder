@@ -31,6 +31,7 @@ export default function AdminOrderPage() {
   const [adminShippingAmount, setAdminShippingAmount] = useState(0);
   const [paidByUserId, setPaidByUserId] = useState(getUserFromToken().id);
   const [userOrders, setUserOrders] = useState([]);
+  const [adminOrderDate, setAdminOrderDate] = useState(new Date().toISOString().split("T")[0]);
 
   // Fetch users once
   useEffect(() => {
@@ -59,7 +60,7 @@ export default function AdminOrderPage() {
         }
       );
 
-        const data = response.data;
+      const data = response.data;
 
       setAdminItems(data.adminLineItems);
 
@@ -222,6 +223,8 @@ export default function AdminOrderPage() {
         adminShippingAmount={adminShippingAmount}
         selectedShipToState={selectedShipToState}
         adminLineItems={discountedAdminItems}
+        adminOrderDate={adminOrderDate}
+        setAdminOrderDate={setAdminOrderDate}
       />
     </div>
   );
