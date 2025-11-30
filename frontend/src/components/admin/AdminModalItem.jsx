@@ -1,5 +1,6 @@
 import "./AdminModalItem.css";
 import InlayInputBox from "../form/InlayInputBox";
+import { useState, useEffect } from "react";
 
 export function AdminModalItem({
   user,
@@ -10,6 +11,28 @@ export function AdminModalItem({
   isPaidByUser,
   handleUserAmountChange
 }) {
+
+  const [shippingInput, setShippingInput] = useState(shipping.toFixed(2));
+  const [taxesInput, setTaxesInput] = useState(taxes.toFixed(2));
+
+  useEffect(() => setShippingInput(shipping.toFixed(2)), [shipping]);
+  useEffect(() => setTaxesInput(taxes.toFixed(2)), [taxes]);
+
+  // When a user leaves the shipping or taxes input
+  // validate and format the input, then update local state and notify parent
+  const handleBlur = (field) => {
+    const inputValue = parseFloat(field === "shipping" ? shippingInput : taxesInput);
+    const parsedValue = parseFloat(inputValue);
+    // fall back to the original value if the input is not a number
+    const originalValue = field === "shipping" ? shipping : taxes;
+    const value = isNaN(parsedValue) ? originalValue : parsedValue;
+
+    // update local input state
+    field === "shipping" ? setShippingInput(value.toFixed(2)) : setTaxesInput(value.toFixed(2));
+    // propagate to parent
+    handleUserAmountChange(userId, field, value);
+  };
+
   // Calculate Total
   const total = (shipping + taxes + subtotal).toFixed(2);
 
@@ -46,11 +69,11 @@ export function AdminModalItem({
             type="number"
             id={shippingId}
             name={shippingId}
-            value={shipping}
+            value={shippingInput}
             step={0.01}
-            onChange={(e) =>
-              handleUserAmountChange(userId, "shipping", e.target.value)
-            }
+            onChange={(e) => setShippingInput(e.target.value)}
+            onBlur={(e) => handleBlur("shipping")}
+            onFocus={(e) => e.target.select()}
             disabled={isPaidByUser} // Paying user's shipping is not editable
           />
         </div>
@@ -64,11 +87,11 @@ export function AdminModalItem({
             type="number"
             id={taxesId}
             name={taxesId}
-            value={taxes}
+            value={taxesInput}
             step={0.01}
-            onChange={(e) =>
-              handleUserAmountChange(userId, "taxes", e.target.value)
-            }
+            onChange={(e) => setTaxesInput(e.target.value)}
+            onBlur={(e) => handleBlur("taxes")}
+            onFocus={(e) => e.target.select()}
             disabled={isPaidByUser} // Paying user's taxes is not editable
           />
         </div>

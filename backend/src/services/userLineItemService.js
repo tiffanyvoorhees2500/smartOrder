@@ -141,3 +141,48 @@ exports.attachPricingToUserLineItems = async (extractedUserLineItems) => {
   );
   return pricedItems;
 }
+
+// add/update/delete UserLineItem for Current Order from Admin or Current Order pages
+exports.upsertUserLineItemForCurrentOrder = async ({
+  userId,
+  productId,
+  quantity
+}) => {
+  // Find existing line item
+  let lineItem = await UserLineItem.findOne({
+    where: {
+      userId,
+      productId,
+      adminOrderId: null
+    }
+  });
+
+  // If quantity is zero, delete the line and finish
+  if (quantity === 0) {
+    if (lineItem) {
+      await lineItem.destroy();
+      return { deleted: true };
+    }
+    return { deleted: false };
+  }
+
+  // Create new line item if none exists for the current order
+  if (!lineItem) {
+    lineItem = await UserLineItem.create({
+      userId,
+      productId,
+      quantity,
+      pendingQuantity: null,
+      adminOrderId: null
+    });
+    return { created: true, lineItem };
+  }
+
+  // Otherwise update existing
+  await lineItem.update({
+    quantity,
+    pendingQuantity: null // Clear pendingQuantity after saving
+  });
+
+  return { updated: true, lineItem };
+};

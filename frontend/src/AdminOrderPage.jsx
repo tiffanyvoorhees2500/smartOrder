@@ -7,6 +7,9 @@ import axios from "axios";
 import { toDecimalPercent, toWholePercent } from "./utils/normalize";
 import { fetchUserDropdownListOptions } from "./services/userService";
 import { getUserFromToken } from "./utils/auth";
+import { useCallback } from "react";
+import { toast } from "react-toastify";
+import { addUserLineItemFromAdminPage } from "./services/userLineItemService";
 
 export default function AdminOrderPage() {
   // Feel Free to move to a context if needed
@@ -15,7 +18,7 @@ export default function AdminOrderPage() {
 
   const [isVisible, setIsVisible] = useState(false);
   const [adminItems, setAdminItems] = useState([]);
-  const [selectedShipToState, setSelectedShipToState] = useState("UT");
+  const [selectedShipToState, setSelectedShipToState] = useState(getUserFromToken()?.defaultShipToState || "UT");
   const [discountOptions, setDiscountOptions] = useState([]);
   const [selectedDiscount, setSelectedDiscount] = useState(0);
   const [numberBottles, setNumberBottles] = useState(0);
@@ -44,38 +47,38 @@ export default function AdminOrderPage() {
     };
 
     loadUsersList();
-  });
+  }, []);
 
-  useEffect(() => {
-    // Fetch admin items from backend API
-    async function fetchAdminItems() {
-      try {
-        const response = await axios.get(
-          `${base_url}/products/admin-list?shipToState=${selectedShipToState}`,
-          {
-            headers: { Authorization: `Bearer ${token}` }
-          }
-        );
+  // Fetch admin items from backend API
+  const fetchAdminItems = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `${base_url}/products/admin-list?shipToState=${selectedShipToState}`,
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
 
         const data = response.data;
 
-        setAdminItems(data.adminLineItems);
+      setAdminItems(data.adminLineItems);
 
-        setDiscountOptions(data.adminDiscountInfo.DISCOUNT_OPTIONS || []);
-        setSelectedShipToState(data.adminShipToState);
-        setSelectedDiscount(
-          toWholePercent(data.adminDiscountInfo.selectedDiscountForCurrent)
-        );
-        setNumberBottles(
-          data.adminDiscountInfo.totalBottlesForCurrentQuantities
-        );
-      } catch (error) {
-        console.error("Error fetching admin items:", error);
-      }
+      setDiscountOptions(data.adminDiscountInfo.DISCOUNT_OPTIONS || []);
+      setSelectedShipToState(data.adminShipToState);
+      setSelectedDiscount(
+        toWholePercent(data.adminDiscountInfo.selectedDiscountForCurrent)
+      );
+      setNumberBottles(
+        data.adminDiscountInfo.totalBottlesForCurrentQuantities
+      );
+    } catch (error) {
+      console.error("Error fetching admin items:", error);
     }
-
-    fetchAdminItems();
   }, [base_url, token, selectedShipToState]);
+  
+  useEffect(() => {
+    fetchAdminItems();
+  }, [fetchAdminItems] );
 
   // Recompute userOrders when adminItems, selectedDiscount, adminShippingAmount, or adminTaxAmount change
   useEffect(() => {
@@ -130,16 +133,16 @@ export default function AdminOrderPage() {
   // Handle quantity change in PriceQtyGroup
   const handleQuantityChange = async (productId, userId, newQuantity) => {
     try {
-      const response = await axios.patch(
-        `${base_url}/user-line-items`,
-        { productId, userId, quantity: newQuantity },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await addUserLineItemFromAdminPage({
+        userId,
+        productId,
+        quantity: newQuantity,
+        state: selectedShipToState
+      });
 
-      // Update admin items with returned updated data
-      setAdminItems(response.data.adminLineItems);
+      fetchAdminItems();
     } catch (error) {
-      console.error("Failed to update quantity:", error);
+      toast.error("Failed to update quantity ");
     }
   };
 
@@ -190,6 +193,7 @@ export default function AdminOrderPage() {
         setAdminTaxAmount={setAdminTaxAmount}
         adminShippingAmount={adminShippingAmount}
         setAdminShippingAmount={setAdminShippingAmount}
+        refreshAdminItems={fetchAdminItems}
       />
 
       {/* List of Items */}
