@@ -51,3 +51,13 @@
   max-width: 320px;
   background-color: rgb(221, 0, 0);
 }
+
+.summarySection {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+}
