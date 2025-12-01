@@ -5,6 +5,8 @@ const adminOrderService = require("../services/adminOrderService");
 const adminLineItemService = require("../services/adminLineItemsService");
 const userOrderService = require("../services/userOrderService");
 const userLineItemService = require("../services/userLineItemService");
+const userService = require("../services/userService");
+const groupMeService = require("../services/groupMeBotService");
 
 exports.finalizeOrder = async (req, res) => {
   const t = await sequelize.transaction();
@@ -22,7 +24,7 @@ exports.finalizeOrder = async (req, res) => {
 
     // Create the admin order
     const adminOrder = await adminOrderService.createAdminOrder(
-      { orderDate,paidForById, shipToState, shippingAmount, taxAmount },
+      { orderDate, paidForById, shipToState, shippingAmount, taxAmount },
       t
     );
 
@@ -65,7 +67,53 @@ exports.finalizeOrder = async (req, res) => {
       t
     );
 
+    // Calculate order totals for GroupMeMessage
+    const orderSubtotals = userOrderService.calculateUserSubtotals(
+      userLineItemsWithPricing
+    );
+
+    // add calculated totals to userAmounts Object
+    const userOrderPriceWithTotals = userAmounts.map((u) => {
+      const subtotal = orderSubtotals[u.userId] || 0;
+      const grandTotal = subtotal + u.shippingAmount + u.taxAmount;
+
+      return {
+        ...u,
+        subtotal,
+        grandTotal
+      };
+    });
+
+    // Create Group Me Message
+    const formatCurrency = (amount) => {
+      return `$${amount.toFixed(2)}`;
+    };
+
+    let messageLines = [];
+
+    messageLines.push(
+      `OHS Order Placed: ${new Date(orderDate).toLocaleDateString()}`
+    );
+    messageLines.push("");
+
+    for (const userOrder of userOrderPriceWithTotals) {
+      const userName = await userService.getUserName(userOrder.userId);
+      messageLines.push(`${userName}: ${formatCurrency(userOrder.grandTotal)}`);
+    }
+
+    messageLines.push("");
+    messageLines.push(
+      "Please visit https://yourapp.com/past-orders to see your completed order details."
+    );
+
+    const message = messageLines.join("\n");
+
+    await groupMeService.sendGroupMeMessage(message);
+
+    // Everything was successful, so committ the transaction
     await t.commit();
+
+    //Send success response
     res.status(200).json({ message: "Admin order finalized successfully" });
   } catch (error) {
     console.error("Error finalizing order:", error);

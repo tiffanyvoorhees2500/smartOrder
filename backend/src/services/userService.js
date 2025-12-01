@@ -35,3 +35,13 @@ exports.getUserBasePrice = async (userId, productId) => {
     throw error;
   }
 };
+
+exports.getUserName = async (userId) => {
+  try {
+    const user = await User.findByPk(userId);
+    return user.name;
+  } catch (error) {
+    console.error("Error fetching user name", error);
+    throw error;
+  }
+};
