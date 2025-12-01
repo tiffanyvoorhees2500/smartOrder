@@ -28,7 +28,7 @@ root.render(
     <BrowserRouter>
       {/* Toast container */}
       <ToastContainer
-        position="bottom-left"
+        position="bottom-right"
         autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}

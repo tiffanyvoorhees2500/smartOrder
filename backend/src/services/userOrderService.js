@@ -2,11 +2,13 @@ const { UserOrder } = require("../models");
 
 // A User Order will never be created without an Admin Order, and will always be processed as a bulk order.
 async function createBulkUserOrders(
-  adminOrderId,
-  userAmounts,
-  adminShippingAmount,
-  adminTaxAmount,
-  shipToState,
+  {
+    adminOrderId,
+    userAmounts,
+    shipToState,
+    adminShippingAmount,
+    adminTaxAmount
+  },
   transaction
 ) {
   // Make sure the sum of user shipping and tax amounts matches the admin amounts
@@ -43,4 +45,17 @@ async function createBulkUserOrders(
   return await UserOrder.bulkCreate(userOrdersData, { transaction });
 }
 
-module.exports = { createBulkUserOrders };
+function calculateUserSubtotals(userLineItemsWithPricing) {
+  const totals = {};
+
+  for (const item of userLineItemsWithPricing) {
+    const subtotal = item.finalPrice * item.quantity;
+
+    if (!totals[item.userId]) totals[item.userId] = 0;
+    totals[item.userId] += subtotal;
+  }
+
+  return totals;
+}
+
+module.exports = { createBulkUserOrders, calculateUserSubtotals };

@@ -1,7 +1,11 @@
+import { useState } from "react";
 import "./AdminOrderModal.css";
 import InlayInputBox from "../form/InlayInputBox";
 import Modal from "../misc/Modal";
 import { AdminModalItem } from "./AdminModalItem";
+import { finalizeOrder } from "../../services/finalizeOrderService";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function AdminOrderModal({
   isVisible,
@@ -13,10 +17,19 @@ export default function AdminOrderModal({
   setUserOrders,
   adminSubtotal,
   adminTaxAmount,
-  adminShippingAmount
+  adminShippingAmount,
+  selectedShipToState,
+  adminLineItems,
+  adminOrderDate,
+  setAdminOrderDate
 }) {
+  const [totalShipping, setTotalShipping] = useState(0);
+  const [totalTaxes, setTotalTaxes] = useState(0);
+
+  const navigate = useNavigate();
+
   // Get today's date and remove the time
-  const today = new Date().toISOString().split("T")[0];
+  const today = adminOrderDate || new Date().toISOString().split("T")[0];
 
   // Calculate grand totals
   const bulkTotal = adminSubtotal + adminTaxAmount + adminShippingAmount;
@@ -35,8 +48,8 @@ export default function AdminOrderModal({
       );
 
       // Recalculate totals
-      const totalShipping = updated.reduce((sum, u) => sum + u.shipping, 0);
-      const totalTaxes = updated.reduce((sum, u) => sum + u.taxes, 0);
+      setTotalShipping(updated.reduce((sum, u) => sum + u.shipping, 0));
+      setTotalTaxes(updated.reduce((sum, u) => sum + u.taxes, 0));
 
       const shippingDiff = adminShippingAmount - totalShipping;
       const taxDiff = adminTaxAmount - totalTaxes;
@@ -54,6 +67,35 @@ export default function AdminOrderModal({
     });
   };
 
+  const handleConfirm = async () => {
+    // Create payload for finalizing order
+    const orderData = {
+      orderDate: adminOrderDate,
+      paidForById: paidByUserId,
+      shipToState: selectedShipToState,
+      shippingAmount: adminShippingAmount,
+      taxAmount: adminTaxAmount,
+      adminLineItems: adminLineItems,
+      userAmounts: userOrders.map((u) => ({
+        userId: u.userId,
+        shippingAmount: u.shipping,
+        taxAmount: u.taxes
+      }))
+    };
+
+    try {
+      await finalizeOrder(orderData);
+      toast.success(
+        "Order finalized successfully! Text messages sent via GroupMe!"
+      );
+      setIsVisible(false);
+      navigate("/admin-past-orders");
+    } catch (error) {
+      console.error("Failed to finalize order:", error);
+      toast.error("Failed to finalize order. Please try again.");
+    }
+  };
+
   return (
     <Modal {...{ isVisible, setIsVisible }} className="adminOrderModal">
       {/* Modal Header */}
@@ -69,7 +111,13 @@ export default function AdminOrderModal({
 
         {/* Date of order */}
         <InlayInputBox htmlFor={"date"} title={"Date Order Placed"}>
-          <input type="date" name="date" id="date" defaultValue={today} />
+          <input
+            type="date"
+            name="date"
+            id="date"
+            defaultValue={today}
+            onChange={(e) => setAdminOrderDate(e.target.value)}
+          />
         </InlayInputBox>
 
         {/* Order Paid By */}
@@ -92,14 +140,44 @@ export default function AdminOrderModal({
       <div className="modalSection">
         {/* Section Title */}
         <div className="modalSectionTitle">
-          <span>Amount Paid to OHS: ${bulkTotal.toFixed(2)} </span>
-          <br />
-          <span>
-            Amount to be collected by:{" "}
-            {paidByUser ? paidByUser.name : "Unknown"} -- ${" "}
-            {userGrandTotal.toFixed(2)}
-          </span>
+          <div className="summarySection">
+            <div className="summaryRow">
+              <span className="summaryLabel">Amount Paid to OHS:</span>
+              <span className="summaryValue"> ${bulkTotal.toFixed(2)} </span>
+            </div>
+            <div className="summaryRow">
+              <span className="summaryLabel">
+                Collected by{" "}{paidByUser ? paidByUser.name : "Unknown"}:
+              </span>
+              <span className="summaryValue"> ${userGrandTotal.toFixed(2)} </span>
+            </div>
+          </div>
           <div className="divider-light"></div>
+          <div className="summarySection">
+            <div className="summaryRow">
+              <span className="summaryLabel">Shipping Paid to OHS:</span>
+              <span className="summaryValue"> ${adminShippingAmount.toFixed(2)} </span>
+            </div>
+            <div className="summaryRow">
+              <span className="summaryLabel">
+                Collected by{" "}{paidByUser ? paidByUser.name : "Unknown"}:
+              </span>
+              <span className="summaryValue"> ${totalShipping.toFixed(2)} </span>
+            </div>
+          </div>
+          <div className="divider-light"></div>
+          <div className="summarySection">
+            <div className="summaryRow">
+              <span className="summaryLabel">Taxes Paid to OHS:</span>
+              <span className="summaryValue"> ${adminTaxAmount.toFixed(2)} </span>
+            </div>
+            <div className="summaryRow">
+              <span className="summaryLabel">
+                Collected by{" "}{paidByUser ? paidByUser.name : "Unknown"}:
+              </span>
+              <span className="summaryValue"> ${totalTaxes.toFixed(2)} </span>
+            </div>
+          </div>
         </div>
 
         {/* User Order List */}
@@ -120,7 +198,7 @@ export default function AdminOrderModal({
       </div>
 
       {/* Confirm Button */}
-      <button type="button" className="highlightButton">
+      <button type="button" className="highlightButton" onClick={handleConfirm}>
         Confirm
       </button>
     </Modal>

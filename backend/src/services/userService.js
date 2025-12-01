@@ -17,3 +17,31 @@ exports.getAlphabeticalUserListOptions = async () => {
     throw error;
   }
 };
+
+exports.getUserBasePrice = async (userId, productId) => {
+  try {
+    const user = await User.findByPk(userId);
+    if (!user) throw new Error("User not found");
+    const pricingType = user.pricingType.toLowerCase(); // e.g., 'retail' or 'wholesale'
+
+    const basePrice = await db.Product.findByPk(productId).then((product) => {
+      if (!product) throw new Error("Product not found");
+      return product[pricingType]; // Access price based on user's pricing type
+    });
+
+    return basePrice;
+  } catch (error) {
+    console.error("Error fetching user base price:", error);
+    throw error;
+  }
+};
+
+exports.getUserName = async (userId) => {
+  try {
+    const user = await User.findByPk(userId);
+    return user.name;
+  } catch (error) {
+    console.error("Error fetching user name", error);
+    throw error;
+  }
+};
