@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./AdminOrderModal.css";
 import InlayInputBox from "../form/InlayInputBox";
 import Modal from "../misc/Modal";
@@ -22,6 +23,9 @@ export default function AdminOrderModal({
   adminOrderDate,
   setAdminOrderDate
 }) {
+  const [totalShipping, setTotalShipping] = useState(0);
+  const [totalTaxes, setTotalTaxes] = useState(0);
+
   const navigate = useNavigate();
 
   // Get today's date and remove the time
@@ -44,8 +48,8 @@ export default function AdminOrderModal({
       );
 
       // Recalculate totals
-      const totalShipping = updated.reduce((sum, u) => sum + u.shipping, 0);
-      const totalTaxes = updated.reduce((sum, u) => sum + u.taxes, 0);
+      setTotalShipping(updated.reduce((sum, u) => sum + u.shipping, 0));
+      setTotalTaxes(updated.reduce((sum, u) => sum + u.taxes, 0));
 
       const shippingDiff = adminShippingAmount - totalShipping;
       const taxDiff = adminTaxAmount - totalTaxes;
@@ -105,7 +109,13 @@ export default function AdminOrderModal({
 
         {/* Date of order */}
         <InlayInputBox htmlFor={"date"} title={"Date Order Placed"}>
-          <input type="date" name="date" id="date" defaultValue={today} onChange={(e) => setAdminOrderDate(e.target.value)} />
+          <input
+            type="date"
+            name="date"
+            id="date"
+            defaultValue={today}
+            onChange={(e) => setAdminOrderDate(e.target.value)}
+          />
         </InlayInputBox>
 
         {/* Order Paid By */}
@@ -128,14 +138,44 @@ export default function AdminOrderModal({
       <div className="modalSection">
         {/* Section Title */}
         <div className="modalSectionTitle">
-          <span>Amount Paid to OHS: ${bulkTotal.toFixed(2)} </span>
-          <br />
-          <span>
-            Amount to be collected by:{" "}
-            {paidByUser ? paidByUser.name : "Unknown"} -- ${" "}
-            {userGrandTotal.toFixed(2)}
-          </span>
+          <div className="summarySection">
+            <div className="summaryRow">
+              <span className="summaryLabel">Amount Paid to OHS:</span>
+              <span className="summaryValue"> ${bulkTotal.toFixed(2)} </span>
+            </div>
+            <div className="summaryRow">
+              <span className="summaryLabel">
+                Collected by{" "}{paidByUser ? paidByUser.name : "Unknown"}:
+              </span>
+              <span className="summaryValue"> ${userGrandTotal.toFixed(2)} </span>
+            </div>
+          </div>
           <div className="divider-light"></div>
+          <div className="summarySection">
+            <div className="summaryRow">
+              <span className="summaryLabel">Shipping Paid to OHS:</span>
+              <span className="summaryValue"> ${adminShippingAmount.toFixed(2)} </span>
+            </div>
+            <div className="summaryRow">
+              <span className="summaryLabel">
+                Collected by{" "}{paidByUser ? paidByUser.name : "Unknown"}:
+              </span>
+              <span className="summaryValue"> ${totalShipping.toFixed(2)} </span>
+            </div>
+          </div>
+          <div className="divider-light"></div>
+          <div className="summarySection">
+            <div className="summaryRow">
+              <span className="summaryLabel">Taxes Paid to OHS:</span>
+              <span className="summaryValue"> ${adminTaxAmount.toFixed(2)} </span>
+            </div>
+            <div className="summaryRow">
+              <span className="summaryLabel">
+                Collected by{" "}{paidByUser ? paidByUser.name : "Unknown"}:
+              </span>
+              <span className="summaryValue"> ${totalTaxes.toFixed(2)} </span>
+            </div>
+          </div>
         </div>
 
         {/* User Order List */}
