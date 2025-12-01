@@ -85,7 +85,9 @@ export default function AdminOrderModal({
 
     try {
       await finalizeOrder(orderData);
-      toast.success("Order finalized successfully!");
+      toast.success(
+        "Order finalized successfully! Text messages sent via GroupMe!"
+      );
       setIsVisible(false);
       navigate("/admin-past-orders");
     } catch (error) {

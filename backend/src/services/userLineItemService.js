@@ -48,7 +48,8 @@ exports.bulkFinalizeCurrentOrders = async (
   { userLineItemsWithPricing, adminOrderId },
   transaction
 ) => {
-  if (!userLineItemsWithPricing || userLineItemsWithPricing.length === 0) return;
+  if (!userLineItemsWithPricing || userLineItemsWithPricing.length === 0)
+    return;
 
   const basePriceCases = [];
   const percentOffCases = [];
@@ -75,7 +76,9 @@ exports.bulkFinalizeCurrentOrders = async (
     finalReplacements.push(item.userId, item.productId, item.finalPrice);
 
     // WHERE clause
-    whereParts.push(`("userId" = ?::uuid AND "productId" = ? AND "adminOrderId" IS NULL)`);
+    whereParts.push(
+      `("userId" = ?::uuid AND "productId" = ? AND "adminOrderId" IS NULL)`
+    );
     whereReplacements.push(item.userId, item.productId);
   }
 
@@ -117,7 +120,8 @@ exports.extractUserLineItemsFromAdminLineItems = (adminLineItems) => {
     for (const item of adminItem.userItems) {
       extractedItems.push({
         userId: item.userId.toString(), // UUID as string
-        productId: Number(adminItem.id) // productId as integer
+        productId: Number(adminItem.id), // productId as integer
+        quantity: item.quantity // include quantity for future calculations
       });
     }
   }
@@ -125,7 +129,7 @@ exports.extractUserLineItemsFromAdminLineItems = (adminLineItems) => {
 };
 
 exports.attachPricingToUserLineItems = async (extractedUserLineItems) => {
-// Precompute pricing for all items in parallel
+  // Precompute pricing for all items in parallel
   const pricedItems = await Promise.all(
     extractedUserLineItems.map(async (item) => {
       const basePrice = Number(
@@ -140,7 +144,7 @@ exports.attachPricingToUserLineItems = async (extractedUserLineItems) => {
     })
   );
   return pricedItems;
-}
+};
 
 // add/update/delete UserLineItem for Current Order from Admin or Current Order pages
 exports.upsertUserLineItemForCurrentOrder = async ({

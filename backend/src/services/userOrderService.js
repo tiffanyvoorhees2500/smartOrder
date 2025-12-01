@@ -45,4 +45,17 @@ async function createBulkUserOrders(
   return await UserOrder.bulkCreate(userOrdersData, { transaction });
 }
 
-module.exports = { createBulkUserOrders };
+function calculateUserSubtotals(userLineItemsWithPricing) {
+  const totals = {};
+
+  for (const item of userLineItemsWithPricing) {
+    const subtotal = item.finalPrice * item.quantity;
+
+    if (!totals[item.userId]) totals[item.userId] = 0;
+    totals[item.userId] += subtotal;
+  }
+
+  return totals;
+}
+
+module.exports = { createBulkUserOrders, calculateUserSubtotals };
