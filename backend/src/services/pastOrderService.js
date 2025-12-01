@@ -169,7 +169,7 @@ exports.getBulkPastOrdersSortedByProduct = async () => {
   return formatted;
 };
 
-exports.getBulkPastOrdersSortedByProduct = async () => {
-    
+exports.getBulkPastOrdersSortedByUser = async () => {
+    // coming soon :)
 };
 
