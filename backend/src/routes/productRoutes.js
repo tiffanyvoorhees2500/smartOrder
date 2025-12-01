@@ -8,7 +8,7 @@ router.get(
   "/dropdown",
   authenticateToken,
   productController.getProductDropdownListOptions
-)
+);
 
 // Get all products for the user's product price sheet list
 router.get(

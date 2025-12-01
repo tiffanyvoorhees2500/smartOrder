@@ -41,8 +41,20 @@ describe("createBulkUserOrders", () => {
     expect(UserOrder.bulkCreate).toHaveBeenCalledTimes(1);
     expect(UserOrder.bulkCreate).toHaveBeenCalledWith(
       [
-        { userId: "user1", adminOrderId, shippingAmount: 5, taxAmount: 1, shipToState },
-        { userId: "user2", adminOrderId, shippingAmount: 4, taxAmount: 2, shipToState }
+        {
+          userId: "user1",
+          adminOrderId,
+          shippingAmount: 5,
+          taxAmount: 1,
+          shipToState
+        },
+        {
+          userId: "user2",
+          adminOrderId,
+          shippingAmount: 4,
+          taxAmount: 2,
+          shipToState
+        }
       ],
       { transaction: undefined }
     );
@@ -61,8 +73,16 @@ describe("createBulkUserOrders", () => {
     ];
 
     await expect(
-      createBulkUserOrders(adminOrderId, userAmounts, adminShippingAmount, adminTaxAmount, shipToState)
-    ).rejects.toThrow("User shipping amounts do not match admin shipping amount");
+      createBulkUserOrders(
+        adminOrderId,
+        userAmounts,
+        adminShippingAmount,
+        adminTaxAmount,
+        shipToState
+      )
+    ).rejects.toThrow(
+      "User shipping amounts do not match admin shipping amount"
+    );
 
     expect(UserOrder.bulkCreate).not.toHaveBeenCalled();
   });
@@ -78,7 +98,13 @@ describe("createBulkUserOrders", () => {
     ];
 
     await expect(
-      createBulkUserOrders(adminOrderId, userAmounts, adminShippingAmount, adminTaxAmount, shipToState)
+      createBulkUserOrders(
+        adminOrderId,
+        userAmounts,
+        adminShippingAmount,
+        adminTaxAmount,
+        shipToState
+      )
     ).rejects.toThrow("User tax amounts do not match admin tax amount");
 
     expect(UserOrder.bulkCreate).not.toHaveBeenCalled();
@@ -97,12 +123,31 @@ describe("createBulkUserOrders", () => {
 
     UserOrder.bulkCreate.mockResolvedValue(userAmounts);
 
-    await createBulkUserOrders(adminOrderId, userAmounts, adminShippingAmount, adminTaxAmount, shipToState, transaction);
+    await createBulkUserOrders(
+      adminOrderId,
+      userAmounts,
+      adminShippingAmount,
+      adminTaxAmount,
+      shipToState,
+      transaction
+    );
 
     expect(UserOrder.bulkCreate).toHaveBeenCalledWith(
       [
-        { userId: "user1", adminOrderId, shippingAmount: 5, taxAmount: 1, shipToState },
-        { userId: "user2", adminOrderId, shippingAmount: 4, taxAmount: 2, shipToState }
+        {
+          userId: "user1",
+          adminOrderId,
+          shippingAmount: 5,
+          taxAmount: 1,
+          shipToState
+        },
+        {
+          userId: "user2",
+          adminOrderId,
+          shippingAmount: 4,
+          taxAmount: 2,
+          shipToState
+        }
       ],
       { transaction }
     );

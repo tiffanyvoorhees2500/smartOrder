@@ -1,39 +1,40 @@
 import "./AdminModalItem.css";
 import InlayInputBox from "../form/InlayInputBox";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 export function AdminModalItem({
   user,
+  userId,
   subtotal,
   shipping,
   taxes,
-  setUserOrders
+  isPaidByUser,
+  handleUserAmountChange
 }) {
-  function updateUserOrders() {
-    // Update User Orders with new shipping and taxes where the user matches
-    setUserOrders((prevUserOrders) => {
-      return prevUserOrders.map((userOrder) => {
-        if (userOrder.user === user) {
-          return {
-            ...userOrder,
-            shipping: shippingValue,
-            taxes: taxesValue
-          };
-        } else {
-          return userOrder;
-        }
-      });
-    });
-  }
 
-  const [shippingValue, setShippingValue] = useState(shipping);
-  const [taxesValue, setTaxesValue] = useState(taxes);
+  const [shippingInput, setShippingInput] = useState(shipping.toFixed(2));
+  const [taxesInput, setTaxesInput] = useState(taxes.toFixed(2));
 
-  // Update User Orders anytime shipping or taxes changes
-  useEffect(updateUserOrders, [shippingValue, taxesValue, setUserOrders, user]);
+  useEffect(() => setShippingInput(shipping.toFixed(2)), [shipping]);
+  useEffect(() => setTaxesInput(taxes.toFixed(2)), [taxes]);
+
+  // When a user leaves the shipping or taxes input
+  // validate and format the input, then update local state and notify parent
+  const handleBlur = (field) => {
+    const inputValue = parseFloat(field === "shipping" ? shippingInput : taxesInput);
+    const parsedValue = parseFloat(inputValue);
+    // fall back to the original value if the input is not a number
+    const originalValue = field === "shipping" ? shipping : taxes;
+    const value = isNaN(parsedValue) ? originalValue : parsedValue;
+
+    // update local input state
+    field === "shipping" ? setShippingInput(value.toFixed(2)) : setTaxesInput(value.toFixed(2));
+    // propagate to parent
+    handleUserAmountChange(userId, field, value);
+  };
 
   // Calculate Total
-  const total = (shippingValue + taxesValue + subtotal).toFixed(2);
+  const total = (shipping + taxes + subtotal).toFixed(2);
 
   // Input Element Ids
   const subtotalId = `subtotal_${user}`;
@@ -54,7 +55,7 @@ export function AdminModalItem({
             type="number"
             id={subtotalId}
             name={subtotalId}
-            defaultValue={subtotal}
+            value={subtotal.toFixed(2)}
             disabled
           />
         </div>
@@ -68,9 +69,12 @@ export function AdminModalItem({
             type="number"
             id={shippingId}
             name={shippingId}
-            defaultValue={shippingValue}
+            value={shippingInput}
             step={0.01}
-            onInput={(e) => setShippingValue(+e.target.value)}
+            onChange={(e) => setShippingInput(e.target.value)}
+            onBlur={(e) => handleBlur("shipping")}
+            onFocus={(e) => e.target.select()}
+            disabled={isPaidByUser} // Paying user's shipping is not editable
           />
         </div>
       </InlayInputBox>
@@ -83,9 +87,12 @@ export function AdminModalItem({
             type="number"
             id={taxesId}
             name={taxesId}
-            defaultValue={taxesValue}
+            value={taxesInput}
             step={0.01}
-            onInput={(e) => setTaxesValue(+e.target.value)}
+            onChange={(e) => setTaxesInput(e.target.value)}
+            onBlur={(e) => handleBlur("taxes")}
+            onFocus={(e) => e.target.select()}
+            disabled={isPaidByUser} // Paying user's taxes is not editable
           />
         </div>
       </InlayInputBox>

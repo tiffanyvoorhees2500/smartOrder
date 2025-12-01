@@ -19,7 +19,10 @@
 
 const { AdminOrder } = require("../models");
 
-async function createAdminOrderService({ paidForById, shipToState, shippingAmount, taxAmount }, transaction) {
+async function createAdminOrderService(
+  { paidForById, shipToState, shippingAmount, taxAmount },
+  transaction
+) {
   return await AdminOrder.create(
     { paidForById, shipToState, shippingAmount, taxAmount },
     { transaction }
