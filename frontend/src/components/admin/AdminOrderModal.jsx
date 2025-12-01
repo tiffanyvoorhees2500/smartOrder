@@ -81,7 +81,9 @@ export default function AdminOrderModal({
 
     try {
       await finalizeOrder(orderData);
-      toast.success("Order finalized successfully!");
+      toast.success(
+        "Order finalized successfully! Text messages sent via GroupMe!"
+      );
       setIsVisible(false);
       navigate("/admin-past-orders");
     } catch (error) {
@@ -105,7 +107,13 @@ export default function AdminOrderModal({
 
         {/* Date of order */}
         <InlayInputBox htmlFor={"date"} title={"Date Order Placed"}>
-          <input type="date" name="date" id="date" defaultValue={today} onChange={(e) => setAdminOrderDate(e.target.value)} />
+          <input
+            type="date"
+            name="date"
+            id="date"
+            defaultValue={today}
+            onChange={(e) => setAdminOrderDate(e.target.value)}
+          />
         </InlayInputBox>
 
         {/* Order Paid By */}
