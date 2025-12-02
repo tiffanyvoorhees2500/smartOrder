@@ -11,7 +11,7 @@ export default function PastUserOrder() {
 
   const fetchPastOrders = useCallback(async () => {
     try {
-      const response = await axios.get(`${base_url}/admin/past`, {
+      const response = await axios.get(`${base_url}/admin/past-by-product`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
