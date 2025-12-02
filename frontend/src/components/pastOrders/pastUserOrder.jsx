@@ -1,63 +1,38 @@
 import "./pastUserOrder.css";
-import GroupByPerson from "./groupBy";
 import InlayInputBox from "../form/InlayInputBox";
-import { useState } from "react";
-import GroupBy from "./groupBy";
+import { useCallback, useEffect, useState } from "react";
+import axios from "axios";
+import PastOrder from "./pastOrder";
 
 export default function PastUserOrder() {
-  // const [groupedBy, setGroupedBy] = useState("person")
-  const pastOrders = [
-    {
-      date: "2023-01-01",
-      subtotal: 12.34,
-      shipping: 0,
-      tax: 0,
-      total: 12.34,
-      orderId: 1,
-      items: [
-        {
-          id: 1,
-          name: "Accute",
-          price: 20,
-          users: [
-            {
-              id: 1,
-              name: "User 1",
-              quantity: 2
-            },
-            {
-              id: 2,
-              name: "User 2",
-              quantity: 5
-            }
-          ]
-        },
-        {
-          id: 2,
-          name: "Big C Nutrient Pak #1",
-          price: 45.2,
-          users: [
-            {
-              id: 2,
-              name: "User 2",
-              quantity: 6
-            },
-            {
-              id: 4,
-              name: "User 4",
-              quantity: 2
-            }
-          ]
-        }
-      ]
+  // Fetch admin items from backend API
+  const base_url = process.env.REACT_APP_API_BASE_URL;
+  const token = typeof window !== "undefined" && localStorage.getItem("token");
+
+  const fetchPastOrders = useCallback(async () => {
+    try {
+      const response = await axios.get(`${base_url}/admin/past`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      const data = response.data;
+      setPastOrders(data);
+    } catch (error) {
+      console.error("Error fetching admin items:", error);
     }
-  ];
+  }, [base_url, token]);
 
-  const groupByOptions = ["person", "item"];
-  const [groupBy, setGroupBy] = useState(groupByOptions[0]);
+  useEffect(() => {
+    fetchPastOrders();
+  }, [fetchPastOrders]);
 
+  const [pastOrders, setPastOrders] = useState([]);
+  const groupByOptions = ["person", "product"];
+  const [groupBy, setGroupBy] = useState(groupByOptions[1]);
+
+  console.log(pastOrders);
   return (
-    <div className="pastUserOrder">
+    <div className="pastOrders">
       {/* Page Title */}
       <h2>All OHS Past Orders</h2>
 
@@ -84,28 +59,13 @@ export default function PastUserOrder() {
 
       {/* Past Orders Container */}
       <div className="orderContainer">
-        {pastOrders.map((pastOrder) => (
-          <div key={pastOrder.orderId}>
-            {/* Past Order Header and Total */}
-            <div className="pastOrderHeader">
-              <span>{pastOrder.date}</span>
-              <span>${pastOrder.total}</span>
-            </div>
-
-            {/* Past Order Value Grouped */}
-            <GroupBy items={pastOrder.items} groupByType={groupBy} />
-          </div>
-        ))}
-
-        {/* Temp for testing */}
-        {pastOrders.map((pastOrder) => (
-          <div key={pastOrder.orderId}>
-            <div className="pastOrderHeader">
-              <span>{pastOrder.date}</span>
-              <span>${pastOrder.total}</span>
-            </div>
-            <GroupBy items={pastOrder.items} groupByType={"item"} />
-          </div>
+        {pastOrders.map((pastOrder, index) => (
+          <PastOrder
+            pastOrder={pastOrder}
+            key={pastOrder.adminOrderId}
+            groupBy={groupBy}
+            index={index}
+          />
         ))}
       </div>
     </div>

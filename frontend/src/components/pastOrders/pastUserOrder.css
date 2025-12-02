@@ -1,4 +1,4 @@
-.pastUserOrder {
+.pastOrders {
   align-self: flex-start;
   width: 100%;
   display: flex;
@@ -6,11 +6,11 @@
   gap: 0.5em;
 }
 
-.pastUserOrder h2 {
+.pastOrders h2 {
   text-align: center;
 }
 
-.pastUserOrder .groupSection {
+.pastOrders .groupSection {
   display: flex;
   flex-direction: column;
   background-color: var(--secondary-color-light);
@@ -19,18 +19,26 @@
   gap: 0.25em;
 }
 
+.pastOrderContainer {
+  background-color: var(--secondary-color-dark);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.pastOrderContainer:has(.active) {
+  background-color: var(--secondary-color-light);
+}
+
 .pastOrderHeader {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--secondary-color-light);
   padding: 0.25em;
   font-size: x-large;
   font-weight: bold;
   width: 100%;
   box-sizing: border-box;
-  border-radius: 8px 8px 0 0;
 }
 
 .orderContainer {
@@ -44,12 +52,16 @@
   flex-direction: column;
   gap: 0.5em;
   background-color: rgba(255, 255, 255, 0.795);
-  border-radius: 0 0 8px 8px;
   overflow: hidden;
   padding: 0.25em;
+  transition: all 300ms ease-in;
+  max-height: 0px;
+}
+.groupByContainer.active {
+  max-height: 1000px;
 }
 
-.groupByContainer > div {
+.groupByContainer > .groupByCard {
   display: flex;
   flex-direction: column;
   border-radius: 8px;
@@ -61,28 +73,30 @@
   padding: 0.25em 0.5em;
   border-bottom: 2px solid var(--secondary-color-light);
   margin: 0 0.25em;
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
-.groupBy {
+.groupByCard {
+  box-shadow: 2px 2px 2px 0px rgba(129, 129, 129, 0.562);
+}
+
+.groupByRow {
   display: grid;
   grid-template-columns: auto 1fr;
   background-color: var(--primary-color);
   padding: 0.25em 0.5em;
 }
 
-.groupBy span:nth-child(even) {
+.orderSummary {
+  display:flex;
+  flex-direction: column;
   text-align: right;
+  padding:0.25em;
 }
 
-/* 
-.groupByQuantity {
-  background-color: var(--secondary-color);
-  color: var(--primary-color);
-  aspect-ratio: 5/4;
-  height: 100%;
-  width: auto;
-  display: inline-block;
-  text-align: center;
-  border-radius: 5px;
-  font-weight: bold;
-} */
+.orderSummary span:last-child{
+  font-weight:bold;
+  font-size: large;
+}

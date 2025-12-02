@@ -90,7 +90,7 @@ root.render(
               path="admin-past-orders"
               element={
                 <AdminRoute>
-                  <div>Admin Past Orders Page</div>
+                  <PastUserOrder />
                 </AdminRoute>
               }
             />

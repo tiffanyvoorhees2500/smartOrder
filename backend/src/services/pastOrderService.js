@@ -1,10 +1,17 @@
 "use strict";
 
 const { Op } = require("sequelize");
-const { AdminOrder, AdminLineItem, Product, User, UserOrder, UserLineItem } = require("../models");
+const {
+  AdminOrder,
+  AdminLineItem,
+  Product,
+  User,
+  UserOrder,
+  UserLineItem
+} = require("../models");
 
 exports.getPastOrdersByUser = async (userId) => {
-    // Get all past user orders
+  // Get all past user orders
   const userOrders = await UserOrder.findAll({
     where: {
       userId,
@@ -24,7 +31,7 @@ exports.getPastOrdersByUser = async (userId) => {
 
   for (const order of userOrders) {
     const lineItems = await UserLineItem.findAll({
-      where: { 
+      where: {
         userId,
         adminOrderId: order.adminOrderId // match by adminOrderId
       },
@@ -41,7 +48,7 @@ exports.getPastOrdersByUser = async (userId) => {
     if (!lineItems.length) continue;
 
     // Format each line item
-    const items = lineItems.map(li => {
+    const items = lineItems.map((li) => {
       const unit = parseFloat(li.finalPrice ?? li.basePrice ?? 0);
       const qty = li.quantity ?? 0;
       const lineTotal = +(unit * qty).toFixed(2);
@@ -54,7 +61,9 @@ exports.getPastOrdersByUser = async (userId) => {
       };
     });
 
-    const subtotal = +items.reduce((sum, it) => sum + it.lineTotal, 0).toFixed(2);
+    const subtotal = +items
+      .reduce((sum, it) => sum + it.lineTotal, 0)
+      .toFixed(2);
     const shippingAmount = +parseFloat(order.shippingAmount ?? 0).toFixed(2);
     const taxAmount = +parseFloat(order.taxAmount ?? 0).toFixed(2);
     const orderDate = order.adminOrder?.orderDate ?? order.createdAt;
@@ -66,7 +75,7 @@ exports.getPastOrdersByUser = async (userId) => {
       subtotal,
       shippingAmount,
       taxAmount,
-      total: +((subtotal + shippingAmount + taxAmount)).toFixed(2)
+      total: +(subtotal + shippingAmount + taxAmount).toFixed(2)
     });
   }
 
@@ -107,7 +116,7 @@ exports.getBulkPastOrdersSortedByProduct = async () => {
     order: [["orderDate", "DESC"]]
   });
 
-  const formatted = adminOrders.map(order => {
+  const formatted = adminOrders.map((order) => {
     // Group AdminLineItems by product
     const productMap = new Map();
 
@@ -115,6 +124,7 @@ exports.getBulkPastOrdersSortedByProduct = async () => {
       const productId = item.productId;
       if (!productMap.has(productId)) {
         productMap.set(productId, {
+          productId,
           productName: item.product?.name ?? "Unknown product",
           unitPrice: parseFloat(item.finalPrice ?? item.basePrice ?? 0),
           totalQty: 0,
@@ -146,9 +156,11 @@ exports.getBulkPastOrdersSortedByProduct = async () => {
     }
 
     // Convert map to array and sort products A-Z
-    const products = Array.from(productMap.values())
-      .map(p => ({...p, total: +p.total.toFixed(2)}))
-      .sort((a, b) => a.productName.localCompare(b.productName));
+    const products = Array.from(productMap.values()).map((p) => ({
+      ...p,
+      total: +p.total.toFixed(2)
+    }));
+    // .sort((a, b) => a.productName.localCompare(b.productName));
 
     const subtotal = products.reduce((sum, p) => sum + p.total, 0);
     const shippingAmount = +parseFloat(order.shippingAmount ?? 0).toFixed(2);
@@ -170,6 +182,5 @@ exports.getBulkPastOrdersSortedByProduct = async () => {
 };
 
 exports.getBulkPastOrdersSortedByUser = async () => {
-    // coming soon :)
+  // coming soon :)
 };
-

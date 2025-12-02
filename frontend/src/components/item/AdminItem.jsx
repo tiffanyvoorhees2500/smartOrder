@@ -3,6 +3,7 @@ import "./AdminItem.css";
 import PriceQtyGroup from "./PriceQtyGroup";
 import InlayInputBox from "../form/InlayInputBox";
 import { toDecimalPercent, toWholePercent } from "../../utils/normalize";
+import ShortenProductName from "../../utils/ShortenProductName"
 
 export default function AdminItem({
   adminItem,
@@ -27,7 +28,7 @@ export default function AdminItem({
   }, [adminItem.wholesale, adminDiscountPercentage]);
 
   const subtotal = finalPrice * totalQuantity;
-  const itemName = adminItem.name.split(" (")[0];
+  const itemName = ShortenProductName(adminItem.name);
 
   const handleWholesaleBlur = (e) => {
     const value = parseFloat(e.target.value);
