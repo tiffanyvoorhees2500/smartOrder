@@ -5,7 +5,6 @@ export default function UniversalDropdown({
   label,
   id,
   name,
-  value,
   options = [],
   onChange,
   placeholder = "Select...",
@@ -77,7 +76,6 @@ export default function UniversalDropdown({
         }}
         onFocus={() => setOpen(true)}
         onKeyDown={handleKeyDown}
-        style={{ width: "100%" }}
       />
 
       {open && !loading && !error && (

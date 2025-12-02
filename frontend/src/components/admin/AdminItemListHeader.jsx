@@ -131,6 +131,7 @@ export default function AdminItemListHeader({
       <label htmlFor="discount">
         Discount:
         <DiscountSelector
+          id={"discount"}
           value={selectedDiscount}
           onChange={setSelectedDiscount}
           options={discountOptions}
@@ -159,7 +160,6 @@ export default function AdminItemListHeader({
           label="Person:"
           name="person"
           id="person"
-          value={selectedUserId}
           options={filteredUsers}
           onChange={setSelectedUserId}
           loading={loadingUsers}
@@ -173,7 +173,6 @@ export default function AdminItemListHeader({
           label="Product:"
           id="product"
           name="product"
-          value={selectedProductId}
           options={productsList}
           onChange={setSelectedProductId}
           placeholder="Select a product..."
