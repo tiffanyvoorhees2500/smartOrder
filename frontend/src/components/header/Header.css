@@ -22,6 +22,11 @@
   width: auto;
 }
 
+a.header-left {
+  text-decoration: none;
+  color: black;
+}
+
 .header-title {
   font-size: 1rem;
   font-weight: bold;

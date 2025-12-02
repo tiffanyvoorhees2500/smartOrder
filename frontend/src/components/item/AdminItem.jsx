@@ -3,6 +3,7 @@ import "./AdminItem.css";
 import PriceQtyGroup from "./PriceQtyGroup";
 import InlayInputBox from "../form/InlayInputBox";
 import { toDecimalPercent, toWholePercent } from "../../utils/normalize";
+import ShortenProductName from "../../utils/ShortenProductName"
 
 export default function AdminItem({
   adminItem,
@@ -27,6 +28,7 @@ export default function AdminItem({
   }, [adminItem.wholesale, adminDiscountPercentage]);
 
   const subtotal = finalPrice * totalQuantity;
+  const itemName = ShortenProductName(adminItem.name);
 
   const handleWholesaleBlur = (e) => {
     const value = parseFloat(e.target.value);
@@ -44,7 +46,7 @@ export default function AdminItem({
         {/* Container for the bulk quantity and product name */}
         <div className="bulkQtyNameContainer">
           <span className="bulkQty">{totalQuantity}</span>
-          <span className="bulkName">{adminItem.name}</span>
+          <span className="bulkName">{itemName}</span>
         </div>
 
         {/* Wholesale Price */}

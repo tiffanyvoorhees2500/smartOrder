@@ -1,0 +1,102 @@
+.pastOrders {
+  align-self: flex-start;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.pastOrders h2 {
+  text-align: center;
+}
+
+.pastOrders .groupSection {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--secondary-color-light);
+  border-radius: 8px;
+  padding: 0.5em;
+  gap: 0.25em;
+}
+
+.pastOrderContainer {
+  background-color: var(--secondary-color-dark);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.pastOrderContainer:has(.active) {
+  background-color: var(--secondary-color-light);
+}
+
+.pastOrderHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25em;
+  font-size: x-large;
+  font-weight: bold;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.orderContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.groupByContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  background-color: rgba(255, 255, 255, 0.795);
+  overflow: hidden;
+  padding: 0.25em;
+  transition: all 300ms ease-in;
+  max-height: 0px;
+}
+.groupByContainer.active {
+  max-height: 1000px;
+}
+
+.groupByContainer > .groupByCard {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: white;
+}
+
+.groupByContainer .bold {
+  padding: 0.25em 0.5em;
+  border-bottom: 2px solid var(--secondary-color-light);
+  margin: 0 0.25em;
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.groupByCard {
+  box-shadow: 2px 2px 2px 0px rgba(129, 129, 129, 0.562);
+}
+
+.groupByRow {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  background-color: var(--primary-color);
+  padding: 0.25em 0.5em;
+}
+
+.orderSummary {
+  display:flex;
+  flex-direction: column;
+  text-align: right;
+  padding:0.25em;
+}
+
+.orderSummary span:last-child{
+  font-weight:bold;
+  font-size: large;
+}

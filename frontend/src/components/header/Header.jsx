@@ -14,10 +14,10 @@ export default function Header() {
   const isCurrentOrderPage = location.pathname === "/current-order";
   return (
     <header className="app-header">
-      <div className="header-left">
+      <a href="/" className="header-left">
         <img src="/logo-horizontal.png" alt="Logo" className="header-logo" />
         <span className="header-title">OHS with Rowley's</span>
-      </div>
+      </a>
       <nav className="header-nav">
         {isCurrentOrderPage && (
           <button

@@ -3,6 +3,7 @@
   --primary-color: #fefefe;
   --secondary-color: #4e888f;
   --secondary-color-light: #6ba7ae;
+  --secondary-color-dark: #3f6e73;
   --accent-color: #000000;
 }
 
@@ -64,4 +65,9 @@ body {
 input,
 label {
   min-width: 0;
+}
+
+.bold {
+  font-weight: bold;
+  font-size: large;
 }

@@ -124,6 +124,7 @@ exports.getBulkPastOrdersSortedByProduct = async () => {
       const productId = item.productId;
       if (!productMap.has(productId)) {
         productMap.set(productId, {
+          productId,
           productName: item.product?.name ?? "Unknown product",
           unitPrice: parseFloat(item.finalPrice ?? item.basePrice ?? 0),
           totalQty: 0,
@@ -155,9 +156,11 @@ exports.getBulkPastOrdersSortedByProduct = async () => {
     }
 
     // Convert map to array and sort products A-Z
-    const products = Array.from(productMap.values())
-      .map((p) => ({ ...p, total: +p.total.toFixed(2) }))
-      .sort((a, b) => a.productName.localeCompare(b.productName));
+    const products = Array.from(productMap.values()).map((p) => ({
+      ...p,
+      total: +p.total.toFixed(2)
+    }));
+    // .sort((a, b) => a.productName.localCompare(b.productName));
 
     const subtotal = products.reduce((sum, p) => sum + p.total, 0);
     const shippingAmount = +parseFloat(order.shippingAmount ?? 0).toFixed(2);
