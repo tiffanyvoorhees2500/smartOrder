@@ -13,8 +13,18 @@ router.post(
   finalizeController.finalizeOrder
 );
 
-router.get("/past", authenticateToken, requireAdmin, pastOrderController.getBulkPastOrdersSortedByProduct);
+router.get(
+  "/past-by-product",
+  authenticateToken,
+  requireAdmin,
+  pastOrderController.getBulkPastOrdersSortedByProduct
+);
 
-router.get("/past", authenticateToken, requireAdmin, pastOrderController.getBulkPastOrdersSortedByUser);
+router.get(
+  "/past-by-user",
+  authenticateToken,
+  requireAdmin,
+  pastOrderController.getBulkPastOrdersSortedByUser
+);
 
 module.exports = router;
