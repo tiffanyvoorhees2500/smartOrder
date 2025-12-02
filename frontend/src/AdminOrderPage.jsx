@@ -220,6 +220,7 @@ export default function AdminOrderPage() {
         setUserOrders={setUserOrders}
         adminSubtotal={adminSubtotal}
         adminTaxAmount={adminTaxAmount}
+        selectedDiscount={selectedDiscount}
         adminShippingAmount={adminShippingAmount}
         selectedShipToState={selectedShipToState}
         adminLineItems={discountedAdminItems}

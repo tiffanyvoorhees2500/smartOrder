@@ -18,6 +18,7 @@ exports.finalizeOrder = async (req, res) => {
       shipToState,
       shippingAmount,
       taxAmount,
+      selectedDiscount,
       adminLineItems,
       userAmounts
     } = req.body;
@@ -32,7 +33,8 @@ exports.finalizeOrder = async (req, res) => {
     await adminLineItemService.createBulkAdminLineItems(
       {
         adminOrderId: adminOrder.id,
-        adminLineItems: adminLineItems
+        adminLineItems: adminLineItems,
+        selectedDiscount
       },
       t
     );
@@ -52,13 +54,14 @@ exports.finalizeOrder = async (req, res) => {
     // Extract user line items from admin line items
     const extractedUserLineItems =
       userLineItemService.extractUserLineItemsFromAdminLineItems(
-        adminLineItems
+        adminLineItems,
       );
 
     // Add Pricing to userLineItems
     const userLineItemsWithPricing =
       await userLineItemService.attachPricingToUserLineItems(
-        extractedUserLineItems
+        extractedUserLineItems,
+        selectedDiscount
       );
 
     // Update userLineItem adminOrderId and pricing details in bulk

@@ -55,20 +55,20 @@ async function createSingleAdminLineItem(
  * - transaction: optional Sequelize transaction
  */
 async function createBulkAdminLineItems(
-  { adminOrderId, adminLineItems },
+  { adminOrderId, adminLineItems, selectedDiscount },
   transaction
 ) {
 
   const adminLineItemsData = adminLineItems.map(item => {
     // Don't trust the frontend for finalPrice calculation
-    const finalPrice = item.wholesale * (1 - (item.discountPercentage) / 100);
+    const finalPrice = item.wholesale * (1 - (selectedDiscount) / 100);
 
     return {
       adminOrderId,
       productId: item.id,
       quantity: item.adminQuantity,
       basePrice: item.wholesale,
-      percentOff: item.discountPercentage / 100,
+      percentOff: selectedDiscount / 100,
       finalPrice
     };
   });

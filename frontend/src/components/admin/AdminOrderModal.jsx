@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./AdminOrderModal.css";
 import InlayInputBox from "../form/InlayInputBox";
 import Modal from "../misc/Modal";
@@ -17,6 +17,7 @@ export default function AdminOrderModal({
   setUserOrders,
   adminSubtotal,
   adminTaxAmount,
+  selectedDiscount,
   adminShippingAmount,
   selectedShipToState,
   adminLineItems,
@@ -25,6 +26,12 @@ export default function AdminOrderModal({
 }) {
   const [totalShipping, setTotalShipping] = useState(0);
   const [totalTaxes, setTotalTaxes] = useState(0);
+
+  const [localPaidByUserId, setLocalPaidByUserId] = useState(paidByUserId);
+
+  useEffect(() => {
+    setLocalPaidByUserId(paidByUserId);
+  }, [paidByUserId]);
 
   const navigate = useNavigate();
 
@@ -38,7 +45,7 @@ export default function AdminOrderModal({
     0
   );
 
-  const paidByUser = userOptions.find((u) => u.id === paidByUserId);
+  const paidByUser = userOptions.find((u) => u.id === localPaidByUserId);
 
   // Handles changes to user shipping or taxes.. Makes sure totals always match admin amounts by assigning diffs to paidByUser
   const handleUserAmountChange = (userId, field, value) => {
@@ -71,10 +78,11 @@ export default function AdminOrderModal({
     // Create payload for finalizing order
     const orderData = {
       orderDate: adminOrderDate,
-      paidForById: paidByUserId,
+      paidForById: localPaidByUserId,
       shipToState: selectedShipToState,
       shippingAmount: adminShippingAmount,
       taxAmount: adminTaxAmount,
+      selectedDiscount: selectedDiscount,
       adminLineItems: adminLineItems,
       userAmounts: userOrders.map((u) => ({
         userId: u.userId,
@@ -124,8 +132,8 @@ export default function AdminOrderModal({
         <InlayInputBox htmlFor={"paid_by"} title={"Order Paid By"}>
           <select
             className="paid_by"
-            value={paidByUserId}
-            onChange={setPaidByUserId}
+            value={localPaidByUserId}
+            onChange={(e) => setLocalPaidByUserId(e.target.value)}
           >
             {userOptions.map((userOption) => (
               <option key={userOption.id} value={userOption.id}>
@@ -147,33 +155,45 @@ export default function AdminOrderModal({
             </div>
             <div className="summaryRow">
               <span className="summaryLabel">
-                Collected by{" "}{paidByUser ? paidByUser.name : "Unknown"}:
+                Collected by {paidByUser ? paidByUser.name : "Unknown"}:
               </span>
-              <span className="summaryValue"> ${userGrandTotal.toFixed(2)} </span>
+              <span className="summaryValue">
+                {" "}
+                ${userGrandTotal.toFixed(2)}{" "}
+              </span>
             </div>
           </div>
           <div className="divider-light"></div>
           <div className="summarySection">
             <div className="summaryRow">
               <span className="summaryLabel">Shipping Paid to OHS:</span>
-              <span className="summaryValue"> ${adminShippingAmount.toFixed(2)} </span>
+              <span className="summaryValue">
+                {" "}
+                ${adminShippingAmount.toFixed(2)}{" "}
+              </span>
             </div>
             <div className="summaryRow">
               <span className="summaryLabel">
-                Collected by{" "}{paidByUser ? paidByUser.name : "Unknown"}:
+                Collected by {paidByUser ? paidByUser.name : "Unknown"}:
               </span>
-              <span className="summaryValue"> ${totalShipping.toFixed(2)} </span>
+              <span className="summaryValue">
+                {" "}
+                ${totalShipping.toFixed(2)}{" "}
+              </span>
             </div>
           </div>
           <div className="divider-light"></div>
           <div className="summarySection">
             <div className="summaryRow">
               <span className="summaryLabel">Taxes Paid to OHS:</span>
-              <span className="summaryValue"> ${adminTaxAmount.toFixed(2)} </span>
+              <span className="summaryValue">
+                {" "}
+                ${adminTaxAmount.toFixed(2)}{" "}
+              </span>
             </div>
             <div className="summaryRow">
               <span className="summaryLabel">
-                Collected by{" "}{paidByUser ? paidByUser.name : "Unknown"}:
+                Collected by {paidByUser ? paidByUser.name : "Unknown"}:
               </span>
               <span className="summaryValue"> ${totalTaxes.toFixed(2)} </span>
             </div>
@@ -190,7 +210,7 @@ export default function AdminOrderModal({
               subtotal={userOrder.subtotal}
               shipping={userOrder.shipping}
               taxes={userOrder.taxes}
-              isPaidByUser={userOrder.userId === paidByUserId}
+              isPaidByUser={userOrder.userId === localPaidByUserId}
               handleUserAmountChange={handleUserAmountChange}
             />
           ))}

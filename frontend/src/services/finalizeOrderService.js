@@ -29,6 +29,7 @@ const base_url = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
  * @property {string} shipToState - State used for tax/shipping rules.
  * @property {number} shippingAmount - Admin-level shipping total.
  * @property {number} taxAmount - Admin-level tax total.
+ * @property {number} selectedDiscount - Eventually ability to override admin and user discount will be in place, but for now this will be used for both
  * @property {AdminLineItem[]} adminLineItems - Items included in the admin order.
  * @property {UserAmount[]} userAmounts - Breakdown of user-level costs.
  *
