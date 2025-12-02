@@ -8,10 +8,11 @@ export default function SelectField({
   placeholder = "Select an option"
 }) {
   return (
-    <label>
+    <label htmlFor={name}>
       {label}
       <select
         name={name}
+        id={name}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         required={required}

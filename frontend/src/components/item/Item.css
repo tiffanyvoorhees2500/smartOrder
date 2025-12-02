@@ -3,7 +3,7 @@
   grid-template-columns: 2fr minmax(150px, auto);
   gap: 0.5em;
   background-color: white;
-  color: var(--secondary-color);
+  color: var(--secondary-text-color);
   padding: 0.5em;
   border: 1px solid var(--secondary-color);
 }

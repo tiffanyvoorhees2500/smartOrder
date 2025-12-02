@@ -113,18 +113,20 @@ export default function PriceSheetPage() {
       </div>
 
       <div className="discountSelectorsDiv">
-        <label>
+        <label htmlFor="discount">
           Bottles in Bulk Order: {originalBulkBottles}
           <DiscountSelector
+            id="discount"
             value={originalDiscount}
             onChange={setOriginalDiscount}
             options={discountOptions}
           />
         </label>
 
-        <label>
+        <label htmlFor="pendingDiscount">
           Including Your Pending: {pendingBulkBottles}
           <DiscountSelector
+            id="pendingDiscount"
             value={pendingDiscount}
             onChange={setPendingDiscount}
             options={discountOptions}

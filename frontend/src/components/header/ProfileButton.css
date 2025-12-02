@@ -47,14 +47,14 @@
   margin: 0;
   padding: 0.5em 0.75em;
   text-wrap: nowrap;
+  background-color: #bdd8db;
 }
 .profileMenu > *:hover {
   background-color: #cee2e4;
 }
 
 .profileMenu button {
-  color: rgb(192, 0, 0);
+  color: #ab0000;
   font-weight: bold;
-  background-color: transparent;
   border: none;
 }
