@@ -20,8 +20,6 @@ router.get(
   pastOrderController.getBulkPastOrdersSortedByProduct
 );
 
-router.get("/past-by-user", pastOrderController.getBulkPastOrdersSortedByUser);
-
 router.get(
   "/past-by-user",
   authenticateToken,
