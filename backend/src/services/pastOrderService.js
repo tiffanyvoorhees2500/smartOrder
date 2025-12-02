@@ -48,34 +48,28 @@ exports.getPastOrdersByUser = async (userId) => {
     if (!lineItems.length) continue;
 
     // Format each line item
-    const items = lineItems.map((li) => {
-      const unit = parseFloat(li.finalPrice ?? li.basePrice ?? 0);
-      const qty = li.quantity ?? 0;
-      const lineTotal = +(unit * qty).toFixed(2);
-
-      return {
+    const {
+      lineItems: itemsWithTotals,
+      subtotal,
+      grandTotal
+    } = calcuateOrderTotals(
+      lineItems.map((li) => ({
         productName: li.product?.name ?? "Unknown product",
-        quantity: qty,
-        unitPrice: +unit.toFixed(2),
-        lineTotal
-      };
-    });
-
-    const subtotal = +items
-      .reduce((sum, it) => sum + it.lineTotal, 0)
-      .toFixed(2);
-    const shippingAmount = +parseFloat(order.shippingAmount ?? 0).toFixed(2);
-    const taxAmount = +parseFloat(order.taxAmount ?? 0).toFixed(2);
-    const orderDate = order.adminOrder?.orderDate ?? order.createdAt;
+        quantity: li.quantity,
+        finalPrice: li.finalPrice ?? li.basePrice ?? 0
+      })),
+      parseFloate(order.shippingAmount ?? 0),
+      parseFloate(order.taxAmount ?? 0)
+    );
 
     formatted.push({
       userOrderId: order.id,
-      orderDate,
-      items,
+      orderDate: order.adminOrder?.orderDate ?? order.createdAt,
+      items: itemsWithTotals,
       subtotal,
-      shippingAmount,
-      taxAmount,
-      total: +(subtotal + shippingAmount + taxAmount).toFixed(2)
+      shippingAmount: parseFloat(order.shippingAmount ?? 0),
+      taxAmount: parseFloat(order.taxAmount ?? 0),
+      total: grandTotal
     });
   }
 
@@ -124,6 +118,7 @@ exports.getBulkPastOrdersSortedByProduct = async () => {
       const productId = item.productId;
       if (!productMap.has(productId)) {
         productMap.set(productId, {
+          productId,
           productName: item.product?.name ?? "Unknown product",
           unitPrice: parseFloat(item.finalPrice ?? item.basePrice ?? 0),
           totalQty: 0,
@@ -131,13 +126,6 @@ exports.getBulkPastOrdersSortedByProduct = async () => {
           users: []
         });
       }
-
-      const productEntry = productMap.get(productId);
-      const qty = item.quantity ?? 0;
-      const lineTotal = +(qty * productEntry.unitPrice).toFixed(2);
-
-      productEntry.totalQty += qty;
-      productEntry.total += lineTotal;
     }
 
     // Add user-level breakdown
@@ -146,20 +134,36 @@ exports.getBulkPastOrdersSortedByProduct = async () => {
       const productEntry = productMap.get(productId);
       if (!productEntry) continue; // Skip if not in admin items
 
-      const qty = userItem.quantity ?? 0;
       productEntry.users.push({
         userId: userItem.userId,
         userName: userItem.user?.name ?? "Unknown user",
-        quantity: qty
+        quantity: userItem.quantity ?? 0
       });
     }
 
-    // Convert map to array and sort products A-Z
+    // Calculate lineTotals for each product using calculateOrderTotals function
+    // Calculate lineTotals for each product using calculateOrderTotals
     const products = Array.from(productMap.values())
-      .map((p) => ({ ...p, total: +p.total.toFixed(2) }))
+      .map((product) => {
+        const { lineItems: itemsWithTotals, subtotal } = calculateOrderTotals(
+          product.users.map((u) => ({
+            quantity: u.quantity,
+            finalPrice: product.unitPrice
+          }))
+        );
+
+        // Assign lineTotals to each user
+        product.users = product.users.map((u, idx) => ({
+          ...u,
+          lineTotal: itemsWithTotals[idx].lineTotal
+        }));
+
+        product.total = subtotal; // total for this product across all users
+        return product;
+      })
       .sort((a, b) => a.productName.localeCompare(b.productName));
 
-    const subtotal = products.reduce((sum, p) => sum + p.total, 0);
+    const subtotal = +products.reduce((sum, p) => sum + p.total, 0).toFixed(2);
     const shippingAmount = +parseFloat(order.shippingAmount ?? 0).toFixed(2);
     const taxAmount = +parseFloat(order.taxAmount ?? 0).toFixed(2);
     const total = +(subtotal + shippingAmount + taxAmount).toFixed(2);
@@ -237,33 +241,42 @@ exports.getBulkPastOrdersSortedByUser = async () => {
       }
 
       const userEntry = userMap.get(userId);
-      const qty = item.quantity ?? 0;
-      const unitPrice = parseFloat(item.finalPrice ?? item.basePrice ?? 0);
-      const lineTotal = +(qty * unitPrice).toFixed(2);
 
       userEntry.products.push({
         productId: item.productId,
         productName: item.product?.name ?? "Unknown product",
-        unitPrice,
-        quantity: qty,
-        total: lineTotal
+        quantity: item.quantity ?? 0,
+        unitPrice: parseFloate(item.finalPrice ?? item.basePrice ?? 0)
       });
-
-      userEntry.subtotal += lineTotal;
     }
 
-    // Attach shipping and tax from UserOrder
+    // For each user, calculate totals using calculateOrderTotals Function
     for (const uo of order.userOrders || []) {
       const entry = userMap.get(uo.userId);
-      if (entry) {
-        entry.shippingAmount = +(uo.shippingAmount ?? 0);
-        entry.taxAmount = +(uo.taxAmount ?? 0);
-        entry.total = +(
-          entry.subtotal +
-          entry.shippingAmount +
-          entry.taxAmount
-        ).toFixed(2);
-      }
+      if (!entry) continue;
+
+      const {
+        lineItems: itemsWithTotals,
+        subtotal,
+        grandTotal
+      } = calculateOrderTotals(
+        entry.products.map((p) => ({
+          quantity: p.quantity,
+          finalPrice: p.unitPrice
+        })),
+        parseFloat(uo.shippingAmount ?? 0),
+        parseFloat(uo.taxAmount ?? 0)
+      );
+
+      // Update products with lineTotals and totals
+      entry.products = entry.products.map((p, idx) => ({
+        ...p,
+        lineTotal: itemsWithTotals[idx].lineTotal
+      }));
+      entry.subtotal = subtotal;
+      entry.shippingAmount = parseFloat(uo.shippingAmount ?? 0);
+      entry.taxAmount = parseFloat(uo.taxAmount ?? 0);
+      entry.total = grandTotal;
     }
 
     // Convert map to array sorted by user name

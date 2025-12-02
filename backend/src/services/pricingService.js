@@ -94,4 +94,21 @@ async function calculateAdminDiscount(shipToState) {
   };
 }
 
-module.exports = { calculateUserDiscount, calculateAdminDiscount };
+function calculateOrderTotals(lineItems, shipping = 0, tax = 0) {
+  const itemsWithTotals = lineItems.map(item => ({
+    ...item,
+    lineTotal: +(item.finalPrice * item.quantity).toFixed(2)
+  }));
+
+  const subtotal = +itemsWithTotals.reduce((sum, it) => sum + it.lineTotal, 0).toFixed(2);
+
+  const grandTotal = +(subtotal + shipping + tax).toFixed(2);
+
+  return { lineItems: itemsWithTotals, subtotal, grandTotal };
+}
+
+module.exports = {
+  calculateUserDiscount,
+  calculateAdminDiscount,
+  calculateOrderTotals
+};
