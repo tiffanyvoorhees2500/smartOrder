@@ -109,7 +109,6 @@ function calculateAdminOrderTotals(
     const finalPrice = parseFloat(item.basePrice * (1 - percentOffToDecimal));
 
     const lineTotal = parseFloat(finalPrice * (adminQuantity ?? 0));
-    console.log(adminQuantity);
     return {
       ...item,
       adminQuantity,

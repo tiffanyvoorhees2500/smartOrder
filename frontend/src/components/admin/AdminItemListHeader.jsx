@@ -132,19 +132,6 @@ export default function AdminItemListHeader({
 
   return (
     <div className={"adminListHeader " + className}>
-      {/* Discount */}
-      <label htmlFor="discount">
-        Discount:
-        <DiscountSelector
-          id={"discount"}
-          value={selectedDiscount}
-          onChange={setSelectedDiscount}
-          options={discountOptions}
-        />
-      </label>
-
-      <p>Number of Bottles in Bulk Order: {numberBottles}</p>
-
       {/* State Selector */}
       <ShipToStateSelector
         label="State"
@@ -155,6 +142,23 @@ export default function AdminItemListHeader({
         required
         placeholder="Select a state"
       />
+
+      {/* Discount */}
+      <div className="discount-section">
+        <label htmlFor="discount">
+          Discount:
+          <DiscountSelector
+            id="discount"
+            value={selectedDiscount}
+            onChange={setSelectedDiscount}
+            options={discountOptions}
+          />
+        </label>
+
+        <small className="discount-info">
+          Number of Bottles in Bulk Order: {numberBottles}
+        </small>
+      </div>
 
       <div className="divider-light" />
 

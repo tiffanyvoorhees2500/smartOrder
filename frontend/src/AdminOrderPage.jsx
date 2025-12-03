@@ -18,7 +18,9 @@ export default function AdminOrderPage() {
 
   const [isVisible, setIsVisible] = useState(false);
   const [adminItems, setAdminItems] = useState([]);
-  const [selectedShipToState, setSelectedShipToState] = useState(getUserFromToken()?.defaultShipToState || "UT");
+  const [selectedShipToState, setSelectedShipToState] = useState(
+    getUserFromToken()?.defaultShipToState || "UT"
+  );
   const [discountOptions, setDiscountOptions] = useState([]);
   const [selectedDiscount, setSelectedDiscount] = useState(0);
   const [numberBottles, setNumberBottles] = useState(0);
@@ -31,7 +33,9 @@ export default function AdminOrderPage() {
   const [adminShippingAmount, setAdminShippingAmount] = useState(0);
   const [paidByUserId, setPaidByUserId] = useState(getUserFromToken().id);
   const [userOrders, setUserOrders] = useState([]);
-  const [adminOrderDate, setAdminOrderDate] = useState(new Date().toISOString().split("T")[0]);
+  const [adminOrderDate, setAdminOrderDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
 
   // Fetch users once
   useEffect(() => {
@@ -69,17 +73,15 @@ export default function AdminOrderPage() {
       setSelectedDiscount(
         toWholePercent(data.adminDiscountInfo.selectedDiscountForCurrent)
       );
-      setNumberBottles(
-        data.adminDiscountInfo.totalBottlesForCurrentQuantities
-      );
+      setNumberBottles(data.adminDiscountInfo.totalBottlesForCurrentQuantities);
     } catch (error) {
       console.error("Error fetching admin items:", error);
     }
   }, [base_url, token, selectedShipToState]);
-  
+
   useEffect(() => {
     fetchAdminItems();
-  }, [fetchAdminItems] );
+  }, [fetchAdminItems]);
 
   // Recompute userOrders when adminItems, selectedDiscount, adminShippingAmount, or adminTaxAmount change
   useEffect(() => {
@@ -98,6 +100,15 @@ export default function AdminOrderPage() {
         const userId = userItem.userId;
         const userName = userItem.name;
         const userQuantity = userItem.quantity;
+        let userFinalPrice;
+        if (userItem.pricingType.toLowerCase() === "wholesale") {
+          userFinalPrice = finalPrice;
+        } else {
+          userFinalPrice =
+            adminItem.retail -
+            adminItem.retail *
+              toDecimalPercent(toWholePercent(selectedDiscount));
+        }
 
         if (!grouped[userId]) {
           grouped[userId] = {
@@ -149,19 +160,40 @@ export default function AdminOrderPage() {
 
   // Memoized discounted admin items (to avoid unnecessary recalculations) with subtotal calculation
   const discountedAdminItems = useMemo(() => {
-    return adminItems.map((item) => {
-      const finalPrice =
-        item.wholesale - item.wholesale * toDecimalPercent(selectedDiscount);
-      const subtotal = finalPrice * item.adminQuantity;
+  return adminItems.map((item) => {
+    const wholesaleFinal =
+      item.wholesale -
+      item.wholesale * toDecimalPercent(selectedDiscount);
+
+    const retailFinal =
+      item.retail -
+      item.retail * toDecimalPercent(selectedDiscount);
+
+    const updatedUserItems = item.userItems.map((u) => {
+      const userFinalPrice =
+        u.pricingType?.toLowerCase() === "wholesale"
+          ? wholesaleFinal
+          : retailFinal;
 
       return {
-        ...item,
-        discountPercentage: selectedDiscount,
-        finalPrice,
-        subtotal
+        ...u,
+        userFinalPrice
       };
     });
-  }, [adminItems, selectedDiscount]);
+
+    const subtotal =
+      wholesaleFinal *
+      item.userItems.reduce((sum, ui) => sum + ui.quantity, 0);
+
+    return {
+      ...item,
+      discountPercentage: selectedDiscount,
+      finalPrice: wholesaleFinal,
+      subtotal,
+      userItems: updatedUserItems // <-- IMPORTANT
+    };
+  });
+}, [adminItems, selectedDiscount]);
 
   // Calculate grand total
   const adminSubtotal = useMemo(() => {

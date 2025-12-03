@@ -157,7 +157,8 @@ exports.getAdminProductList = async (req, res) => {
       adminLineItemsMap[productId].userItems.push({
         userId: uli.userId,
         name: uli.user.name,
-        quantity: uli.quantity
+        quantity: uli.quantity,
+        pricingType: uli.user.pricingType
       });
 
       // update the sum
