@@ -1,6 +1,7 @@
 "use strict";
 
 const { Op } = require("sequelize");
+const { calculateOrderTotals } = require("../services/pricingService");
 const {
   AdminOrder,
   AdminLineItem,
@@ -9,6 +10,7 @@ const {
   UserOrder,
   UserLineItem
 } = require("../models");
+const { getPastAdminOrdersWithCalculations } = require("./adminOrderService");
 
 exports.getPastOrdersByUser = async (userId) => {
   // Get all past user orders
@@ -58,8 +60,8 @@ exports.getPastOrdersByUser = async (userId) => {
         quantity: li.quantity,
         finalPrice: li.finalPrice ?? li.basePrice ?? 0
       })),
-      parseFloate(order.shippingAmount ?? 0),
-      parseFloate(order.taxAmount ?? 0)
+      parseFloat(order.shippingAmount ?? 0),
+      parseFloat(order.taxAmount ?? 0)
     );
 
     formatted.push({
@@ -76,225 +78,120 @@ exports.getPastOrdersByUser = async (userId) => {
   return formatted;
 };
 
-exports.getBulkPastOrdersSortedByProduct = async () => {
-  const adminOrders = await AdminOrder.findAll({
-    include: [
-      {
-        model: AdminLineItem,
-        as: "adminLineItems",
-        include: [
-          {
-            model: Product,
-            as: "product",
-            attributes: ["name"]
-          }
-        ]
-      },
-      {
-        model: UserLineItem,
-        as: "userLineItems",
-        include: [
-          {
-            model: User,
-            as: "user",
-            attributes: ["id", "name"]
-          },
-          {
-            model: Product,
-            as: "product",
-            attributes: ["name"]
-          }
-        ]
-      }
-    ],
-    order: [["orderDate", "DESC"]]
+exports.getBulkPastOrdersSortedByProduct = async ({
+  limit = 10,
+  offset = 0
+} = {}) => {
+  const adminOrders = await getPastAdminOrdersWithCalculations({
+    limit,
+    offset
   });
 
-  const formatted = adminOrders.map((order) => {
-    // Group AdminLineItems by product
+  return adminOrders.map((order) => {
     const productMap = new Map();
 
-    for (const item of order.adminLineItems || []) {
-      const productId = item.productId;
-      if (!productMap.has(productId)) {
-        productMap.set(productId, {
-          productId,
-          productName: item.product?.name ?? "Unknown product",
-          unitPrice: parseFloat(item.finalPrice ?? item.basePrice ?? 0),
-          totalQty: 0,
-          total: 0,
-          users: []
-        });
-      }
+    // Build product map
+    for (const item of order.adminLineItems) {
+      console.log(item.adminQuantity);
+      console.log(item.lineTotal);
+      productMap.set(item.productId, {
+        productId: item.productId,
+        productName: item.product?.name ?? "Unknown",
+        basePrice: parseFloat(item.basePrice),
+        percentOff: parseFloat(item.percentOff),
+        adminQuantity: item.adminQuantity,
+        finalPrice: item.finalPrice,
+        total: item.lineTotal,
+        users: []
+      });
     }
 
-    // Add user-level breakdown
-    for (const userItem of order.userLineItems || []) {
-      const productId = userItem.productId;
-      const productEntry = productMap.get(productId);
-      if (!productEntry) continue; // Skip if not in admin items
+    // Attach user-level quantities to each product
+    for (const userItem of order.userLineItems) {
+      const productEntry = productMap.get(userItem.productId);
+      if (!productEntry) continue;
 
       productEntry.users.push({
         userId: userItem.userId,
-        userName: userItem.user?.name ?? "Unknown user",
-        quantity: userItem.quantity ?? 0
+        userName: userItem.user?.name ?? "Unknown",
+        quantity: userItem.quantity
       });
     }
-
-    // Calculate lineTotals for each product using calculateOrderTotals function
-    // Calculate lineTotals for each product using calculateOrderTotals
-    const products = Array.from(productMap.values())
-      .map((product) => {
-        const { lineItems: itemsWithTotals, subtotal } = calculateOrderTotals(
-          product.users.map((u) => ({
-            quantity: u.quantity,
-            finalPrice: product.unitPrice
-          }))
-        );
-
-        // Assign lineTotals to each user
-        product.users = product.users.map((u, idx) => ({
-          ...u,
-          lineTotal: itemsWithTotals[idx].lineTotal
-        }));
-
-        product.total = subtotal; // total for this product across all users
-        return product;
-      })
-      .sort((a, b) => a.productName.localeCompare(b.productName));
-
-    const subtotal = +products.reduce((sum, p) => sum + p.total, 0).toFixed(2);
-    const shippingAmount = +parseFloat(order.shippingAmount ?? 0).toFixed(2);
-    const taxAmount = +parseFloat(order.taxAmount ?? 0).toFixed(2);
-    const total = +(subtotal + shippingAmount + taxAmount).toFixed(2);
 
     return {
       adminOrderId: order.id,
       orderDate: order.orderDate,
-      subtotal,
-      shippingAmount,
-      taxAmount,
-      total,
-      products
+      subtotal: order.subtotal,
+      shippingAmount: parseFloat(order.shippingAmount ?? 0),
+      taxAmount: parseFloat(order.taxAmount ?? 0),
+      total: order.total,
+      products: Array.from(productMap.values())
     };
   });
-
-  return formatted;
 };
 
-exports.getBulkPastOrdersSortedByUser = async () => {
-  const adminOrders = await AdminOrder.findAll({
-    include: [
-      {
-        model: AdminLineItem,
-        as: "adminLineItems",
-        include: [
-          {
-            model: Product,
-            as: "product",
-            attributes: ["name"]
-          }
-        ]
-      },
-      {
-        model: UserLineItem,
-        as: "userLineItems",
-        include: [
-          {
-            model: User,
-            as: "user",
-            attributes: ["id", "name"]
-          },
-          {
-            model: Product,
-            as: "product",
-            attributes: ["name"]
-          }
-        ]
-      },
-      {
-        model: UserOrder,
-        as: "userOrders",
-        attributes: ["userId", "shippingAmount", "taxAmount"]
-      }
-    ],
-    order: [["orderDate", "DESC"]]
-  });
+exports.getBulkPastOrdersSortedByUser = async ({
+  limit = 10,
+  offset = 0
+} = {}) => {
+  const adminOrders = getPastAdminOrdersWithCalculations({ limit, offset });
 
-  const formatted = adminOrders.map((order) => {
-    // Group UserLineItem by User
+  return adminOrders.map((order) => {
     const userMap = new Map();
 
-    for (const item of order.userLineItems || []) {
-      const userId = item.userId;
-
-      if (!userMap.has(userId)) {
-        userMap.set(userId, {
-          userId,
-          userName: item.user.name ?? "Unknown",
+    // Group userLineItems by userId
+    for (const item of order.userLineItems) {
+      if (!userMap.has(item.userId)) {
+        userMap.set(item.userId, {
+          userId: item.userId,
+          userName: item.user?.name ?? "Unknown",
           products: [],
           subtotal: 0,
-          shippingAmount: 0,
-          taxAmount: 0,
-          total: 0
+          totalShipping: 0,
+          totalTax: 0
         });
       }
 
-      const userEntry = userMap.get(userId);
-
+      const userEntry = userMap.get(item.userId);
       userEntry.products.push({
         productId: item.productId,
-        productName: item.product?.name ?? "Unknown product",
-        quantity: item.quantity ?? 0,
-        unitPrice: parseFloate(item.finalPrice ?? item.basePrice ?? 0)
+        productName: item.product?.name ?? "Unknown",
+        quantity: item.quantity,
+        basePrice: item.basePrice,
+        percentOff: item.percentOff
       });
+
+      // Accumulate shipping and tax per user
+      userEntry.totalShipping += item.shippingAmount || 0;
+      userEntry.totalTax += item.taxAmount || 0;
     }
 
-    // For each user, calculate totals using calculateOrderTotals Function
-    for (const uo of order.userOrders || []) {
-      const entry = userMap.get(uo.userId);
-      if (!entry) continue;
-
-      const {
-        lineItems: itemsWithTotals,
-        subtotal,
-        grandTotal
-      } = calculateOrderTotals(
-        entry.products.map((p) => ({
+    // Calculate totals per user
+    for (const userEntry of userMap.values()) {
+      const { lineItems, subtotal, grandTotal } = calculateOrderTotals(
+        userEntry.products.map((p) => ({
           quantity: p.quantity,
-          finalPrice: p.unitPrice
+          basePrice: p.basePrice,
+          percentOff: p.percentOff
         })),
-        parseFloat(uo.shippingAmount ?? 0),
-        parseFloat(uo.taxAmount ?? 0)
+        userEntry.totalShipping,
+        userEntry.totalTax
       );
 
-      // Update products with lineTotals and totals
-      entry.products = entry.products.map((p, idx) => ({
+      userEntry.products = userEntry.products.map((p, idx) => ({
         ...p,
-        lineTotal: itemsWithTotals[idx].lineTotal
+        lineTotal: lineItems[idx].lineTotal,
+        finalPrice: lineItems[idx].finalPrice
       }));
-      entry.subtotal = subtotal;
-      entry.shippingAmount = parseFloat(uo.shippingAmount ?? 0);
-      entry.taxAmount = parseFloat(uo.taxAmount ?? 0);
-      entry.total = grandTotal;
+
+      userEntry.subtotal = subtotal;
+      userEntry.total = grandTotal;
     }
-
-    // Convert map to array sorted by user name
-    const users = Array.from(userMap.values()).sort((a, b) =>
-      a.userName.localeCompare(b.userName)
-    );
-
-    const overallGrandTotal = +users
-      .reduce((sum, user) => sum + user.total, 0)
-      .toFixed(2);
 
     return {
       adminOrderId: order.id,
       orderDate: order.orderDate,
-      overallGrandTotal,
-      users
+      users: Array.from(userMap.values())
     };
   });
-
-  return formatted;
 };

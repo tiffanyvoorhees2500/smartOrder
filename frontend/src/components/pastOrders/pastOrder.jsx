@@ -1,9 +1,10 @@
 import { useState } from "react";
 import GroupBy from "./groupBy";
+import { formatCurrency } from '../../utils/normalize';
 
 export default function PastOrder({ pastOrder, groupBy, index }) {
   const [open, setOpen] = useState(index === 0);
-  
+  console.log(pastOrder);
   return (
     <div
       key={pastOrder.adminOrderId}
@@ -13,20 +14,17 @@ export default function PastOrder({ pastOrder, groupBy, index }) {
       {/* Past Order Header and Total */}
       <div className="pastOrderHeader">
         <span>{pastOrder.orderDate.split("T")[0]}</span>
-        <span>${pastOrder.total}</span>
+        <span>{formatCurrency(pastOrder.total)}</span>
       </div>
 
       {/* Past Order Value Grouped */}
       <div className={`groupByContainer  ${open ? "active" : ""}`}>
-        <GroupBy
-          products={pastOrder.products}
-          groupByType={groupBy}
-        />
+        <GroupBy products={pastOrder.products} groupByType={groupBy} />
         <div className="orderSummary">
-          <span>Subtotal: ${pastOrder.subtotal}</span>
-          <span>Shipping Amount: ${pastOrder.shippingAmount}</span>
-          <span>Tax Amount ${pastOrder.taxAmount}</span>
-          <span>Grand Total ${pastOrder.total}</span>
+          <span>Subtotal: {formatCurrency(pastOrder.subtotal)}</span>
+          <span>Shipping Amount: {formatCurrency(pastOrder.shippingAmount)}</span>
+          <span>Tax Amount {formatCurrency(pastOrder.taxAmount)}</span>
+          <span>Grand Total {formatCurrency(pastOrder.total)}</span>
         </div>
       </div>
     </div>

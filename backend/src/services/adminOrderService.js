@@ -1,26 +1,15 @@
-/**
- * NOTE on `transaction` parameter:
- *
- * A transaction is an object provided by Sequelize that allows multiple
- * database operations to be treated as a single atomic unit.
- *
- * - If all operations inside the transaction succeed, you call `transaction.commit()`
- *   and all changes are saved to the database.
- * - If any operation fails, you call `transaction.rollback()` and all changes
- *   made during the transaction are undone.
- *
- * This ensures data consistency, especially when creating multiple related rows,
- * such as AdminOrderLineItems for a bulk order.
- *
- * The `transaction` is optional; if passed, all Sequelize calls will run inside it.
- * This is important for workflows like `finalizeOrder` where we want all related
- * tables to be updated together.
- */
-
-const { AdminOrder } = require("../models");
+const {
+  AdminOrder,
+  AdminLineItem,
+  Product,
+  UserLineItem,
+  UserOrder,
+  User
+} = require("../models");
+const { calculateAdminOrderTotals } = require("../services/pricingService");
 
 async function createAdminOrder(
-  { orderDate,paidForById, shipToState, shippingAmount, taxAmount },
+  { orderDate, paidForById, shipToState, shippingAmount, taxAmount },
   transaction
 ) {
   return await AdminOrder.create(
@@ -29,4 +18,75 @@ async function createAdminOrder(
   );
 }
 
-module.exports = { createAdminOrder };
+async function getPastAdminOrdersWithCalculations({
+  limit = 10,
+  offset = 0
+} = {}) {
+  const adminOrders = await AdminOrder.findAll({
+    include: [
+      {
+        model: AdminLineItem,
+        as: "adminLineItems",
+        include: [
+          {
+            model: Product,
+            as: "product" // include product details
+          }
+        ]
+      },
+      {
+        model: UserLineItem,
+        as: "userLineItems",
+        include: [
+          {
+            model: User,
+            as: "user"
+          }
+        ]
+      },
+      {
+        model: UserOrder,
+        as: "userOrders"
+      }
+    ],
+    order: [["orderDate", "DESC"]],
+    limit,
+    offset
+  });
+
+  // Attach adminQuantity, finalPrice, and lineTotal to adminLineItems
+  return adminOrders.map((order) => {
+    // Parse shipping and tax
+    const shipping = parseFloat(order.shippingAmount ?? 0);
+    const tax = parseFloat(order.taxAmount ?? 0);
+
+    // Calculate totals for the entire order at once
+    const { adminLineItemsWithTotals, subtotal, grandTotal } =
+      calculateAdminOrderTotals(
+        order.adminLineItems,
+        order.userLineItems,
+        shipping,
+        tax
+      );
+
+    // Attach calculated values back to each adminLineItem
+    order.adminLineItems = order.adminLineItems.map((item, idx) => ({
+      ...item.toJSON(),
+      adminQuantity: adminLineItemsWithTotals[idx].adminQuantity,
+      lineTotal: parseFloat(adminLineItemsWithTotals[idx].lineTotal.toFixed(2)),
+      finalPrice: parseFloat(
+        adminLineItemsWithTotals[idx].finalPrice.toFixed(2)
+      )
+    }));
+
+    // Attach order-level totals
+    order.subtotal = parseFloat(subtotal.toFixed(2));
+    order.total = parseFloat(grandTotal.toFixed(2));
+    order.shippingAmount = shipping;
+    order.taxAmount = tax;
+
+    return order;
+  });
+}
+
+module.exports = { createAdminOrder, getPastAdminOrdersWithCalculations };
