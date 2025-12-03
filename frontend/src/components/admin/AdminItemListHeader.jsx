@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import InlayInputBox from "../form/InlayInputBox";
 import { toast } from "react-toastify";
 import "./AdminItemListHeader.css";
 import { fetchProductDropdownListOptions } from "../../services/productService";
 import { states } from "../../components/form/states";
-import UserSelector from "../selectors/UserSelector";
+import UniversalDropdown from "../selectors/universalDropdown";
 import { addUserLineItemFromAdminPage } from "../../services/userLineItemService";
 import DiscountSelector from "../selectors/DiscountSelector";
 import ShipToStateSelector from "../selectors/ShipToStateSelector";
@@ -28,6 +28,8 @@ export default function AdminItemListHeader({
   setAdminShippingAmount,
   refreshAdminItems
 }) {
+  const personDropdownRef = useRef(null);
+
   const [productsList, setProductsList] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [productError, setProductError] = useState(null);
@@ -46,7 +48,13 @@ export default function AdminItemListHeader({
     const loadProductsList = async () => {
       try {
         const productList = await fetchProductDropdownListOptions();
-        setProductsList(productList);
+        // Split to only product name ignore stuff in ()
+        const cleanedProducts = productList.map((product) => ({
+          ...product,
+          name: product.name.split("(")[0].trim()
+        }));
+
+        setProductsList(cleanedProducts);
       } catch (error) {
         console.error("Error fetching admin products:", error);
         setProductError("Failed to load products.");
@@ -79,6 +87,9 @@ export default function AdminItemListHeader({
       setSelectedUserId("");
       setSelectedProductId("");
       setSelectedQty(1);
+
+      // <-- Set focus back to person dropdown
+      personDropdownRef.current?.focus();
 
       toast.success("Order updated successfully!");
     } catch (err) {
@@ -150,46 +161,33 @@ export default function AdminItemListHeader({
       {/* Add To Order */}
       <div className="headerRow">
         {/* Person */}
-        <UserSelector
-          label="Person"
+        <UniversalDropdown
+          label="Person:"
           name="person"
           id="person"
-          value={selectedUserId}
           options={filteredUsers}
+          value={selectedUserId}
           onChange={setSelectedUserId}
           loading={loadingUsers}
           error={userError}
           required
           placeholder="Select a user..."
+          inputRef={personDropdownRef}
         />
 
         {/* Product */}
-        <label htmlFor="product">
-          Product:
-          <select
-            name="product"
-            id="product"
-            value={selectedProductId}
-            onChange={(e) => setSelectedProductId(e.target.value)}
-          >
-            <option value="">
-              {loadingProducts
-                ? "Loading products..."
-                : productError
-                  ? productError
-                  : "Add a product..."}
-            </option>
-            {!loadingProducts &&
-              !productError &&
-              productsList.map((product) => (
-                <option key={product.id} value={product.id}>
-                  {product.name.length > 100
-                    ? product.name.slice(0, 100) + "..."
-                    : product.name}
-                </option>
-              ))}
-          </select>
-        </label>
+        <UniversalDropdown
+          label="Product:"
+          id="product"
+          name="product"
+          options={productsList}
+          value={selectedProductId}
+          onChange={setSelectedProductId}
+          placeholder="Select a product..."
+          required
+          loading={loadingProducts}
+          error={productError}
+        />
 
         {/* Quantity */}
         <label htmlFor="quantity">
