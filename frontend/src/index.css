@@ -1,10 +1,13 @@
 :root {
-  /* Add your custom color scheme */
+  /* Background Colors */
   --primary-color: #fefefe;
-  --secondary-color: #4e888f;
+  --secondary-color: #497f86;
   --secondary-color-light: #6ba7ae;
   --secondary-color-dark: #3f6e73;
   --accent-color: #000000;
+
+  /* Text Colors */
+  --secondary-text-color: #487e84;
 }
 
 body {

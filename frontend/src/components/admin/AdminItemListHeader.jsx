@@ -36,8 +36,10 @@ export default function AdminItemListHeader({
   const [selectedProductId, setSelectedProductId] = useState("");
   const [selectedQty, setSelectedQty] = useState(1);
 
-  const [shippingInput, setShippingInput] = useState(adminShippingAmount.toFixed(2));
-  const [taxInput, setTaxInput] = useState(adminTaxAmount.toFixed(2))
+  const [shippingInput, setShippingInput] = useState(
+    adminShippingAmount.toFixed(2)
+  );
+  const [taxInput, setTaxInput] = useState(adminTaxAmount.toFixed(2));
 
   useEffect(() => {
     // Fetch products for admin order page
@@ -81,15 +83,16 @@ export default function AdminItemListHeader({
       toast.success("Order updated successfully!");
     } catch (err) {
       toast.error(
-        err.response?.data?.message ||
-          "Failed to add to order. Internal Error."
+        err.response?.data?.message || "Failed to add to order. Internal Error."
       );
     }
   };
 
   // Filter users by selected ship-to state
   const filteredUsers = selectedShipToState
-    ? usersList.filter(user => user.defaultShipToState === selectedShipToState)
+    ? usersList.filter(
+        (user) => user.defaultShipToState === selectedShipToState
+      )
     : usersList;
 
   useEffect(() => {
@@ -122,6 +125,7 @@ export default function AdminItemListHeader({
       <label htmlFor="discount">
         Discount:
         <DiscountSelector
+          id={"discount"}
           value={selectedDiscount}
           onChange={setSelectedDiscount}
           options={discountOptions}

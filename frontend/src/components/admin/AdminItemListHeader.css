@@ -2,7 +2,9 @@
   display: flex;
   flex-direction: column;
   gap: 0.5em;
-  padding: 1em;
+  padding: 0.5em;
+  background-color: #587c80;
+  border:0.25em solid hsla(0, 0%, 100%, 0.2);
 }
 
 .adminListHeader .headerRow {

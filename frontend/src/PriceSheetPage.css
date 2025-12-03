@@ -20,7 +20,7 @@
 .discountSelectorsDiv > * {
   flex: 1 1 0; /* grow to fill, shrink if needed */
   min-width: 0; /* ensures proper shrinking in flex container */
-  color: var(--primary-color);
+  color: white;
 }
 
 /* Options */
@@ -33,7 +33,7 @@
 .optionsDiv > * {
   flex: 1 1 0; /* grow to fill, shrink if needed */
   min-width: 0; /* ensures proper shrinking in flex container */
-  color: var(--primary-color);
+  color: white;
 }
 
 /* -- Search Element */
@@ -42,7 +42,7 @@
 }
 
 .searchElement label {
-  color: var(--primary-color);
+  color: white;
   font-size: 2rem;
 }
 
