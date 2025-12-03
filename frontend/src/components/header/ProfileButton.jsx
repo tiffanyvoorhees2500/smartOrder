@@ -23,7 +23,7 @@ export default function ProfileButton() {
         onMouseLeave={() => setOpen(false)}
       >
         <Link to="/current-order">Current Order</Link>
-        <Link to="/past-orders">Past Orders</Link>
+        {/* <Link to="/past-orders">Past Orders</Link> */}
 
         {/* Only show for Admin */}
         {isAdmin && (

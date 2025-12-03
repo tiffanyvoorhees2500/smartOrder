@@ -3,7 +3,7 @@ import "./AdminItem.css";
 import PriceQtyGroup from "./PriceQtyGroup";
 import InlayInputBox from "../form/InlayInputBox";
 import { toDecimalPercent, toWholePercent } from "../../utils/normalize";
-import ShortenProductName from "../../utils/ShortenProductName"
+import ShortenProductName from "../../utils/ShortenProductName";
 
 export default function AdminItem({
   adminItem,
@@ -15,7 +15,6 @@ export default function AdminItem({
   const retailInputId = `retail_price_${adminItem.id}`;
   const discountInputId = `discount_percentage_${adminItem.id}`;
   const finalInputId = `final_price_${adminItem.id}`;
-
   const totalQuantity = adminItem.userItems
     .map((x) => x.quantity)
     .reduce((a, b) => a + b, 0);
@@ -26,19 +25,24 @@ export default function AdminItem({
       adminItem.wholesale * toDecimalPercent(adminDiscountPercentage)
     );
   }, [adminItem.wholesale, adminDiscountPercentage]);
+  
 
   const subtotal = finalPrice * totalQuantity;
   const itemName = ShortenProductName(adminItem.name);
 
   const handleWholesaleBlur = (e) => {
     const value = parseFloat(e.target.value);
-    e.target.value = isNaN(value) ? adminItem.wholesale.toFixed(2) : value.toFixed(2);
-  }
+    e.target.value = isNaN(value)
+      ? adminItem.wholesale.toFixed(2)
+      : value.toFixed(2);
+  };
 
   const handleRetailBlur = (e) => {
     const value = parseFloat(e.target.value);
-    e.target.value = isNaN(value) ? adminItem.retail.toFixed(2) : value.toFixed(2);
-  }
+    e.target.value = isNaN(value)
+      ? adminItem.retail.toFixed(2)
+      : value.toFixed(2);
+  };
 
   return (
     <div className="itemContainer adminItemContainer">
@@ -107,7 +111,7 @@ export default function AdminItem({
           <PriceQtyGroup
             key={`${adminItem.id}-${userItem.userId}`}
             selectName={`${adminItem.id}-${userItem.userId}-quantity`}
-            price={adminItem.wholesale}
+            price={userItem.userFinalPrice}
             helpText={userItem.name}
             quantity={userItem.quantity}
             setQuantity={(newQuantity) =>

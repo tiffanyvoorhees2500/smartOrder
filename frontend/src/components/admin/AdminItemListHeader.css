@@ -19,6 +19,11 @@
   border: none;
 }
 
+.discount-section .discount-info{
+  display: block;
+  margin-top: 4px;
+}
+
 .headerRow button {
   grid-column: -2/-1;
 }
