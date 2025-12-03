@@ -4,7 +4,6 @@ import { formatCurrency } from '../../utils/normalize';
 
 export default function PastOrder({ pastOrder, groupBy, index }) {
   const [open, setOpen] = useState(index === 0);
-  console.log(pastOrder);
   return (
     <div
       key={pastOrder.adminOrderId}
