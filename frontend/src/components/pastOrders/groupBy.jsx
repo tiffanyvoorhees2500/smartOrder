@@ -1,3 +1,4 @@
+import { formatCurrency } from '../../utils/normalize';
 import ShortenProductName from "../../utils/ShortenProductName";
 import GroupByRow from "./groupByRow";
 
@@ -15,7 +16,7 @@ export default function GroupBy({ products, groupByType }) {
         <div className="bold">
           <span>{shortGroupName}</span>
           <span>
-            {group.totalQty} @ ${group.unitPrice} = ${group.total}
+            {group.adminQuantity} @ {formatCurrency(group.finalPrice)} = {formatCurrency(group.total)}
           </span>
         </div>
 

@@ -128,19 +128,27 @@ exports.extractUserLineItemsFromAdminLineItems = (adminLineItems) => {
   return extractedItems;
 };
 
-exports.attachPricingToUserLineItems = async (extractedUserLineItems) => {
+exports.attachPricingToUserLineItems = async (
+  extractedUserLineItems,
+  selectedDiscount
+) => {
   // Precompute pricing for all items in parallel
   const pricedItems = await Promise.all(
     extractedUserLineItems.map(async (item) => {
       const basePrice = Number(
         await getUserBasePrice(item.userId, item.productId)
       );
-      const percentOff = Number(
-        (await calculateUserDiscount(await User.findByPk(item.userId)))
-          .selectedDiscountForCurrent
-      );
-      const finalPrice = Number(basePrice * (1 - percentOff));
-      return { ...item, basePrice, percentOff, finalPrice };
+      // If selectedDiscount is not null/undefined, use it; otherwise calculate
+      const percentOff =
+        selectedDiscount != null
+          ? Number(selectedDiscount)
+          : Number(
+              (await calculateUserDiscount(await User.findByPk(item.userId)))
+                .selectedDiscountForCurrent
+            );
+      const decimalPercent = percentOff / 100;
+      const finalPrice = Number(basePrice * (1 - decimalPercent));
+      return { ...item, basePrice, percentOff: decimalPercent, finalPrice };
     })
   );
   return pricedItems;

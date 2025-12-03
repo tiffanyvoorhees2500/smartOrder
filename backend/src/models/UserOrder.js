@@ -26,12 +26,20 @@ module.exports = (sequelize, DataTypes) => {
       shippingAmount: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
-        defaultValue: 0.0
+        defaultValue: 0.0,
+        get() {
+          const value = this.getDataValue("shippingAmount");
+          return value !== null ? parseFloat(value) : null;
+        }
       },
       taxAmount: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
-        defaultValue: 0.0
+        defaultValue: 0.0,
+        get() {
+          const value = this.getDataValue("taxAmount");
+          return value !== null ? parseFloat(value) : null;
+        }
       }
     },
     {}

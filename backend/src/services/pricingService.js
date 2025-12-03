@@ -94,4 +94,60 @@ async function calculateAdminDiscount(shipToState) {
   };
 }
 
-module.exports = { calculateUserDiscount, calculateAdminDiscount };
+function calculateAdminOrderTotals(
+  adminLineItems,
+  userLineItems,
+  shipping = 0,
+  tax = 0
+) {
+  const itemsWithTotals = adminLineItems.map((item) => {
+    const adminQuantity = userLineItems
+      .filter((u) => u.productId === item.productId)
+      .reduce((sum, u) => sum + u.quantity, 0);
+
+    const percentOffToDecimal = parseFloat(item.percentOff) / 100;
+    const finalPrice = parseFloat(item.basePrice * (1 - percentOffToDecimal));
+
+    const lineTotal = parseFloat(finalPrice * (adminQuantity ?? 0));
+    console.log(adminQuantity);
+    return {
+      ...item,
+      adminQuantity,
+      finalPrice,
+      lineTotal
+    };
+  });
+  const subtotal = itemsWithTotals.reduce((sum, it) => sum + it.lineTotal, 0);
+
+  const grandTotal = +(subtotal + shipping + tax);
+
+  return { adminLineItemsWithTotals: itemsWithTotals, subtotal, grandTotal };
+}
+
+function calculateOrderTotals(lineItems, shipping = 0, tax = 0) {
+  console.log(lineItems);
+  const itemsWithTotals = lineItems.map((item) => {
+    const finalPrice = parseFloat(
+      item.basePrice * (1 - (item.percentOff ?? 0))
+    );
+    const lineTotal = parseFloat(finalPrice * (item.quantity ?? 0));
+    return {
+      ...item,
+      finalPrice,
+      lineTotal
+    };
+  });
+
+  const subtotal = itemsWithTotals.reduce((sum, it) => sum + it.lineTotal, 0);
+
+  const grandTotal = +(subtotal + shipping + tax);
+
+  return { lineItems: itemsWithTotals, subtotal, grandTotal };
+}
+
+module.exports = {
+  calculateUserDiscount,
+  calculateAdminDiscount,
+  calculateAdminOrderTotals,
+  calculateOrderTotals
+};

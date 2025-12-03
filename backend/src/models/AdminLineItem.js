@@ -19,12 +19,20 @@ module.exports = (sequelize, DataTypes) => {
       },
       basePrice: {
         type: DataTypes.DECIMAL(10, 2),
-        allowNull: false
+        allowNull: false,
+        get() {
+          const value = this.getDataValue("basePrice");
+          return value !== null ? parseFloat(value) : null;
+        }
       },
       percentOff: {
         type: DataTypes.DECIMAL(5, 2),
         allowNull: false,
-        defaultValue: 0.0
+        defaultValue: 0.0,
+        get() {
+          const value = this.getDataValue("percentOff");
+          return value !== null ? parseFloat(value) : null;
+        }
       },
       finalPrice: {
         type: DataTypes.DECIMAL(10, 2),

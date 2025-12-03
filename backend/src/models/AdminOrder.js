@@ -27,12 +27,20 @@ module.exports = (sequelize, DataTypes) => {
       shippingAmount: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
-        defaultValue: 0.0
+        defaultValue: 0.0,
+        get() {
+          const value = this.getDataValue("shippingAmount");
+          return value !== null ? parseFloat(value) : null;
+        }
       },
       taxAmount: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
-        defaultValue: 0.0
+        defaultValue: 0.0,
+        get() {
+          const value = this.getDataValue("taxAmount");
+          return value !== null ? parseFloat(value) : null;
+        }
       },
       original_id: {
         type: DataTypes.STRING,
@@ -48,21 +56,45 @@ module.exports = (sequelize, DataTypes) => {
       as: "paidForBy"
     });
 
+    // Cascade delete
     AdminOrder.hasMany(models.AdminLineItem, {
       foreignKey: "adminOrderId",
-      as: "adminLineItems"
+      as: "adminLineItems",
+      onDelete: "Cascade"
     });
 
+    // Set NULL
     AdminOrder.hasMany(models.UserLineItem, {
       foreignKey: "adminOrderId",
-      as: "userLineItems"
+      as: "userLineItems",
+      onDelete: "SET NULL"
     });
 
+    // Cascade delete
     AdminOrder.hasMany(models.UserOrder, {
       foreignKey: "adminOrderId",
-      as: "userOrders"
+      as: "userOrders",
+      onDelete: "Cascade"
     });
   };
+
+  // Hook to reset pricing when onDelete for userLineItems
+  AdminOrder.beforeDestroy(async (adminOrder, options) => {
+    const { UserLineItem } = adminOrder.sequelize.models;
+
+    await UserLineItem.update(
+      {
+        adminOrderId: null,
+        basePrice: null,
+        percentOff: null,
+        finalPrice: null
+      },
+      {
+        where: { adminOrderId: adminOrder.id },
+        transaction: options.transaction
+      }
+    );
+  });
 
   return AdminOrder;
 };

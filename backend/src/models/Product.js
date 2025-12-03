@@ -13,11 +13,19 @@ module.exports = (sequelize, DataTypes) => {
     },
     retail: {
       type: DataTypes.DECIMAL(10, 2),
-      allowNull: false
+      allowNull: false,
+      get() {
+        const value = this.getDataValue("retail");
+        return value !== null ? parseFloat(value) : null;
+      }
     },
     wholesale: {
       type: DataTypes.DECIMAL(10, 2),
-      allowNull: false
+      allowNull: false,
+      get() {
+        const value = this.getDataValue("wholesale");
+        return value !== null ? parseFloat(value) : null;
+      }
     },
     discontinued: {
       type: DataTypes.BOOLEAN,

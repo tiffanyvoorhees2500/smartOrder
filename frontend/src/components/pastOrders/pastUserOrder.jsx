@@ -30,7 +30,6 @@ export default function PastUserOrder() {
   const groupByOptions = ["person", "product"];
   const [groupBy, setGroupBy] = useState(groupByOptions[1]);
 
-  console.log(pastOrders);
   return (
     <div className="pastOrders">
       {/* Page Title */}

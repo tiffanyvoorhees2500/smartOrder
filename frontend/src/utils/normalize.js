@@ -21,3 +21,12 @@ export function toDecimalPercent(value) {
   // Whole percent (ex: 15 → 0.15)
   return num / 100;
 }
+
+export function formatCurrency(amount) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(amount || 0);
+}

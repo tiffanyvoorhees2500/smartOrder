@@ -37,8 +37,8 @@ export default function AdminOrderPage() {
   useEffect(() => {
     const loadUsersList = async () => {
       try {
-        const usersList = await fetchUserDropdownListOptions();
-        setUsersList(usersList);
+        const list = await fetchUserDropdownListOptions();
+        setUsersList(list);
       } catch (error) {
         console.error("Error fetching admin users:", error);
         setUserError("Failed to load users.");
@@ -220,6 +220,7 @@ export default function AdminOrderPage() {
         setUserOrders={setUserOrders}
         adminSubtotal={adminSubtotal}
         adminTaxAmount={adminTaxAmount}
+        selectedDiscount={selectedDiscount}
         adminShippingAmount={adminShippingAmount}
         selectedShipToState={selectedShipToState}
         adminLineItems={discountedAdminItems}
