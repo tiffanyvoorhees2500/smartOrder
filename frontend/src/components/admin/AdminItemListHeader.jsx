@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import InlayInputBox from "../form/InlayInputBox";
 import { toast } from "react-toastify";
 import "./AdminItemListHeader.css";
@@ -28,6 +28,8 @@ export default function AdminItemListHeader({
   setAdminShippingAmount,
   refreshAdminItems
 }) {
+  const personDropdownRef = useRef(null);
+
   const [productsList, setProductsList] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [productError, setProductError] = useState(null);
@@ -85,6 +87,9 @@ export default function AdminItemListHeader({
       setSelectedUserId("");
       setSelectedProductId("");
       setSelectedQty(1);
+
+      // <-- Set focus back to person dropdown
+      personDropdownRef.current?.focus();
 
       toast.success("Order updated successfully!");
     } catch (err) {
@@ -161,11 +166,13 @@ export default function AdminItemListHeader({
           name="person"
           id="person"
           options={filteredUsers}
+          value={selectedUserId}
           onChange={setSelectedUserId}
           loading={loadingUsers}
           error={userError}
           required
           placeholder="Select a user..."
+          inputRef={personDropdownRef}
         />
 
         {/* Product */}
@@ -174,6 +181,7 @@ export default function AdminItemListHeader({
           id="product"
           name="product"
           options={productsList}
+          value={selectedProductId}
           onChange={setSelectedProductId}
           placeholder="Select a product..."
           required

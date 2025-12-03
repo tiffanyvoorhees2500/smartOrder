@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import "./universalDropdown.css";
 
 export default function UniversalDropdown({
@@ -6,17 +6,27 @@ export default function UniversalDropdown({
   id,
   name,
   options = [],
+  value,
   onChange,
   placeholder = "Select...",
   required = false,
   loading = false,
   error = null,
   displayKey = "name",
-  valueKey = "id"
+  valueKey = "id",
+  inputRef
 }) {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
+
+  const wrapperRef = useRef(null);
+
+  // Keep input display in sync with selected value
+  useEffect(() => {
+    const selectedItem = options.find((item) => item[valueKey] === value);
+    setQuery(selectedItem ? selectedItem[displayKey] : "");
+  }, [value, options, displayKey, valueKey]);
 
   const filteredOptions = useMemo(() => {
     if (!query) return options;
@@ -44,7 +54,7 @@ export default function UniversalDropdown({
       setHighlightedIndex((prev) =>
         prev > 0 ? prev - 1 : filteredOptions.length - 1
       );
-    } else if (e.key === "Enter") {
+    } else if (e.key === "Enter" || e.key === "Tab") {
       e.preventDefault();
       const item = filteredOptions[highlightedIndex];
       if (item) handleSelect(item);
@@ -53,12 +63,24 @@ export default function UniversalDropdown({
     }
   };
 
+  // Close dropdown if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div
       className="comboBoxWrapper"
       style={{ position: "relative" }}
-      tabIndex={0}
-      onBlur={() => setTimeout(() => setOpen(false), 100)}
+      ref={wrapperRef}
     >
       {label && <label htmlFor={id}>{label}</label>}
 
@@ -76,6 +98,7 @@ export default function UniversalDropdown({
         }}
         onFocus={() => setOpen(true)}
         onKeyDown={handleKeyDown}
+        autoComplete="off"
       />
 
       {open && !loading && !error && (
@@ -87,7 +110,12 @@ export default function UniversalDropdown({
               <li
                 key={item[valueKey]}
                 onMouseDown={() => handleSelect(item)}
-                style={{ padding: "8px", cursor: "pointer", backgroundColor: index === highlightedIndex ? "#ddd": "transparent" }}
+                style={{
+                  padding: "8px",
+                  cursor: "pointer",
+                  backgroundColor:
+                    index === highlightedIndex ? "#ddd" : "transparent"
+                }}
               >
                 {item[displayKey].length > 100
                   ? item[displayKey].slice(0, 100) + "..."
