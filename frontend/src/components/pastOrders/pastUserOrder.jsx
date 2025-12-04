@@ -1,8 +1,9 @@
 import "./pastUserOrder.css";
-import InlayInputBox from "../form/InlayInputBox";
+// import InlayInputBox from "../form/InlayInputBox";
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import PastOrder from "./pastOrder";
+import Loading from "../misc/Loading";
 
 export default function PastUserOrder() {
   // Fetch admin items from backend API
@@ -20,6 +21,7 @@ export default function PastUserOrder() {
     } catch (error) {
       console.error("Error fetching admin items:", error);
     }
+    setLoaded(true)
   }, [base_url, token]);
 
   useEffect(() => {
@@ -28,19 +30,19 @@ export default function PastUserOrder() {
 
   const [pastOrders, setPastOrders] = useState([]);
   const groupByOptions = ["person", "product"];
-  const [groupBy, setGroupBy] = useState(groupByOptions[1]);
+  const [groupBy] = useState(groupByOptions[1]);
+  const [loaded, setLoaded] = useState(false);
 
   return (
     <div className="pastOrders">
       {/* Page Title */}
       <h2>All OHS Past Orders</h2>
+      {!loaded && <Loading />}
 
       {/* Group Order By Section */}
-      <div className="groupSection">
-        {/* Group By Title */}
+      {/* <div className="groupSection">
         <span>Group Order By</span>
 
-        {/* Group By Select Box */}
         <InlayInputBox title={"Group By"} htmlFor={"groupby"}>
           <select
             name="groupby"
@@ -54,7 +56,7 @@ export default function PastUserOrder() {
             ))}
           </select>
         </InlayInputBox>
-      </div>
+      </div> */}
 
       {/* Past Orders Container */}
       <div className="orderContainer">

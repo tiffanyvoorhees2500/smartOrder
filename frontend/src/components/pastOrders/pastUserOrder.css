@@ -47,21 +47,27 @@
   gap: 1em;
 }
 
-.groupByContainer {
+.groupByContainer div {
   display: flex;
   flex-direction: column;
-  gap: 0.5em;
+  gap: 0em;
   background-color: rgba(255, 255, 255, 0.795);
   overflow: hidden;
   padding: 0.25em;
-  transition: all 300ms ease-in;
-  max-height: 0px;
-}
-.groupByContainer.active {
-  max-height: 1000px;
 }
 
-.groupByContainer > .groupByCard {
+.groupByContainer > div:first-child {
+  transition: all 300ms ease-in;
+  padding: 0;
+  gap: 0;
+  max-height: 0px;
+}
+
+.groupByContainer.active > div:first-child {
+  max-height: 9999px;
+}
+
+.groupByContainer div > .groupByCard {
   display: flex;
   flex-direction: column;
   border-radius: 8px;
@@ -73,13 +79,21 @@
   padding: 0.25em 0.5em;
   border-bottom: 2px solid var(--secondary-color-light);
   margin: 0 0.25em;
-  display:flex;
+  display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
 .groupByCard {
   box-shadow: 2px 2px 2px 0px rgba(129, 129, 129, 0.562);
+  margin: 0.25em;
+}
+
+.groupByCard .cardSummary {
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  gap: 0.2em;
+  text-align: right;
 }
 
 .groupByRow {
@@ -90,13 +104,28 @@
 }
 
 .orderSummary {
-  display:flex;
+  display: flex;
   flex-direction: column;
   text-align: right;
-  padding:0.25em;
+  padding: 0.25em;
 }
 
-.orderSummary span:last-child{
-  font-weight:bold;
+.orderSummary span:last-child {
+  font-weight: bold;
   font-size: large;
+}
+
+@media screen and (max-width: 430px) {
+  .groupByCard .cardSummary span:nth-child(4) {
+    display: none;
+  }
+
+  .groupByCard .cardSummary span:last-child {
+    grid-column: span 3;
+    border-top:2px solid var(--secondary-color-light);
+  }
+  .groupByCard .cardSummary {
+    grid-template-columns: repeat(3, auto);
+    gap: 0.2em;
+  }
 }

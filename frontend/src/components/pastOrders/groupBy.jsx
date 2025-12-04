@@ -1,4 +1,4 @@
-import { formatCurrency } from '../../utils/normalize';
+import { formatCurrency } from "../../utils/normalize";
 import ShortenProductName from "../../utils/ShortenProductName";
 import GroupByRow from "./groupByRow";
 
@@ -15,9 +15,13 @@ export default function GroupBy({ products, groupByType }) {
         {/* Display the group name (item name or user name) */}
         <div className="bold">
           <span>{shortGroupName}</span>
-          <span>
-            {group.adminQuantity} @ {formatCurrency(group.finalPrice)} = {formatCurrency(group.total)}
-          </span>
+          <div className="cardSummary">
+            <span>{group.adminQuantity}</span>
+            <span>@</span>
+            <span>{formatCurrency(group.finalPrice)}</span>
+            <span>=</span>
+            <span>{formatCurrency(group.total)}</span>
+          </div>
         </div>
 
         {/* Display list of items or users */}
