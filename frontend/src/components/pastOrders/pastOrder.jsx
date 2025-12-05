@@ -1,6 +1,6 @@
 import { useState } from "react";
 import GroupBy from "./groupBy";
-import { formatCurrency } from '../../utils/normalize';
+import { formatCurrency } from "../../utils/normalize";
 
 export default function PastOrder({ pastOrder, groupBy, index }) {
   const [open, setOpen] = useState(index === 0);
@@ -18,10 +18,14 @@ export default function PastOrder({ pastOrder, groupBy, index }) {
 
       {/* Past Order Value Grouped */}
       <div className={`groupByContainer  ${open ? "active" : ""}`}>
-        <GroupBy products={pastOrder.products} groupByType={groupBy} />
+        <div>
+          <GroupBy products={pastOrder.products} groupByType={groupBy} />
+        </div>
         <div className="orderSummary">
           <span>Subtotal: {formatCurrency(pastOrder.subtotal)}</span>
-          <span>Shipping Amount: {formatCurrency(pastOrder.shippingAmount)}</span>
+          <span>
+            Shipping Amount: {formatCurrency(pastOrder.shippingAmount)}
+          </span>
           <span>Tax Amount {formatCurrency(pastOrder.taxAmount)}</span>
           <span>Grand Total {formatCurrency(pastOrder.total)}</span>
         </div>
