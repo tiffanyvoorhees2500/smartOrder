@@ -6,11 +6,14 @@ import { states } from "./states";
 import { setToken } from "../../utils/auth";
 import { getAuthHeader, getUserFromToken } from "../../utils/auth";
 import { toast } from "react-toastify";
+import SetTitle from "../../utils/SetTitle";
 
 const base_url = process.env.REACT_APP_API_BASE_URL;
 
 /* Login Form */
 export function LoginForm() {
+  SetTitle("Login");
+
   const [errorMessage, setErrorMessage] = useState("");
 
   async function handleLogin(e) {
@@ -74,6 +77,8 @@ export function LoginForm() {
 
 /* Manage Users Form */
 export function ManageUsersForm() {
+  SetTitle("Manage Users");
+
   const isAdmin = getUserFromToken()?.isAdmin;
 
   const [users, setUsers] = useState([]);

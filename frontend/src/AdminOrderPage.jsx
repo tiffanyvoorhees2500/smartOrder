@@ -10,8 +10,11 @@ import { getUserFromToken } from "./utils/auth";
 import { useCallback } from "react";
 import { toast } from "react-toastify";
 import { addUserLineItemFromAdminPage } from "./services/userLineItemService";
+import SetTitle from "./utils/SetTitle";
 
 export default function AdminOrderPage() {
+  SetTitle("Admin Order");
+
   // Feel Free to move to a context if needed
   const base_url = process.env.REACT_APP_API_BASE_URL;
   const token = typeof window !== "undefined" && localStorage.getItem("token");
@@ -160,40 +163,38 @@ export default function AdminOrderPage() {
 
   // Memoized discounted admin items (to avoid unnecessary recalculations) with subtotal calculation
   const discountedAdminItems = useMemo(() => {
-  return adminItems.map((item) => {
-    const wholesaleFinal =
-      item.wholesale -
-      item.wholesale * toDecimalPercent(selectedDiscount);
+    return adminItems.map((item) => {
+      const wholesaleFinal =
+        item.wholesale - item.wholesale * toDecimalPercent(selectedDiscount);
 
-    const retailFinal =
-      item.retail -
-      item.retail * toDecimalPercent(selectedDiscount);
+      const retailFinal =
+        item.retail - item.retail * toDecimalPercent(selectedDiscount);
 
-    const updatedUserItems = item.userItems.map((u) => {
-      const userFinalPrice =
-        u.pricingType?.toLowerCase() === "wholesale"
-          ? wholesaleFinal
-          : retailFinal;
+      const updatedUserItems = item.userItems.map((u) => {
+        const userFinalPrice =
+          u.pricingType?.toLowerCase() === "wholesale"
+            ? wholesaleFinal
+            : retailFinal;
+
+        return {
+          ...u,
+          userFinalPrice
+        };
+      });
+
+      const subtotal =
+        wholesaleFinal *
+        item.userItems.reduce((sum, ui) => sum + ui.quantity, 0);
 
       return {
-        ...u,
-        userFinalPrice
+        ...item,
+        discountPercentage: selectedDiscount,
+        finalPrice: wholesaleFinal,
+        subtotal,
+        userItems: updatedUserItems // <-- IMPORTANT
       };
     });
-
-    const subtotal =
-      wholesaleFinal *
-      item.userItems.reduce((sum, ui) => sum + ui.quantity, 0);
-
-    return {
-      ...item,
-      discountPercentage: selectedDiscount,
-      finalPrice: wholesaleFinal,
-      subtotal,
-      userItems: updatedUserItems // <-- IMPORTANT
-    };
-  });
-}, [adminItems, selectedDiscount]);
+  }, [adminItems, selectedDiscount]);
 
   // Calculate grand total
   const adminSubtotal = useMemo(() => {

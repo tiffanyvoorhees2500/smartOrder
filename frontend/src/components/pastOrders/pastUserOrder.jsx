@@ -4,8 +4,11 @@ import { useCallback, useEffect, useState, useRef } from "react";
 import axios from "axios";
 import PastOrder from "./pastOrder";
 import Loading from "../misc/Loading";
+import SetTitle from "../../utils/SetTitle";
 
 export default function PastUserOrder() {
+  SetTitle("Past Orders");
+
   // Fetch admin items from backend API
   const base_url = process.env.REACT_APP_API_BASE_URL;
   const token = typeof window !== "undefined" && localStorage.getItem("token");
