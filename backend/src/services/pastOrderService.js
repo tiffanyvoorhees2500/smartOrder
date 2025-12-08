@@ -92,8 +92,6 @@ exports.getBulkPastOrdersSortedByProduct = async ({
 
     // Build product map
     for (const item of order.adminLineItems) {
-      console.log(item.adminQuantity);
-      console.log(item.lineTotal);
       productMap.set(item.productId, {
         productId: item.productId,
         productName: item.product?.name ?? "Unknown",
@@ -125,6 +123,7 @@ exports.getBulkPastOrdersSortedByProduct = async ({
       shippingAmount: parseFloat(order.shippingAmount ?? 0),
       taxAmount: parseFloat(order.taxAmount ?? 0),
       total: order.total,
+      paidBy: order.paidForBy.name,
       products: Array.from(productMap.values())
     };
   });

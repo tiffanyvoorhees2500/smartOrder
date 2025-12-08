@@ -27,7 +27,7 @@ export default function PastOrder({ pastOrder, groupBy, index }) {
             Shipping Amount: {formatCurrency(pastOrder.shippingAmount)}
           </span>
           <span>Tax Amount {formatCurrency(pastOrder.taxAmount)}</span>
-          <span>Grand Total {formatCurrency(pastOrder.total)}</span>
+          <span>{pastOrder.paidBy} Paid OHS {formatCurrency(pastOrder.total)}</span>
         </div>
       </div>
     </div>

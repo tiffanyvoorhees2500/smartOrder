@@ -124,7 +124,6 @@ function calculateAdminOrderTotals(
 }
 
 function calculateOrderTotals(lineItems, shipping = 0, tax = 0) {
-  console.log(lineItems);
   const itemsWithTotals = lineItems.map((item) => {
     const finalPrice = parseFloat(
       item.basePrice * (1 - (item.percentOff ?? 0))

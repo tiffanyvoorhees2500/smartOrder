@@ -24,6 +24,7 @@ async function getPastAdminOrdersWithCalculations({
 } = {}) {
   const adminOrders = await AdminOrder.findAll({
     include: [
+      { model: User, as: "paidForBy" },
       {
         model: AdminLineItem,
         as: "adminLineItems",
