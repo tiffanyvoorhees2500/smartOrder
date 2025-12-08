@@ -4,6 +4,11 @@ import { formatCurrency } from "../../utils/normalize";
 
 export default function PastOrder({ pastOrder, groupBy, index }) {
   const [open, setOpen] = useState(index === 0);
+
+  const formattedDate = new Date(pastOrder.orderDate).toLocaleDateString(
+    "en-US",
+    { year: "numeric", month: "long", day: "numeric" }
+  );
   return (
     <div
       key={pastOrder.adminOrderId}
@@ -12,7 +17,7 @@ export default function PastOrder({ pastOrder, groupBy, index }) {
     >
       {/* Past Order Header and Total */}
       <div className="pastOrderHeader">
-        <span>{pastOrder.orderDate.split("T")[0]}</span>
+        <span>{formattedDate}</span>
         <span>{formatCurrency(pastOrder.total)}</span>
       </div>
 
@@ -27,7 +32,9 @@ export default function PastOrder({ pastOrder, groupBy, index }) {
             Shipping Amount: {formatCurrency(pastOrder.shippingAmount)}
           </span>
           <span>Tax Amount {formatCurrency(pastOrder.taxAmount)}</span>
-          <span>Grand Total {formatCurrency(pastOrder.total)}</span>
+          <span>
+            {pastOrder.paidBy} Paid OHS {formatCurrency(pastOrder.total)}
+          </span>
         </div>
       </div>
     </div>
