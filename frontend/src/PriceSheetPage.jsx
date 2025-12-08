@@ -9,8 +9,11 @@ import { HeaderContext } from "./PriceSheetContext";
 import { states } from "./components/form/states";
 import Ping from "./components/misc/Ping";
 import { FaArrowLeft } from "react-icons/fa";
+import SetTitle from "./utils/SetTitle";
 
 export default function PriceSheetPage() {
+  SetTitle("Current Order");
+
   const {
     items,
     discountOptions,
